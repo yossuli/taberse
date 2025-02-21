@@ -2,7 +2,7 @@
   "name": "game1",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "tsr generate && vite",
     "build": "vite build --mode client && vite build",
     "preview": "wrangler pages dev",
     "deploy": "pnpm run build && wrangler pages deploy"
@@ -20,8 +20,11 @@
     "@hono/vite-build": "^1.2.0",
     "@hono/vite-cloudflare-pages": "^0.4.2",
     "@hono/vite-dev-server": "^0.18.1",
+    "@tanstack/router-cli": "^1.109.2",
+    "@tanstack/router-plugin": "^1.109.2",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
+    "@vitejs/plugin-react": "^4.3.4",
     "vite": "^5.4.12",
     "wrangler": "^3.96.0"
   }

@@ -1,17 +1,19 @@
-import { createRoot } from "react-dom/client";
+import { createLazyRoute } from "@tanstack/react-router";
 import { useState } from "react";
 
-export const App = () => {
-  return (
-    <>
-      <h1>Hello, Hono with React!</h1>
-      <h2>Example of useState()</h2>
-      <Counter />
-      <h2>Example of API fetch()</h2>
-      <ClockButton />
-    </>
-  );
-};
+export const Route = createLazyRoute("/")({
+  component: () => {
+    return (
+      <>
+        <h1>Hello, Hono with React!</h1>
+        <h2>Example of useState()</h2>
+        <Counter />
+        <h2>Example of API fetch()</h2>
+        <ClockButton />
+      </>
+    );
+  },
+});
 
 function Counter() {
   const [count, setCount] = useState(0);
