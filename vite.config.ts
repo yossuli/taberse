@@ -27,7 +27,9 @@ export default defineConfig(({ mode }) => {
             entry: "app/index.tsx",
           },
         }),
-        pages(),
+        pages({
+          entry: ["app/index.tsx"],
+        }),
       ],
     };
   }
