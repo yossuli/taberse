@@ -5,7 +5,7 @@ import { showRoutes } from "hono/dev";
 
 const base = new Hono();
 
-base.get("*", (c, next) => {
+base.get("*", async (c, next) => {
   console.log(c.req.url);
   if (c.req.url.includes("/api")) {
     console.log("API request", c.req.url);
