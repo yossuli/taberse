@@ -3,16 +3,29 @@ import ReactDOM from "react-dom/client";
 import {
   RouterProvider,
   createRootRoute,
+  createRoute,
   createRouter,
 } from "@tanstack/react-router";
+import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 
 import { App } from "./App";
+import { Hoge } from "./routes/Hoge";
 
-const rootRoute = createRootRoute({
+const rootRoute = createRootRoute({});
+
+const indexRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/",
   component: () => <App />,
 });
 
-const routeTree = rootRoute;
+const hogeRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/hoge",
+  component: () => <Hoge />,
+});
+
+const routeTree = rootRoute.addChildren([indexRoute, hogeRoute]);
 const router = createRouter({ routeTree });
 
 const env = import.meta.env;
@@ -34,6 +47,7 @@ if (!rootElement.innerHTML) {
   root.render(
     <StrictMode>
       <RouterProvider router={router} />
+      <TanStackRouterDevtools router={router} />
     </StrictMode>
   );
 }
