@@ -24,7 +24,7 @@ base.get("*", (c, next) => {
           {import.meta.env.PROD ? (
             <script type="module" src="/static/client.js"></script>
           ) : (
-            <script type="module" src="/app/client.tsx"></script>
+            <script type="module" src="/src/client.tsx"></script>
           )}
         </head>
         <body>

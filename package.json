@@ -8,6 +8,7 @@
     "deploy": "pnpm run build && wrangler pages deploy"
   },
   "dependencies": {
+    "@tanstack/react-router": "^1.109.2",
     "hono": "^4.7.2",
     "honox": "^0.1.34",
     "react": "^19.0.0",
