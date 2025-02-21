@@ -1,15 +1,16 @@
 import { Hono } from "hono";
 import { renderToString } from "react-dom/server";
+import { createApp } from "honox/server";
+import { showRoutes } from "hono/dev";
 
-const app = new Hono();
+const base = new Hono();
 
-app.get("/api/clock", (c) => {
-  return c.json({
-    time: new Date().toLocaleTimeString(),
-  });
-});
-
-app.get("*", (c) => {
+base.get("*", (c, next) => {
+  console.log(c.req.url);
+  if (c.req.url.includes("/api")) {
+    console.log("API request", c.req.url);
+    return next();
+  }
   return c.html(
     renderToString(
       <html>
@@ -23,7 +24,7 @@ app.get("*", (c) => {
           {import.meta.env.PROD ? (
             <script type="module" src="/static/client.js"></script>
           ) : (
-            <script type="module" src="/src/client.tsx"></script>
+            <script type="module" src="/app/client.tsx"></script>
           )}
         </head>
         <body>
@@ -33,5 +34,8 @@ app.get("*", (c) => {
     )
   );
 });
+
+const app = createApp({ app: base });
+showRoutes(app);
 
 export default app;
