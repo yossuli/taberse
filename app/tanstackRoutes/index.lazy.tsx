@@ -10,6 +10,8 @@ export const Route = createLazyRoute("/")({
         <Counter />
         <h2>Example of API fetch()</h2>
         <ClockButton />
+        <h2>Example of API fetch() with param</h2>
+        <ReqWithIdButton />
       </>
     );
   },
@@ -46,6 +48,34 @@ const ClockButton = () => {
   return (
     <div>
       <button onClick={handleClick}>Get Server Time</button>
+      {response && <pre>{response}</pre>}
+    </div>
+  );
+};
+
+const ReqWithIdButton = () => {
+  const [response, setResponse] = useState<string | null>(null);
+  const [id, setId] = useState(0);
+  const handleClick = async () => {
+    const response = await fetch(`/api/test/${id}`);
+    const data = await response.json();
+    const headers = Array.from(response.headers.entries()).reduce(
+      (acc, [key, value]) => ({ ...acc, [key]: value }),
+      {}
+    );
+    const fullResponse = {
+      url: response.url,
+      status: response.status,
+      headers,
+      body: data,
+    };
+    setResponse(JSON.stringify(fullResponse, null, 2));
+  };
+
+  return (
+    <div>
+      <input type="number" onChange={(e) => setId(+e.target.value)} />
+      <button onClick={handleClick}>Get Server Time with param</button>
       {response && <pre>{response}</pre>}
     </div>
   );
