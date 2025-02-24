@@ -19,33 +19,24 @@ const schema = z
   })
   .optional();
 
-export const GET = createRoute(
-  clerkMiddleware(),
-  zValidator("query", schema),
-  (c) => {
-    const auth = getAuth(c);
-    return c.json({ auth });
-  }
-);
+export const GET = createRoute(clerkMiddleware(), (c) => {
+  const auth = getAuth(c);
+  return c.json({ auth });
+});
 
 const app = new Hono();
 
-const route = app.get(
-  "/",
-  clerkMiddleware(),
-  zValidator("query", schema),
-  (c) => {
-    const auth = getAuth(c);
-    return c.json({ auth });
-  }
-);
+const route = app.get("/", clerkMiddleware(), (c) => {
+  const auth = getAuth(c);
+  return c.json({ auth });
+});
 
 type GETType = typeof GET;
 
 type App = typeof route;
 
 type PickIN<T extends any[]> =
-  T["1"] extends H<any, any, infer R, any> ? R : never;
+  T["0"] extends H<any, any, infer R, any> ? R : never;
 type PickOUT<T extends any[]> =
   T["0"] extends H<any, any, any, infer R> ? R : never;
 
@@ -57,10 +48,3 @@ type GETS = ToSchema<
 >;
 
 const client = hc<App & Hono<BlankEnv, GETS, "/">>("");
-
-client.index.$get({}).then((res) => res.json());
-
-client.api.test.auth
-  .$get({})
-  .then((res) => res.json())
-  .then((data) => console.log(data));
