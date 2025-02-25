@@ -23,7 +23,7 @@ if (!rootElement.innerHTML) {
     <StrictMode>
       <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
         <RouterProvider router={router} />
-        <TanStackRouterDevtools router={router} />
+        {import.meta.env.DEV && <TanStackRouterDevtools router={router} />}
       </ClerkProvider>
     </StrictMode>
   );
