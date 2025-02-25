@@ -4,6 +4,7 @@ import adapter from "@hono/vite-dev-server/cloudflare";
 import viteReact from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 import { TanStackRouterVite } from "@tanstack/router-plugin/vite";
+import cloudflarePagesPlugin from "@hono/vite-cloudflare-pages";
 
 export default defineConfig(({ mode }) => {
   if (mode === "client") {
@@ -21,7 +22,13 @@ export default defineConfig(({ mode }) => {
   } else {
     return {
       ssr: {
-        external: ["react", "react-dom", "@hono/clerk-auth"],
+        external: [
+          "react",
+          "react-dom",
+          "@hono/clerk-auth",
+          "@prisma/client",
+          "@prisma/adapter-d1",
+        ],
       },
       plugins: [
         honox({

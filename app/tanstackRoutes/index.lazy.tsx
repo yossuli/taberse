@@ -21,6 +21,13 @@ export const Route = createLazyRoute("/")({
         <Link to={"/form"}>
           <button>Jump to form</button>
         </Link>
+        <form action="api/test/game" method="post">
+          <input type="text" name="title" />
+          <input type="text" name="passPhrase" />
+          <button type="submit">Submit</button>
+        </form>
+        <h2>Example of API fetch() to DB</h2>
+        <FetchToDB />
       </>
     );
   },
@@ -117,6 +124,32 @@ const ReqWithBodyButton = () => {
     <div>
       <input type="text" onChange={(e) => setName(e.target.value)} />
       <button onClick={handleClick}>Post name</button>
+      {response && <pre>{response}</pre>}
+    </div>
+  );
+};
+
+const FetchToDB = () => {
+  const [response, setResponse] = useState<string | null>(null);
+  const handleClick = async () => {
+    const response = await client.api.test.game.$get();
+    const data = await response.json();
+    const headers = Array.from(response.headers.entries()).reduce(
+      (acc, [key, value]) => ({ ...acc, [key]: value }),
+      {}
+    );
+    const fullResponse = {
+      url: response.url,
+      status: response.status,
+      headers,
+      body: data,
+    };
+    setResponse(JSON.stringify(fullResponse, null, 2));
+  };
+
+  return (
+    <div>
+      <button onClick={handleClick}>Get games</button>
       {response && <pre>{response}</pre>}
     </div>
   );

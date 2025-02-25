@@ -1,13 +1,12 @@
-import { Hono } from "hono";
+import { Env, Hono } from "hono";
 import { renderToString } from "react-dom/server";
 import { createApp } from "honox/server";
 import { showRoutes } from "hono/dev";
 import { generateHcType } from "./utils/generateHcType";
 
-const base = new Hono();
+const base = new Hono<Env>();
 
 base.get("*", async (c, next) => {
-  console.log(c.req.url);
   if (c.req.url.includes("/api")) {
     console.log("API request", c.req.url);
     return next();
