@@ -6,6 +6,7 @@ import { Routes } from "../.hc.type";
 const client = hc<Routes>("");
 
 export const Route = createLazyRoute("/")({
+  
   component: () => {
     return (
       <>
@@ -15,7 +16,9 @@ export const Route = createLazyRoute("/")({
         <h2>Example of API fetch()</h2>
         <ClockButton />
         <h2>Example of API fetch() with param</h2>
-        <ReqWithIdButton />
+        <ReqWithParamButton />
+        <h2>Example of API fetch() with body</h2>
+        <ReqWithBodyButton />
       </>
     );
   },
@@ -57,7 +60,7 @@ const ClockButton = () => {
   );
 };
 
-const ReqWithIdButton = () => {
+const ReqWithParamButton = () => {
   const [response, setResponse] = useState<string | null>(null);
   const [id, setId] = useState(0);
   const handleClick = async () => {
@@ -81,7 +84,37 @@ const ReqWithIdButton = () => {
   return (
     <div>
       <input type="number" onChange={(e) => setId(+e.target.value)} />
-      <button onClick={handleClick}>Get Server Time with param</button>
+      <button onClick={handleClick}>Get param</button>
+      {response && <pre>{response}</pre>}
+    </div>
+  );
+};
+
+const ReqWithBodyButton = () => {
+  const [response, setResponse] = useState<string | null>(null);
+  const [name, setName] = useState("");
+  const handleClick = async () => {
+    const response = await client.api.test.$post({
+      json: { name },
+    });
+    const data = await response.json();
+    const headers = Array.from(response.headers.entries()).reduce(
+      (acc, [key, value]) => ({ ...acc, [key]: value }),
+      {}
+    );
+    const fullResponse = {
+      url: response.url,
+      status: response.status,
+      headers,
+      body: data,
+    };
+    setResponse(JSON.stringify(fullResponse, null, 2));
+  };
+
+  return (
+    <div>
+      <input type="text" onChange={(e) => setName(e.target.value)} />
+      <button onClick={handleClick}>Post name</button>
       {response && <pre>{response}</pre>}
     </div>
   );
