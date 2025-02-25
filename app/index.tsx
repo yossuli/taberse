@@ -2,6 +2,7 @@ import { Hono } from "hono";
 import { renderToString } from "react-dom/server";
 import { createApp } from "honox/server";
 import { showRoutes } from "hono/dev";
+import { generateHcType } from "./utils/generateHcType";
 
 const base = new Hono();
 
@@ -37,5 +38,7 @@ base.get("*", async (c, next) => {
 
 const app = createApp({ app: base });
 showRoutes(app);
+
+generateHcType(app);
 
 export default app;

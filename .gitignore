@@ -33,3 +33,4 @@ lerna-debug.log*
 .DS_Store
 app/routeTree.gen.ts
 vite.config.ts.*
+app/.hc.type.ts

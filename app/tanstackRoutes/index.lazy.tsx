@@ -1,5 +1,9 @@
 import { createLazyRoute } from "@tanstack/react-router";
+import { hc } from "hono/client";
 import { useState } from "react";
+import { Routes } from "../.hc.type";
+
+const client = hc<Routes>("");
 
 export const Route = createLazyRoute("/")({
   component: () => {
@@ -30,7 +34,7 @@ const ClockButton = () => {
   const [response, setResponse] = useState<string | null>(null);
 
   const handleClick = async () => {
-    const response = await fetch("/api/test");
+    const response = await client.api.test.$get();
     const data = await response.json();
     const headers = Array.from(response.headers.entries()).reduce(
       (acc, [key, value]) => ({ ...acc, [key]: value }),
@@ -57,7 +61,9 @@ const ReqWithIdButton = () => {
   const [response, setResponse] = useState<string | null>(null);
   const [id, setId] = useState(0);
   const handleClick = async () => {
-    const response = await fetch(`/api/test/${id}`);
+    const response = await client.api.test[":id"].$get({
+      param: { id: String(id) },
+    });
     const data = await response.json();
     const headers = Array.from(response.headers.entries()).reduce(
       (acc, [key, value]) => ({ ...acc, [key]: value }),
