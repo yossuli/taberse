@@ -1,4 +1,4 @@
-import { createLazyRoute } from "@tanstack/react-router";
+import { createLazyRoute, Link } from "@tanstack/react-router";
 import { hc } from "hono/client";
 import { useState } from "react";
 import { Routes } from "../.hc.type";
@@ -6,7 +6,6 @@ import { Routes } from "../.hc.type";
 const client = hc<Routes>("");
 
 export const Route = createLazyRoute("/")({
-  
   component: () => {
     return (
       <>
@@ -19,6 +18,9 @@ export const Route = createLazyRoute("/")({
         <ReqWithParamButton />
         <h2>Example of API fetch() with body</h2>
         <ReqWithBodyButton />
+        <Link to={"/form"}>
+          <button>Jump to form</button>
+        </Link>
       </>
     );
   },
