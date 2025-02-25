@@ -73,7 +73,7 @@ const ReqWithParamButton = () => {
   const [response, setResponse] = useState<string | null>(null);
   const [id, setId] = useState(0);
   const handleClick = async () => {
-    const response = await client.api.test[":id"].$get({
+    const response = await client.api.test.id[":id"].$get({
       param: { id: String(id) },
     });
     const data = await response.json();
