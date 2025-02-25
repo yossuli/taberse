@@ -5,12 +5,7 @@ import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 import { router } from "./route";
 import { ClerkProvider } from "@clerk/clerk-react";
 
-const env = import.meta.env;
-
-const PUBLISHABLE_KEY =
-  env.MODE === "development"
-    ? env.VITE_CLERK_PUBLISHABLE_KEY
-    : env.CLERK_PUBLISHABLE_KEY;
+const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
 if (!PUBLISHABLE_KEY) {
   throw new Error("Missing Publishable Key");

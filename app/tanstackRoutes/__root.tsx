@@ -5,22 +5,16 @@ import {
   SignInButton,
   SignedIn,
   UserButton,
+  useUser,
 } from "@clerk/clerk-react";
-import { useEffect, useState } from "react";
 
 export const Route = createRootRoute({
   component: RootComponent,
 });
 
 function RootComponent() {
-  const [auth, setAuth] = useState();
-  useEffect(() => {
-    fetch("/api/test/auth")
-      .then((res) => res.json())
-      .then((data) => {
-        setAuth(data.auth);
-      });
-  }, []);
+  const user = useUser();
+
   return (
     <React.Fragment>
       <SignedOut>
@@ -28,8 +22,9 @@ function RootComponent() {
       </SignedOut>
       <SignedIn>
         <UserButton />
+        {user?.user?.username}
+        <Outlet />
       </SignedIn>
-      <Outlet />
     </React.Fragment>
   );
 }
