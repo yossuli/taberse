@@ -13,7 +13,7 @@ if (!PUBLISHABLE_KEY) {
 
 const rootElement = document.getElementById("root");
 
-if (rootElement?.innerHTML) {
+if (rootElement) {
   const root = ReactDOM.createRoot(rootElement);
   root.render(
     <StrictMode>
