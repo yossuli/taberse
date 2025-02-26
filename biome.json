@@ -103,7 +103,10 @@
           "fix": "safe"
         },
         "useNamingConvention": "off",
-        "useSelfClosingElements": "error",
+        "useSelfClosingElements": {
+          "level": "error",
+          "fix": "safe"
+        },
         "useShorthandArrayType": "error"
       },
       "suspicious": {
