@@ -1,19 +1,18 @@
-import { Env, Hono } from "hono";
-import { renderToString } from "react-dom/server";
-import { createApp } from "honox/server";
+import { type Env, Hono } from "hono";
 import { showRoutes } from "hono/dev";
+import { createApp } from "honox/server";
+import { renderToString } from "react-dom/server";
 import { generateHcType } from "./utils/generateHcType";
 
 const base = new Hono<Env>();
 
 base.get("*", async (c, next) => {
   if (c.req.url.includes("/api")) {
-    console.log("API request", c.req.url);
     return next();
   }
   return c.html(
     renderToString(
-      <html>
+      <html lang="ja">
         <head>
           <meta charSet="utf-8" />
           <meta content="width=device-width, initial-scale=1" name="viewport" />
@@ -22,16 +21,16 @@ base.get("*", async (c, next) => {
             href="https://cdn.simplecss.org/simple.min.css"
           />
           {import.meta.env.PROD ? (
-            <script type="module" src="/static/client.js"></script>
+            <script type="module" src="/static/client.js" />
           ) : (
-            <script type="module" src="/app/client.tsx"></script>
+            <script type="module" src="/app/client.tsx" />
           )}
         </head>
         <body>
-          <div id="root"></div>
+          <div id="root" />
         </body>
-      </html>
-    )
+      </html>,
+    ),
   );
 });
 

@@ -17,7 +17,9 @@ export const POST = createRoute(
     const { title, passPhrase } = c.req.valid("form");
     console.log("DB", c.env.DB);
     const prismaClient = await getPrismaClient(c.env.DB);
-    if (!auth?.userId) return c.redirect("/");
+    if (!auth?.userId) {
+      return c.redirect("/");
+    }
     const game = await prismaClient.game.create({
       data: {
         title,
@@ -28,7 +30,7 @@ export const POST = createRoute(
     });
     console.log("game", game);
     return c.redirect("/");
-  }
+  },
 );
 
 export const GET = createRoute(async (c) => {

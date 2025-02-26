@@ -8,6 +8,12 @@
     "migration:dev": "wrangler d1 migrations apply game1-db --local",
     "migration:prod": "wrangler d1 migrations apply game1-db --remote",
     "generate": "prisma generate",
+    "format": "biome format ./app",
+    "format:fix": "biome format --write ./app",
+    "format:error": "biome format --diagnostic-level=error ./app",
+    "lint": "biome lint ./app",
+    "lint:fix": "biome lint --apply ./app",
+    "lint:error": "biome lint --diagnostic-level=error ./app",
     "preview": "wrangler pages dev",
     "deploy": "pnpm run build && wrangler pages deploy"
   },
@@ -27,6 +33,7 @@
     "zod": "^3.24.2"
   },
   "devDependencies": {
+    "@biomejs/biome": "1.9.4",
     "@cloudflare/workers-types": "^4.20241218.0",
     "@hono/vite-build": "^1.2.0",
     "@hono/vite-cloudflare-pages": "^0.4.2",

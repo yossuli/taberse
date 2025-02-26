@@ -1,7 +1,7 @@
-import { createLazyRoute, Link } from "@tanstack/react-router";
+import { Link, createLazyRoute } from "@tanstack/react-router";
 import { hc } from "hono/client";
 import { useState } from "react";
-import { Routes } from "../.hc.type";
+import type { Routes } from "../.hc.type";
 
 const client = hc<Routes>("");
 
@@ -18,8 +18,8 @@ export const Route = createLazyRoute("/")({
         <ReqWithParamButton />
         <h2>Example of API fetch() with body</h2>
         <ReqWithBodyButton />
-        <Link to={"/form"}>
-          <button>Jump to form</button>
+        <Link to="/form">
+          <button type="button">Jump to form</button>
         </Link>
         <form action="api/test/game" method="post">
           <input type="text" name="title" />
@@ -36,7 +36,7 @@ export const Route = createLazyRoute("/")({
 function Counter() {
   const [count, setCount] = useState(0);
   return (
-    <button onClick={() => setCount(count + 1)}>
+    <button type="button" onClick={() => setCount(count + 1)}>
       You clicked me {count} times
     </button>
   );
@@ -50,7 +50,7 @@ const ClockButton = () => {
     const data = await response.json();
     const headers = Array.from(response.headers.entries()).reduce(
       (acc, [key, value]) => ({ ...acc, [key]: value }),
-      {}
+      {},
     );
     const fullResponse = {
       url: response.url,
@@ -63,7 +63,9 @@ const ClockButton = () => {
 
   return (
     <div>
-      <button onClick={handleClick}>Get Server Time</button>
+      <button type="button" onClick={handleClick}>
+        Get Server Time
+      </button>
       {response && <pre>{response}</pre>}
     </div>
   );
@@ -79,7 +81,7 @@ const ReqWithParamButton = () => {
     const data = await response.json();
     const headers = Array.from(response.headers.entries()).reduce(
       (acc, [key, value]) => ({ ...acc, [key]: value }),
-      {}
+      {},
     );
     const fullResponse = {
       url: response.url,
@@ -93,7 +95,9 @@ const ReqWithParamButton = () => {
   return (
     <div>
       <input type="number" onChange={(e) => setId(+e.target.value)} />
-      <button onClick={handleClick}>Get param</button>
+      <button type="button" onClick={handleClick}>
+        Get param
+      </button>
       {response && <pre>{response}</pre>}
     </div>
   );
@@ -109,7 +113,7 @@ const ReqWithBodyButton = () => {
     const data = await response.json();
     const headers = Array.from(response.headers.entries()).reduce(
       (acc, [key, value]) => ({ ...acc, [key]: value }),
-      {}
+      {},
     );
     const fullResponse = {
       url: response.url,
@@ -123,7 +127,9 @@ const ReqWithBodyButton = () => {
   return (
     <div>
       <input type="text" onChange={(e) => setName(e.target.value)} />
-      <button onClick={handleClick}>Post name</button>
+      <button type="button" onClick={handleClick}>
+        Post name
+      </button>
       {response && <pre>{response}</pre>}
     </div>
   );
@@ -136,7 +142,7 @@ const FetchToDB = () => {
     const data = await response.json();
     const headers = Array.from(response.headers.entries()).reduce(
       (acc, [key, value]) => ({ ...acc, [key]: value }),
-      {}
+      {},
     );
     const fullResponse = {
       url: response.url,
@@ -149,7 +155,9 @@ const FetchToDB = () => {
 
   return (
     <div>
-      <button onClick={handleClick}>Get games</button>
+      <button type="button" onClick={handleClick}>
+        Get games
+      </button>
       {response && <pre>{response}</pre>}
     </div>
   );

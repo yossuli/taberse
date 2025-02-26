@@ -1,6 +1,6 @@
+import { zValidator } from "@hono/zod-validator";
 import { createRoute } from "honox/factory";
 import z from "zod";
-import { zValidator } from "@hono/zod-validator";
 export const GET = createRoute((c) => {
   const time = new Date().toISOString();
   return c.json({ time });
