@@ -120,13 +120,16 @@
         "noTemplateCurlyInString": "warn",
         "useAtIndex": "info",
         "useCollapsedIf": "info",
+        "useConsistentCurlyBraces": {
+          "level": "error",
+          "fix": "safe"
+        },
         "useComponentExportOnlyModules": {
           "level": "error",
           "options": {
             "allowConstantExport": true
           }
-        },
-        "useConsistentCurlyBraces": "error"
+        }
       }
     }
   }
