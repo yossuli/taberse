@@ -32,8 +32,8 @@ export const TaberseLogo: FC<TaberseLogoProps> = ({
         ry="8"
         fill="none"
         stroke="#3b82f6"
-        stroke-width="0.4"
-        stroke-opacity="0.6"
+        strokeWidth="0.4"
+        strokeOpacity="0.6"
         transform="rotate(-10, 22.5, 30)"
       />
       <ellipse
@@ -43,8 +43,8 @@ export const TaberseLogo: FC<TaberseLogoProps> = ({
         ry="6.8"
         fill="none"
         stroke="#3b82f6"
-        stroke-width="0.4"
-        stroke-opacity="0.6"
+        strokeWidth="0.4"
+        strokeOpacity="0.6"
         transform="rotate(-10, 22.5, 30)"
       />
       <ellipse
@@ -54,8 +54,8 @@ export const TaberseLogo: FC<TaberseLogoProps> = ({
         ry="5.6"
         fill="none"
         stroke="#3b82f6"
-        stroke-width="0.4"
-        stroke-opacity="0.6"
+        strokeWidth="0.4"
+        strokeOpacity="0.6"
         transform="rotate(-10, 22.5, 30)"
       />
       <ellipse
@@ -65,8 +65,8 @@ export const TaberseLogo: FC<TaberseLogoProps> = ({
         ry="4.4"
         fill="none"
         stroke="#3b82f6"
-        stroke-width="0.4"
-        stroke-opacity="0.6"
+        strokeWidth="0.4"
+        strokeOpacity="0.6"
         transform="rotate(-10, 22.5, 30)"
       />
 
@@ -77,8 +77,8 @@ export const TaberseLogo: FC<TaberseLogoProps> = ({
         x2="50"
         y2="30"
         stroke="#3b82f6"
-        stroke-width="0.4"
-        stroke-opacity="0.5"
+        strokeWidth="0.4"
+        strokeOpacity="0.5"
         transform="rotate(-10, 22.5, 30)"
       />
       <line
@@ -87,8 +87,8 @@ export const TaberseLogo: FC<TaberseLogoProps> = ({
         x2="47"
         y2="30"
         stroke="#3b82f6"
-        stroke-width="0.4"
-        stroke-opacity="0.5"
+        strokeWidth="0.4"
+        strokeOpacity="0.5"
         transform="rotate(10, 22.5, 30)"
       />
       <line
@@ -97,8 +97,8 @@ export const TaberseLogo: FC<TaberseLogoProps> = ({
         x2="44"
         y2="30"
         stroke="#3b82f6"
-        stroke-width="0.4"
-        stroke-opacity="0.5"
+        strokeWidth="0.4"
+        strokeOpacity="0.5"
         transform="rotate(30, 22.5, 30)"
       />
       <line
@@ -107,8 +107,8 @@ export const TaberseLogo: FC<TaberseLogoProps> = ({
         x2="41"
         y2="30"
         stroke="#3b82f6"
-        stroke-width="0.4"
-        stroke-opacity="0.5"
+        strokeWidth="0.4"
+        strokeOpacity="0.5"
         transform="rotate(50, 22.5, 30)"
       />
       <line
@@ -117,8 +117,8 @@ export const TaberseLogo: FC<TaberseLogoProps> = ({
         x2="38"
         y2="30"
         stroke="#3b82f6"
-        stroke-width="0.4"
-        stroke-opacity="0.5"
+        strokeWidth="0.4"
+        strokeOpacity="0.5"
         transform="rotate(70, 22.5, 30)"
       />
       <line
@@ -127,8 +127,8 @@ export const TaberseLogo: FC<TaberseLogoProps> = ({
         x2="35"
         y2="30"
         stroke="#3b82f6"
-        stroke-width="0.4"
-        stroke-opacity="0.5"
+        strokeWidth="0.4"
+        strokeOpacity="0.5"
         transform="rotate(90, 22.5, 30)"
       />
 
@@ -142,7 +142,7 @@ export const TaberseLogo: FC<TaberseLogoProps> = ({
         ry="2"
         fill="white"
         stroke="#1e293b"
-        stroke-width="0.7"
+        strokeWidth="0.7"
         transform="rotate(-15, 9, 17.6)"
         filter="drop-shadow(0px 1px 1px rgba(0,0,0,0.1))"
       />
@@ -162,7 +162,7 @@ export const TaberseLogo: FC<TaberseLogoProps> = ({
         ry="2"
         fill="white"
         stroke="#1e293b"
-        stroke-width="0.7"
+        strokeWidth="0.7"
         transform="rotate(-5, 19, 15.6)"
         filter="drop-shadow(0px 1px 1px rgba(0,0,0,0.1))"
       />
@@ -170,9 +170,9 @@ export const TaberseLogo: FC<TaberseLogoProps> = ({
       <text
         x="17"
         y="17"
-        font-family="Arial, sans-serif"
-        font-size="6"
-        font-weight="bold"
+        fontFamily="Arial, sans-serif"
+        fontSize="6"
+        fontWeight="bold"
         fill="#dc2626"
         transform="rotate(-5, 19, 15.6)"
       >
@@ -189,7 +189,7 @@ export const TaberseLogo: FC<TaberseLogoProps> = ({
         ry="2"
         fill="#f5f5dc"
         stroke="#1e293b"
-        stroke-width="0.7"
+        strokeWidth="0.7"
         filter="drop-shadow(0px 1px 1px rgba(0,0,0,0.1))"
       />
       <rect
@@ -201,14 +201,14 @@ export const TaberseLogo: FC<TaberseLogoProps> = ({
         ry="1"
         fill="none"
         stroke="#166534"
-        stroke-width="0.7"
+        strokeWidth="0.7"
       />
       <text
         x="26.5"
         y="16"
-        font-family="Arial, sans-serif"
-        font-size="4.8"
-        font-weight="bold"
+        fontFamily="Arial, sans-serif"
+        fontSize="4.8"
+        fontWeight="bold"
         fill="#166534"
       >
         中
@@ -224,7 +224,7 @@ export const TaberseLogo: FC<TaberseLogoProps> = ({
         ry="2"
         fill="#a263eb"
         stroke="#1e293b"
-        stroke-width="0.7"
+        strokeWidth="0.7"
         transform="rotate(5, 39, 15.6)"
         filter="drop-shadow(0px 1px 1px rgba(0,0,0,0.1))"
       />
@@ -235,15 +235,15 @@ export const TaberseLogo: FC<TaberseLogoProps> = ({
         ry="4.4"
         fill="none"
         stroke="white"
-        stroke-width="1.5"
+        strokeWidth="1.5"
         transform="rotate(5, 39, 15.6)"
       />
       <text
         x="37.8"
         y="17.2"
-        font-family="Arial, sans-serif"
-        font-size="4"
-        font-weight="bold"
+        fontFamily="Arial, sans-serif"
+        fontSize="4"
+        fontWeight="bold"
         fill="white"
         transform="rotate(5, 39, 15.6)"
       >
@@ -261,12 +261,12 @@ export const TaberseLogo: FC<TaberseLogoProps> = ({
       <text
         x="22.5"
         y="35"
-        font-family="Arial, sans-serif"
-        font-size="8"
-        font-weight="bold"
+        fontFamily="Arial, sans-serif"
+        fontSize="8"
+        fontWeight="bold"
         fill="#1e293b"
-        text-anchor="middle"
-        letter-spacing="0.5"
+        textAnchor="middle"
+        letterSpacing="0.5"
       >
         Taberse
       </text>
