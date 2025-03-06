@@ -34,5 +34,9 @@ lerna-debug.log*
 app/routeTree.gen.ts
 vite.config.ts.*
 app/.hc.type.ts
-wrangler.jsonc.back
+wrangler.jsonc
 **/*.db
+
+## Panda
+public/static/styled-system
+public/static/styled-system-studio
