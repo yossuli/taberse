@@ -19,9 +19,8 @@ export const Route = createLazyRoute("/sign-in")({
         <h2>ゲームをプレイする</h2>
         <p
           className={css({
-            d: "flex",
+            display: "flex",
             flexWrap: "wrap",
-            // },
           })}
         >
           <span>このゲームでは、</span>
@@ -51,12 +50,14 @@ export const Route = createLazyRoute("/sign-in")({
           <span>clerkの</span>
           <span>プライバシーポリシーは</span>
           <span>
-            <a href="https://clerk.com/legal/privacy">こちら</a>から
+            <a href="https://clerk.com/legal/privacy">こちら</a>
           </span>
-          <span>ご確認ください。</span>
+          <span>から</span>
+          <span>ご確認</span>
+          <span>ください。</span>
           <br />
         </p>
-        <SignInButton>clerk</SignInButton>
+        <SignInButton>ログインして開始</SignInButton>
       </div>
     );
   },
