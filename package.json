@@ -44,6 +44,7 @@
     "@hono/vite-cloudflare-pages": "^0.4.2",
     "@hono/vite-dev-server": "^0.18.1",
     "@pandacss/dev": "^0.53.0",
+    "@pandacss/studio": "^0.53.1",
     "@tanstack/router-cli": "^1.109.2",
     "@tanstack/router-plugin": "^1.109.2",
     "@types/node": "^22.13.5",
