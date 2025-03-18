@@ -25,7 +25,10 @@ base.get("*", async (c, next) => {
             href="https://cdn.simplecss.org/simple.min.css"
           />
           {import.meta.env.PROD ? (
-            <script type="module" src="/static/client.js" />
+            <>
+              <script type="module" src="/static/client.js" />
+              <link rel="stylesheet" href="./static/styled-system/styles.css" />
+            </>
           ) : (
             <script type="module" src="/app/client.tsx" />
           )}

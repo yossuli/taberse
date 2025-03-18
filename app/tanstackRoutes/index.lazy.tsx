@@ -8,7 +8,7 @@ const client = hc<Routes>("");
 export const Route = createLazyRoute("/")({
   component: () => {
     return (
-      <>
+      <div>
         <h1>Hello, Hono with React!</h1>
         <h2>Example of useState()</h2>
         <Counter />
@@ -28,7 +28,7 @@ export const Route = createLazyRoute("/")({
         </form>
         <h2>Example of API fetch() to DB</h2>
         <FetchToDB />
-      </>
+      </div>
     );
   },
 });

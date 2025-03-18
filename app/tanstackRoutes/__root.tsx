@@ -1,6 +1,8 @@
 import { SignedIn, SignedOut, UserButton, useUser } from "@clerk/clerk-react";
+import { css } from "@ss/css";
 import { Outlet, createRootRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { flex } from "../../public/static/styled-system/patterns";
 import { TaberseLogo } from "../components/TaberseLogo";
 
 export const Route = createRootRoute({
@@ -17,48 +19,55 @@ function RootComponent() {
     if (!user.isSignedIn) {
       navigate({ to: "/sign-in" });
     }
-  }, [user.isSignedIn, navigate]);
+  }, [navigate, user.isSignedIn]);
 
   return (
     <>
       {compactMode ? (
-        <div style={{ position: "fixed", margin: "1rem", right: 0, top: 0 }}>
+        <div
+          className={css({
+            position: "fixed",
+            margin: "1",
+            right: "0",
+            top: "0",
+          })}
+        >
           <TaberseLogo onClick={() => setCompactMode(false)} />
         </div>
       ) : (
         <header
-          style={{
+          className={flex({
             position: "sticky",
-            top: 0,
+            top: "0",
+            p: "3 0",
             backgroundColor: "var(--bg)",
-            padding: "0.67rem",
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-between",
-            borderBottom: "1px solid var(--border)",
-          }}
+            justify: "space-between",
+            borderBottomColor: "var(--border)",
+            borderBottomStyle: "solid",
+            borderBottomWidth: "1",
+          })}
         >
           <h1
-            style={{
-              display: "flex",
+            className={flex({
+              align: "center",
               flexGrow: 1,
-            }}
+            })}
           >
             <TaberseLogo onClick={() => setCompactMode(true)} />
-            <div style={{ width: "1rem" }} />
+            <div className={css({ width: "3" })} />
             Taberse
           </h1>
           <div
-            style={{
+            className={css({
               display: "flex",
               alignItems: "center",
-            }}
+            })}
           >
             <UserButton />
             <h5
-              style={{
-                marginLeft: "1rem",
-              }}
+              className={css({
+                marginLeft: "1",
+              })}
             >
               {user?.user?.username}
             </h5>
