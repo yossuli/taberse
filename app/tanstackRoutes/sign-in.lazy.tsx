@@ -1,20 +1,19 @@
 import { SignInButton, useUser } from "@clerk/clerk-react";
 import { css } from "@ss/css";
+import { Container } from "@ss/jsx";
 import { createLazyRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
-import { container } from "../../public/static/styled-system/patterns";
 export const Route = createLazyRoute("/sign-in")({
   component: () => {
     const user = useUser();
     const navigate = useNavigate();
     useEffect(() => {
-      console.log(user.isSignedIn);
       if (user.isSignedIn) {
         navigate({ to: ".." });
       }
     }, [navigate, user.isSignedIn]);
     return (
-      <div className={container()}>
+      <Container>
         <h2>ゲームをプレイする</h2>
         <p
           className={css({
@@ -60,7 +59,7 @@ export const Route = createLazyRoute("/sign-in")({
           <span>ください。</span>
         </p>
         <SignInButton>ログインして開始</SignInButton>
-      </div>
+      </Container>
     );
   },
 });

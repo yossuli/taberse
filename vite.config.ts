@@ -42,5 +42,10 @@ export default defineConfig(({ mode }) => {
       }),
       tsconfigPaths(),
     ],
+    server: {
+      fs: {
+        allow: ["app", "./public/static/styled-system"],
+      },
+    },
   };
 });
