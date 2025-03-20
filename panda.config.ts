@@ -6,6 +6,11 @@ export default defineConfig({
   exclude: [],
   theme: {},
   outdir: "./app/styled-system",
+  importMap: {
+    css: "@ss/css",
+    jsx: "@ss/jsx",
+    patterns: "@ss/patterns",
+  },
   jsxFramework: "react",
   patterns: {
     extend: {
