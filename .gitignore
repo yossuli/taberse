@@ -38,5 +38,5 @@ wrangler.jsonc
 **/*.db
 
 ## Panda
-public/static/styled-system
-public/static/styled-system-studio
+**/styled-system
+**/styled-system-studio

@@ -2,8 +2,8 @@ import { SignedIn, SignedOut, UserButton, useUser } from "@clerk/clerk-react";
 import { css } from "@ss/css";
 import { Outlet, createRootRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { flex } from "../../public/static/styled-system/patterns";
 import { TaberseLogo } from "../components/TaberseLogo";
+import { flex } from "../styled-system/patterns";
 
 export const Route = createRootRoute({
   component: RootComponent,

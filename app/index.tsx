@@ -10,9 +10,6 @@ base.get("*", async (c, next) => {
   if (c.req.url.includes("/api")) {
     return next();
   }
-  if (c.req.url.includes("/public")) {
-    return c.redirect(c.req.url.replace("/public", ""));
-  }
 
   return c.html(
     renderToString(

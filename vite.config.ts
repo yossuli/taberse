@@ -2,7 +2,7 @@ import pages from "@hono/vite-cloudflare-pages";
 import adapter from "@hono/vite-dev-server/cloudflare";
 import { TanStackRouterVite } from "@tanstack/router-plugin/vite";
 import viteReact from "@vitejs/plugin-react";
-import honox from "honox/vite";
+import honox, { devServerDefaultOptions } from "honox/vite";
 import { defineConfig } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 
@@ -35,6 +35,13 @@ export default defineConfig(({ mode }) => {
         devServer: {
           adapter,
           entry: "app/index.tsx",
+          exclude: [
+            ...devServerDefaultOptions.exclude,
+            /^\/app\/.+\.tsx?/,
+            /^\/favicon.ico/,
+            /^\/static\/.+/,
+            /^\/app\/styled-system\/.+\.mjs?/,
+          ],
         },
       }),
       pages({
@@ -42,10 +49,5 @@ export default defineConfig(({ mode }) => {
       }),
       tsconfigPaths(),
     ],
-    server: {
-      fs: {
-        allow: ["app", "./public/static/styled-system"],
-      },
-    },
   };
 });
