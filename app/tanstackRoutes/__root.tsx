@@ -1,9 +1,11 @@
 import { SignedIn, SignedOut, UserButton, useUser } from "@clerk/clerk-react";
 import { css } from "@ss/css";
+import { Container } from "@ss/jsx";
+import { center, container } from "@ss/patterns";
 import { Outlet, createRootRoute, useNavigate } from "@tanstack/react-router";
+import { mergeCn } from "app/utils/mergeCn";
 import { useEffect, useState } from "react";
 import { TaberseLogo } from "../components/TaberseLogo";
-import { flex } from "../styled-system/patterns";
 
 export const Route = createRootRoute({
   component: RootComponent,
@@ -36,51 +38,42 @@ function RootComponent() {
         </div>
       ) : (
         <header
-          className={flex({
-            position: "sticky",
-            top: "0",
-            p: "3 0",
-            backgroundColor: "var(--bg)",
-            justify: "space-between",
-            borderBottomColor: "var(--border)",
-            borderBottomStyle: "solid",
-            borderBottomWidth: "1",
-          })}
+          className={mergeCn(
+            container({
+              position: "sticky",
+              top: "0",
+              flexDirection: "row",
+              backgroundColor: "var(--bg)",
+              borderBottomColor: "var(--border)",
+              borderBottomStyle: "solid",
+              borderBottomWidth: "1",
+              gap: "2",
+              zIndex: "9999",
+            }),
+            center,
+          )}
         >
+          <TaberseLogo onClick={() => setCompactMode(true)} />
           <h1
-            className={flex({
-              align: "center",
-              flexGrow: 1,
+            className={css({
+              marginRight: "auto",
             })}
           >
-            <TaberseLogo onClick={() => setCompactMode(true)} />
-            <div className={css({ width: "3" })} />
             Taberse
           </h1>
-          <div
-            className={css({
-              display: "flex",
-              alignItems: "center",
-            })}
-          >
-            <UserButton />
-            <h5
-              className={css({
-                marginLeft: "1",
-              })}
-            >
-              {user?.user?.username}
-            </h5>
-            <SignedOut>ログインしていません</SignedOut>
-          </div>
+          <UserButton />
+          <h5>{user?.user?.username}</h5>
+          <SignedOut>ログインしていません</SignedOut>
         </header>
       )}
-      <SignedOut>
-        <Outlet />
-      </SignedOut>
-      <SignedIn>
-        <Outlet />
-      </SignedIn>
+      <Container>
+        <SignedOut>
+          <Outlet />
+        </SignedOut>
+        <SignedIn>
+          <Outlet />
+        </SignedIn>
+      </Container>
     </>
   );
 }
