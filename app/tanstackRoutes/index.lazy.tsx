@@ -8,7 +8,7 @@ const client = hc<Routes>("");
 export const Route = createLazyRoute("/")({
   component: () => {
     return (
-      <div>
+      <>
         <h1>Hello, Hono with React!</h1>
         <h2>Example of useState()</h2>
         <Counter />
@@ -28,7 +28,7 @@ export const Route = createLazyRoute("/")({
         </form>
         <h2>Example of API fetch() to DB</h2>
         <FetchToDB />
-      </div>
+      </>
     );
   },
 });
@@ -62,12 +62,12 @@ const ClockButton = () => {
   };
 
   return (
-    <div>
+    <>
       <button type="button" onClick={handleClick}>
         Get Server Time
       </button>
       {response && <pre>{response}</pre>}
-    </div>
+    </>
   );
 };
 
@@ -93,13 +93,13 @@ const ReqWithParamButton = () => {
   };
 
   return (
-    <div>
+    <>
       <input type="number" onChange={(e) => setId(+e.target.value)} />
       <button type="button" onClick={handleClick}>
         Get param
       </button>
       {response && <pre>{response}</pre>}
-    </div>
+    </>
   );
 };
 
@@ -125,13 +125,13 @@ const ReqWithBodyButton = () => {
   };
 
   return (
-    <div>
+    <>
       <input type="text" onChange={(e) => setName(e.target.value)} />
       <button type="button" onClick={handleClick}>
         Post name
       </button>
       {response && <pre>{response}</pre>}
-    </div>
+    </>
   );
 };
 
@@ -154,11 +154,11 @@ const FetchToDB = () => {
   };
 
   return (
-    <div>
+    <>
       <button type="button" onClick={handleClick}>
         Get games
       </button>
       {response && <pre>{response}</pre>}
-    </div>
+    </>
   );
 };

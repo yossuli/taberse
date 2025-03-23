@@ -1,6 +1,5 @@
 import { SignInButton, useUser } from "@clerk/clerk-react";
-import { css } from "@ss/css";
-import { Container } from "@ss/jsx";
+import { flex } from "@ss/patterns";
 import { createLazyRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
 export const Route = createLazyRoute("/sign-in")({
@@ -13,10 +12,10 @@ export const Route = createLazyRoute("/sign-in")({
       }
     }, [navigate, user.isSignedIn]);
     return (
-      <Container>
+      <>
         <h2>ゲームをプレイする</h2>
         <p
-          className={css({
+          className={flex({
             display: "flex",
             flexWrap: "wrap",
             "& > div": {
@@ -59,7 +58,7 @@ export const Route = createLazyRoute("/sign-in")({
           <span>ください。</span>
         </p>
         <SignInButton>ログインして開始</SignInButton>
-      </Container>
+      </>
     );
   },
 });

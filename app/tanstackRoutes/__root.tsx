@@ -1,7 +1,7 @@
 import { SignedIn, SignedOut, UserButton, useUser } from "@clerk/clerk-react";
 import { css, cx } from "@ss/css";
 import { Container } from "@ss/jsx";
-import { sticky } from "@ss/patterns";
+import { container, sticky } from "@ss/patterns";
 import { Outlet, createRootRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { TaberseLogo } from "../components/TaberseLogo";
@@ -38,6 +38,7 @@ function RootComponent() {
       ) : (
         <header
           className={cx(
+            container(),
             sticky({
               gap: "2",
               top: "0",
