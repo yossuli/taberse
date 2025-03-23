@@ -1,9 +1,8 @@
 import { SignedIn, SignedOut, UserButton, useUser } from "@clerk/clerk-react";
-import { css } from "@ss/css";
+import { css, cx } from "@ss/css";
 import { Container } from "@ss/jsx";
-import { center, container } from "@ss/patterns";
+import { sticky } from "@ss/patterns";
 import { Outlet, createRootRoute, useNavigate } from "@tanstack/react-router";
-import { mergeCn } from "app/utils/mergeCn";
 import { useEffect, useState } from "react";
 import { TaberseLogo } from "../components/TaberseLogo";
 
@@ -38,19 +37,11 @@ function RootComponent() {
         </div>
       ) : (
         <header
-          className={mergeCn(
-            container({
-              position: "sticky",
-              top: "0",
-              flexDirection: "row",
-              backgroundColor: "var(--bg)",
-              borderBottomColor: "var(--border)",
-              borderBottomStyle: "solid",
-              borderBottomWidth: "1",
+          className={cx(
+            sticky({
               gap: "2",
-              zIndex: "9999",
+              top: "0",
             }),
-            center,
           )}
         >
           <TaberseLogo onClick={() => setCompactMode(true)} />
@@ -66,7 +57,7 @@ function RootComponent() {
           <SignedOut>ログインしていません</SignedOut>
         </header>
       )}
-      <Container>
+      <Container flexDirection="column">
         <SignedOut>
           <Outlet />
         </SignedOut>
