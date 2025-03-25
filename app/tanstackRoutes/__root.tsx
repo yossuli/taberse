@@ -3,7 +3,7 @@ import { css, cx } from "@ss/css";
 import { Container } from "@ss/jsx";
 import { center, container, sticky } from "@ss/patterns";
 import { Outlet, createRootRoute, useNavigate } from "@tanstack/react-router";
-import { Header } from "app/componant/Header";
+import { Header } from "app/components/Header";
 import { useEffect } from "react";
 
 export const Route = createRootRoute({
