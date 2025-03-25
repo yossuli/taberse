@@ -3,13 +3,11 @@ import type { FC } from "react";
 interface TaberseLogoProps {
   width?: number;
   height?: number;
-  onClick?: () => void;
 }
 
 export const TaberseLogo: FC<TaberseLogoProps> = ({
   width = 45,
   height = 45,
-  onClick,
 }) => {
   return (
     <svg
@@ -18,8 +16,6 @@ export const TaberseLogo: FC<TaberseLogoProps> = ({
       width={width}
       height={height}
       fill="none"
-      onClick={onClick}
-      onKeyDown={onClick}
     >
       <title>Taberse</title>
       <rect x="0" y="0" width="45" height="45" rx="8" ry="8" fill="#f8faff" />
