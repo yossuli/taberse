@@ -32,6 +32,17 @@ function RootComponent() {
           <Outlet />
         </SignedIn>
       </Container>
+      <footer
+        className={cx(container(), center(), sticky({ gap: "2", bottom: "0" }))}
+      >
+        <h4 className={css({ marginEnd: "2" })}>@ 2025 yossuli</h4>
+        <h5>
+          <a href="https://x.com/yossulito">𝕏</a>
+        </h5>
+        <h5>
+          <a href="https://github.com/yossuli">github</a>
+        </h5>
+      </footer>
     </>
   );
 }
