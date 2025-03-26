@@ -1,4 +1,5 @@
 import { SignInButton, useUser } from "@clerk/clerk-react";
+import { css } from "@ss/css";
 import { flex } from "@ss/patterns";
 import { createLazyRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
@@ -32,7 +33,7 @@ export const Route = createLazyRoute("/sign-in")({
           <span>サインインが</span>
           <span>必要</span>
           <span>です。</span>
-          <div />
+          <span className={css({ width: "100%" })} />
           <span>サインインに</span>
           <span>用いられた</span>
           <span>情報を</span>
@@ -44,7 +45,7 @@ export const Route = createLazyRoute("/sign-in")({
           <span>のみ</span>
           <span>使用</span>
           <span>します。</span>
-          <div />
+          <span className={css({ width: "100%" })} />
           <span>認証システムとして</span>
           <span>使用</span>
           <span>している</span>
