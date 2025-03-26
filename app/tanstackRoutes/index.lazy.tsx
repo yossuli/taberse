@@ -1,6 +1,6 @@
 import { Link, createLazyRoute } from "@tanstack/react-router";
 import { hc } from "hono/client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { Routes } from "../.hc.type";
 
 const client = hc<Routes>("");
@@ -10,6 +10,8 @@ export const Route = createLazyRoute("/")({
     return (
       <>
         <h1>Hello, Hono with React!</h1>
+        <h2>Example of stream</h2>
+        <Stream />
         <h2>Example of useState()</h2>
         <Counter />
         <h2>Example of API fetch()</h2>
@@ -32,6 +34,70 @@ export const Route = createLazyRoute("/")({
     );
   },
 });
+
+function Stream() {
+  const [isStreaming, setIsStreaming] = useState(false);
+  const [response, setResponse] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!isStreaming) {
+      return;
+    }
+
+    const abortController = new AbortController(); // AbortControllerを作成
+    const stream = client.api.test.stream.$get();
+
+    stream.then((response) => {
+      const reader = response.body?.getReader();
+      if (!reader) {
+        return;
+      }
+
+      const readStream = () => {
+        // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: <explanation>
+        reader.read().then(({ done, value }) => {
+          if (done || abortController.signal.aborted) {
+            console.log("Stream complete");
+            return;
+          }
+          const text = new TextDecoder().decode(value);
+          setResponse(text);
+          readStream(); // 再帰的に呼び出し
+        });
+      };
+
+      readStream();
+    });
+
+    return () => {
+      abortController.abort(); // クリーンアップ時にストリームを中断
+    };
+  }, [isStreaming]);
+
+  return (
+    <>
+      <button
+        type="button"
+        onClick={() => {
+          console.log("clicked");
+          setIsStreaming((c) => !c);
+        }}
+      >
+        Stream
+      </button>
+      <button
+        type="button"
+        onClick={() => {
+          client.api.test.stream.$put();
+        }}
+      >
+        Put
+      </button>
+      {isStreaming ? "Streaming" : "Not streaming"}
+      {response && <pre>{response}</pre>}
+    </>
+  );
+}
 
 function Counter() {
   const [count, setCount] = useState(0);

@@ -16,7 +16,7 @@ function RootComponent() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!user.isSignedIn) {
+    if (user.isSignedIn === false) {
       navigate({ to: "/sign-in" });
     }
   }, [navigate, user.isSignedIn]);
