@@ -16,6 +16,21 @@ export default defineConfig({
     pre: {
       overflowX: "scroll",
     },
+    form: {
+      display: "flex",
+      flexDirection: "column",
+      gap: "2",
+      w: "fit-content",
+      "& > div": {
+        display: "flex",
+        flexDirection: "row",
+        gap: "2",
+      },
+    },
+    button: {
+      width: "fit-content",
+      margin: "auto",
+    },
   },
   outdir: "./app/styled-system",
   importMap: {
@@ -33,6 +48,14 @@ export default defineConfig({
         },
       },
       ...sticky,
+      br: {
+        transform() {
+          return {
+            w: "100%",
+          };
+        },
+        jsxElement: "span",
+      },
     },
   },
 });
