@@ -12,6 +12,7 @@
     "migration:dev": "wrangler d1 migrations apply game1-db --local",
     "migration:prod": "wrangler d1 migrations apply game1-db --remote",
     "generate": "prisma generate",
+    "studio": "DATABASE_URL=file:../$(find .wrangler/state/v3/d1/miniflare-D1DatabaseObject -type f -name '*.sqlite' -print -quit) prisma studio",
     "format": "biome format ./app",
     "format:fix": "biome format --write ./app",
     "format:error": "biome format --diagnostic-level=error ./app",
