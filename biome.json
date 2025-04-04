@@ -112,7 +112,8 @@
       "suspicious": {
         "noConsole": "off",
         "noConsoleLog": "warn",
-        "noExplicitAny": "warn"
+        "noExplicitAny": "warn",
+        "noArrayIndexKey": "warn"
       },
       "nursery": {
         "noDuplicateElseIf": "error",
