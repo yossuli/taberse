@@ -1,8 +1,8 @@
 import type { JsonValue } from "@prisma/client/runtime/library";
 import { css, cx } from "@ss/css";
-import { Br } from "@ss/jsx";
 import { flex } from "@ss/patterns";
 import { createLazyRoute } from "@tanstack/react-router";
+import { NaturalWrapParagraph } from "app/components/NaturalWrapParagraph";
 import { hc } from "hono/client";
 import { useEffect, useState } from "react";
 import type { Routes } from "../.hc.type";
@@ -16,7 +16,15 @@ export const Route = createLazyRoute("/")({
         <h1 className={css({ lineHeight: "1.4 !important" })}>
           ようこそ <mark>Taberse</mark> へ!!
         </h1>
-        <Notice />
+        <NaturalWrapParagraph
+          className={cx(flex({ marginTop: "0!" }), "notice")}
+          // biome-ignore format: sentence want to be a single line
+          paragraph={[
+            ["ここでは、", "現実世界で", "ボードゲームを", "遊ぶ", "ように", "自由に", "ルールを", "決めて", "遊ぶことが", "できます。"],
+            ["この", " ", "Taberse", " ", "は、", "ルールの", "検証を", "行いません。"],
+            ["プレイヤーの", "皆さんは", "外部ツールで", "コミュニケーションを", "取りながら", "ルールを", "守って", "遊んで", "ください。"],
+          ]}
+        />
         <h2>ルームを作成する</h2>
         <form action="/" method="post">
           <label htmlFor="passphrase">
@@ -52,74 +60,6 @@ export const Route = createLazyRoute("/")({
     );
   },
 });
-
-const Notice = () => {
-  return (
-    <p
-      className={cx(
-        flex({
-          display: "flex",
-          flexWrap: "wrap",
-          marginTop: "0!",
-          "& > div": {
-            w: "100%",
-          },
-        }),
-        "notice",
-      )}
-    >
-      <span>ここでは、</span>
-      <span>現実世界で</span>
-      <span>ボードゲームを</span>
-      <span>遊ぶ</span>
-      <span>ように</span>
-      <span>自由に</span>
-      <span>ルールを</span>
-      <span>決めて</span>
-      <span>遊ぶことが</span>
-      <span>できます。</span>
-      <Br />
-      <span>この</span> <span>Taberse</span> <span>は、</span>
-      <span>ルールの</span>
-      <span>検証を</span>
-      <span>行いません。</span>
-      <Br />
-      <span>プレイヤーの</span>
-      <span>皆さんは</span>
-      <span>外部ツールで</span>
-      <span>コミュニケーションを</span>
-      <span>取りながら</span>
-      <span>ルールを</span>
-      <span>守って</span>
-      <span>遊んで</span>
-      <span>ください。</span>
-      <Br />
-      {/* <button
-        type="button"
-        className={float({
-          position: "absolute",
-          right: "0",
-          top: "0",
-          w: "8",
-          aspectRatio: "1/1",
-          "&::after, &::before": {
-            position: "absolute",
-            content: "''",
-            w: "8",
-            h: "1",
-            bg: "var(--bg)",
-            zIndex: -1,
-            transform: "translate(-50%,-50%) rotate(45deg)",
-            borderRadius: "2",
-          },
-          "&::before": {
-            transform: "translate(-50%,-50%) rotate(-45deg)",
-          },
-        })}
-      /> */}
-    </p>
-  );
-};
 
 const Rules = () => {
   const [rules, setRules] = useState<

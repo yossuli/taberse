@@ -2,6 +2,7 @@ import { cx } from "@ss/css";
 import { Br } from "@ss/jsx";
 import { flex } from "@ss/patterns";
 import type { ReactNode } from "react";
+import React from "react";
 
 type Props = {
   paragraph: ReactNode[][];
@@ -26,12 +27,12 @@ export const NaturalWrapParagraph = ({ paragraph, className }: Props) => {
       )}
     >
       {paragraph.map((sentence, j) => (
-        <>
+        <React.Fragment key={j}>
           {sentence.map((text, i) => (
-            <span key={`${j}-${i}`}>{text}</span>
+            <span key={`${j}-${i}-${text}`}>{text}</span>
           ))}
-          <Br key={j} />
-        </>
+          <Br key={`${j}-00`} />
+        </React.Fragment>
       ))}
     </p>
   );
