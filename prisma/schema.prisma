@@ -2,7 +2,7 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["driverAdapters"]
 }
 
@@ -11,12 +11,54 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Game{
-  id String @id @default(cuid())
-  title String
+model Game {
+  id         String   @id @default(cuid())
+  title      String
   passPhrase String
-  createBy String
-  createdAt DateTime @default(now())
-  rule Json
+  createBy   String
+  createdAt  DateTime @default(now())
+  rule       Json
+}
 
+model Rule {
+  id      String @id @default(cuid())
+  name    String // 1-1
+  ownerId String // 1-1-1
+  content Json // 1-2
+  Room    Room[]
+
+  @@unique([ownerId, name]) // 1-1-1: ユーザー内で一意
+}
+
+model Room {
+  id             String       @id @default(cuid())
+  passPhrase     String       @unique // 2-1-1
+  ruleId         String // 2-1-2
+  rule           Rule         @relation(fields: [ruleId], references: [id])
+  ownerId        String // 3-1
+  players        RoomPlayer[] // 3
+  currentStateId String? // 最新のゲーム状態
+  currentState   GameState?   @relation
+  createdAt      DateTime     @default(now())
+  state          String
+}
+
+model RoomPlayer {
+  id     String @id @default(cuid())
+  userId String
+  roomId String
+  room   Room   @relation(fields: [roomId], references: [id])
+
+  @@unique([userId, roomId])
+}
+
+model GameState {
+  id              String      @id @default(cuid())
+  roomId          String      @unique // ルームごとの状態
+  room            Room        @relation(fields: [roomId], references: [id])
+  previousStateId String? // Git の親コミットのようなもの
+  previousState   GameState?  @relation("GameStateRelation", fields: [previousStateId], references: [id])
+  stateData       Json // ゲームの状態（場の状態、手札など）
+  createdAt       DateTime    @default(now())
+  GameState       GameState[] @relation("GameStateRelation")
 }
