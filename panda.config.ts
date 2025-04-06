@@ -47,6 +47,12 @@ export default defineConfig({
           alignItems: "center",
         },
       },
+      grid: {
+        defaultValues: {
+          alignItems: "center",
+          justifyItems: "center",
+        },
+      },
       ...sticky,
       br: {
         transform() {

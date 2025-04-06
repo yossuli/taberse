@@ -1,8 +1,10 @@
 import type { JsonValue } from "@prisma/client/runtime/library";
 import { css, cx } from "@ss/css";
-import { flex } from "@ss/patterns";
+import { flex, grid } from "@ss/patterns";
 import { createLazyRoute } from "@tanstack/react-router";
 import { NaturalWrapParagraph } from "app/components/NaturalWrapParagraph";
+import { useZValidateForm } from "app/hooks/useZValidateForm";
+import { RuleSchema } from "app/zodSchemas";
 import { hc } from "hono/client";
 import { useEffect, useState } from "react";
 import type { Routes } from "../.hc.type";
@@ -27,10 +29,10 @@ export const Route = createLazyRoute("/")({
         />
         <h2>ルームを作成する</h2>
         <form action="/" method="post">
-          <label htmlFor="passphrase">
+          <label htmlFor="roomMakePassphrase">
             <h4>あいことばを入力してください</h4>
           </label>
-          <input type="text" id="passphrase" />
+          <input type="text" id="roomMakePassphrase" />
           <label htmlFor="rules">
             <h4>ルールを選択してください</h4>
           </label>
@@ -38,21 +40,14 @@ export const Route = createLazyRoute("/")({
           <button type="submit">作成</button>
         </form>
         <h2>ルールを作成する</h2>
-        <form action="/" method="post">
-          <label htmlFor="title">
-            <h4>ルールのタイトルを入力してください</h4>
-          </label>
-          <input type="text" id="title" />
-          <h4>ルールの詳細を入力してください</h4>
-          <button type="submit">作成</button>
-        </form>
+        <RuleMakeForm />
         <h2>ルームを検索する</h2>
         <form action="/" method="post">
-          <label htmlFor="passphrase">
+          <label htmlFor="roomJoinPassphrase">
             <h4>あいことばを入力してください</h4>
           </label>
           <div>
-            <input type="text" id="passphrase" />
+            <input type="text" id="roomJoinPassphrase" />
             <button type="submit">入室</button>
           </div>
         </form>
@@ -84,5 +79,112 @@ const Rules = () => {
         </option>
       ))}
     </select>
+  );
+};
+
+const RuleMakeForm = () => {
+  const { register, trigger, onSubmit, errors } = useZValidateForm(RuleSchema);
+  console.error(errors);
+  return (
+    <form
+      onSubmit={onSubmit((data) => {
+        console.log("data", data);
+        client.api.test.game.$post(
+          {
+            json: data,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          },
+        );
+      })}
+      className={grid({
+        gap: "1rem",
+        columns: 2,
+        "& > label::after": {
+          content: "'　：'",
+        },
+      })}
+    >
+      <label htmlFor="title">ルール名</label>
+      <input type="text" id="title" {...register("name")} />
+      {errors.name && <ErrorNotice>{errors.name.message}</ErrorNotice>}
+      <label htmlFor="description">ルール説明</label>
+      <textarea id="description" {...register("description")} />
+      {errors.description && (
+        <ErrorNotice>{errors.description.message}</ErrorNotice>
+      )}
+      <label htmlFor="players">プレイヤー数</label>
+      <div
+        className={cx(
+          grid({
+            gap: "1rem",
+            columns: 2,
+          }),
+        )}
+      >
+        <label htmlFor="min">最小人数</label>
+        <input
+          type="number"
+          id="min"
+          {...register("players.min", {
+            valueAsNumber: true,
+            onChange: () =>
+              trigger("players", {
+                shouldFocus: true,
+              }),
+          })}
+        />
+        {errors.players?.min && (
+          <ErrorNotice>{errors.players.min.message}</ErrorNotice>
+        )}
+        <label htmlFor="max">最大人数</label>
+        <input
+          type="number"
+          id="max"
+          {...register("players.max", {
+            valueAsNumber: true,
+            onChange: () => trigger("players"),
+          })}
+        />
+        {errors.players?.max && (
+          <ErrorNotice>{errors.players.max.message}</ErrorNotice>
+        )}
+      </div>
+      {![errors.players?.min, errors.players?.max].some(Boolean) &&
+        errors.players && <ErrorNotice>{errors.players.message}</ErrorNotice>}
+      <button
+        type="submit"
+        className={css({
+          gridColumn: "1/3",
+        })}
+      >
+        作成
+      </button>
+    </form>
+  );
+};
+
+const ErrorNotice = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
+  return (
+    <div
+      className={cx(
+        css({
+          gridColumn: "1/3",
+          marginY: "0!",
+          bg: "red.700!",
+          borderColor: "red.200!",
+        }),
+        "notice",
+      )}
+    >
+      {children}
+    </div>
   );
 };
