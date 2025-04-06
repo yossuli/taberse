@@ -11,18 +11,29 @@ export const RuleSchema = z.object({
     .refine(({ min, max }) => min <= max, {
       message: "min must be less than or equal to max",
     }),
-  //   roles: z.array(z.string()).nonempty(),
-  //   turn: z
-  //     .object({
-  //       skipRoles: z.array(z.string()),
-  //       turnTimeLimit: z
-  //         .object({
-  //           time: z.number().positive(),
-  //           type: z.enum(["persistent", "reset"]),
-  //         })
-  //         .optional(),
-  //     })
-  //     .optional(),
+  roles: z
+    .array(z.string().min(1))
+    .nonempty()
+    .superRefine((roles, ctx) => {
+      const uniqueRoles = new Set(roles);
+      if (uniqueRoles.size !== roles.length) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Roles must be unique",
+        });
+      }
+    }),
+  turn: z
+    .object({
+      skipRoles: z.array(z.string()),
+      turnTimeLimit: z
+        .object({
+          time: z.number().positive(),
+          type: z.enum(["persistent", "reset"]),
+        })
+        .optional(),
+    })
+    .optional(),
   //   decks: z.array(
   //     z.object({
   //       name: z.string(),

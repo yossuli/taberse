@@ -1,12 +1,12 @@
 import type { JsonValue } from "@prisma/client/runtime/library";
 import { css, cx } from "@ss/css";
-import { flex, grid } from "@ss/patterns";
+import { grid } from "@ss/patterns";
 import { createLazyRoute } from "@tanstack/react-router";
-import { NaturalWrapParagraph } from "app/components/NaturalWrapParagraph";
 import { useZValidateForm } from "app/hooks/useZValidateForm";
 import { RuleSchema } from "app/zodSchemas";
 import { hc } from "hono/client";
 import { useEffect, useState } from "react";
+import { useFieldArray } from "react-hook-form";
 import type { Routes } from "../.hc.type";
 
 const client = hc<Routes>("");
@@ -15,7 +15,7 @@ export const Route = createLazyRoute("/")({
   component: () => {
     return (
       <>
-        <h1 className={css({ lineHeight: "1.4 !important" })}>
+        {/* <h1 className={css({ lineHeight: "1.4 !important" })}>
           ようこそ <mark>Taberse</mark> へ!!
         </h1>
         <NaturalWrapParagraph
@@ -38,7 +38,7 @@ export const Route = createLazyRoute("/")({
           </label>
           <Rules />
           <button type="submit">作成</button>
-        </form>
+        </form> */}
         <h2>ルールを作成する</h2>
         <RuleMakeForm />
         <h2>ルームを検索する</h2>
@@ -82,9 +82,18 @@ const Rules = () => {
   );
 };
 
+// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: <explanation>
 const RuleMakeForm = () => {
-  const { register, trigger, onSubmit, errors } = useZValidateForm(RuleSchema);
-  console.error(errors);
+  const { control, register, trigger, onSubmit, errors } =
+    useZValidateForm(RuleSchema);
+  const { fields, append, remove, update } = useFieldArray({
+    control,
+    // @ts-ignore
+    name: "roles",
+  });
+  // biome-ignore lint/suspicious/noConsoleLog: <explanation>
+  console.log("fields", fields);
+  console.error("errors", errors);
   return (
     <form
       onSubmit={onSubmit((data) => {
@@ -155,6 +164,54 @@ const RuleMakeForm = () => {
       </div>
       {![errors.players?.min, errors.players?.max].some(Boolean) &&
         errors.players && <ErrorNotice>{errors.players.message}</ErrorNotice>}
+      <label htmlFor="roles">ロール</label>
+      <div
+        className={cx(
+          grid({
+            gap: "1rem",
+            columns: 2,
+          }),
+        )}
+      >
+        <div className={css({ gridColumn: "1/3" })}>
+          {fields.map((field, index) => (
+            <div
+              key={field.id}
+              className={cx(
+                grid({
+                  gap: "1rem",
+                  columns: 2,
+                }),
+              )}
+            >
+              <input
+                {...register(`roles.${index}`)}
+                onChange={(e) => update(index, e.target.value)}
+              />
+              <button type="button" onClick={() => remove(index)}>
+                削除
+              </button>
+              {errors.roles?.[index] && (
+                <ErrorNotice>{errors.roles[index].message}</ErrorNotice>
+              )}
+            </div>
+          ))}
+        </div>
+        <button
+          type="button"
+          className={css({
+            gridColumn: "1/3",
+          })}
+          onClick={() => {
+            append("");
+          }}
+        >
+          追加
+        </button>
+        {errors.roles && !fields.some((_, index) => errors.roles?.[index]) && (
+          <ErrorNotice>{errors.roles.message}</ErrorNotice>
+        )}
+      </div>
       <button
         type="submit"
         className={css({

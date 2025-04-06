@@ -15,15 +15,15 @@ export const POST = createRoute(
     if (!auth?.userId) {
       return c.redirect("/");
     }
-    const createdRule = await prismaClient.rule.create({
-      data: {
-        name,
-        content: JSON.stringify(rule),
-        ownerId: auth.userId,
-      },
-    });
-    console.log("rule", createdRule);
-    return c.json(createdRule);
+    // const createdRule = await prismaClient.rule.create({
+    //   data: {
+    //     name,
+    //     content: JSON.stringify(rule),
+    //     ownerId: auth.userId,
+    //   },
+    // });
+    console.log("rule", rule);
+    return c.json(rule);
   },
 );
 

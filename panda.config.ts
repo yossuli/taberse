@@ -52,6 +52,16 @@ export default defineConfig({
           alignItems: "center",
           justifyItems: "center",
         },
+        transform(props) {
+          const { columns, rows, ...rest } = props;
+          return {
+            display: "grid",
+            gridTemplateColumns: `repeat(${columns}, auto)`,
+            gridTemplateRows: `repeat(${rows}, auto)`,
+            gap: "2",
+            ...rest,
+          };
+        },
       },
       ...sticky,
       br: {

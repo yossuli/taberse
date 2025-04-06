@@ -8,9 +8,10 @@ import type { z } from "zod";
 export const useZValidateForm = <T extends z.ZodObject<any>>(schema: T) => {
   type SchemaType = z.infer<typeof schema>;
   const {
+    control,
+    handleSubmit,
     register,
     trigger,
-    handleSubmit,
     formState: { errors },
   } = useForm<SchemaType>({
     resolver: zodResolver(schema),
@@ -22,9 +23,10 @@ export const useZValidateForm = <T extends z.ZodObject<any>>(schema: T) => {
   };
 
   return {
+    control,
+    handleSubmit,
     register,
     trigger,
-    handleSubmit,
     onSubmit: (onSubmit: SubmitHandler<SchemaType>) =>
       handleSubmit(onSubmit, onError),
     errors,
