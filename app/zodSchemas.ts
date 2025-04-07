@@ -15,17 +15,29 @@ export const RuleSchema = z.object({
     .array(z.string().min(1))
     .nonempty()
     .superRefine((roles, ctx) => {
-      const uniqueRoles = new Set(roles);
-      if (uniqueRoles.size !== roles.length) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: "Roles must be unique",
-        });
-      }
+      roles.forEach((role, index) => {
+        if (roles.filter((_, i) => i !== index).includes(role)) {
+          ctx.addIssue({
+            message: `Role "${role}" is duplicated`,
+            code: z.ZodIssueCode.custom,
+            path: [index],
+          });
+        }
+      });
     }),
   turn: z
     .object({
-      skipRoles: z.array(z.string()),
+      ignoreRoles: z.array(z.string()).superRefine((ignoreRoles, ctx) => {
+        ignoreRoles.forEach((role, index) => {
+          if (ignoreRoles.filter((_, i) => i !== index).includes(role)) {
+            ctx.addIssue({
+              message: `Role "${role}" is duplicated`,
+              code: z.ZodIssueCode.custom,
+              path: [index],
+            });
+          }
+        });
+      }),
       turnTimeLimit: z
         .object({
           time: z.number().positive(),

@@ -6,6 +6,7 @@ import { useZValidateForm } from "app/hooks/useZValidateForm";
 import { RuleSchema } from "app/zodSchemas";
 import { hc } from "hono/client";
 import { useEffect, useState } from "react";
+import React from "react";
 import { useFieldArray } from "react-hook-form";
 import type { Routes } from "../.hc.type";
 
@@ -86,13 +87,30 @@ const Rules = () => {
 const RuleMakeForm = () => {
   const { control, register, trigger, onSubmit, errors } =
     useZValidateForm(RuleSchema);
-  const { fields, append, remove, update } = useFieldArray({
+  const {
+    fields: rolesFields,
+    append,
+    remove,
+    update,
+  } = useFieldArray({
     control,
     // @ts-ignore
     name: "roles",
   });
+  const {
+    fields: turnIgnoreFields,
+    append: append1,
+    remove: remove1,
+    update: update1,
+  } = useFieldArray({
+    control,
+    // @ts-ignore
+    name: "turn.ignoreRoles",
+  });
+
   // biome-ignore lint/suspicious/noConsoleLog: <explanation>
-  console.log("fields", fields);
+  console.log("fields", rolesFields);
+  console.log("turnIgnoreFields", turnIgnoreFields);
   console.error("errors", errors);
   return (
     <form
@@ -110,7 +128,6 @@ const RuleMakeForm = () => {
         );
       })}
       className={grid({
-        gap: "1rem",
         columns: 2,
         "& > label::after": {
           content: "'　：'",
@@ -129,7 +146,6 @@ const RuleMakeForm = () => {
       <div
         className={cx(
           grid({
-            gap: "1rem",
             columns: 2,
           }),
         )}
@@ -168,25 +184,28 @@ const RuleMakeForm = () => {
       <div
         className={cx(
           grid({
-            gap: "1rem",
             columns: 2,
           }),
         )}
       >
         <div className={css({ gridColumn: "1/3" })}>
-          {fields.map((field, index) => (
+          {rolesFields.map((field, index) => (
             <div
               key={field.id}
               className={cx(
                 grid({
-                  gap: "1rem",
                   columns: 2,
                 }),
               )}
             >
               <input
                 {...register(`roles.${index}`)}
-                onChange={(e) => update(index, e.target.value)}
+                onChange={(e) => {
+                  update(index, e.target.value);
+                  trigger("roles", {
+                    shouldFocus: true,
+                  });
+                }}
               />
               <button type="button" onClick={() => remove(index)}>
                 削除
@@ -208,10 +227,106 @@ const RuleMakeForm = () => {
         >
           追加
         </button>
-        {errors.roles && !fields.some((_, index) => errors.roles?.[index]) && (
-          <ErrorNotice>{errors.roles.message}</ErrorNotice>
+        {errors.roles?.root && (
+          <ErrorNotice>{errors.roles.root.message}</ErrorNotice>
         )}
       </div>
+      <label htmlFor="turn">ターン</label>
+      <div
+        className={cx(
+          grid({
+            columns: 2,
+          }),
+        )}
+      >
+        {rolesFields.filter((r) => (r[0] ?? "") !== "").length > 0 && (
+          <>
+            <label htmlFor="turn.skipRoles">スキップするロール</label>
+            <div
+              className={cx(
+                grid({
+                  columns: 2,
+                }),
+              )}
+            >
+              {turnIgnoreFields.map((field, index) => (
+                <React.Fragment key={field.id}>
+                  <select
+                    id={`turn.ignoreRoles.${index}`}
+                    {...register(`turn.ignoreRoles.${index}`)}
+                    onChange={(e) => {
+                      if (e.target.value === "") {
+                        remove1(index);
+                        return;
+                      }
+                      update1(index, e.target.value);
+                      trigger("turn.ignoreRoles", {
+                        shouldFocus: true,
+                      });
+                    }}
+                  >
+                    <option value="">なし</option>
+                    {rolesFields.map((field) => (
+                      // @ts-ignore
+                      <option key={field.id} value={field[0]}>
+                        {/* @ts-ignore */}
+                        {field[0]}
+                      </option>
+                    ))}
+                  </select>
+                  <button type="button" onClick={() => remove1(index)}>
+                    削除
+                  </button>
+                  {errors.turn?.ignoreRoles?.[index] && (
+                    <ErrorNotice>
+                      {errors.turn.ignoreRoles[index].message}
+                    </ErrorNotice>
+                  )}
+                </React.Fragment>
+              ))}
+              <button
+                type="button"
+                className={css({
+                  gridColumn: "1/3",
+                })}
+                onClick={() => {
+                  append1("");
+                }}
+              >
+                追加
+              </button>
+            </div>
+            {errors.turn?.ignoreRoles?.root && (
+              <ErrorNotice>{errors.turn.ignoreRoles.root.message}</ErrorNotice>
+            )}
+          </>
+        )}
+        <label htmlFor="turn.turnTimeLimit">ターン制限時間</label>
+        <input
+          type="number"
+          id="turn.turnTimeLimit"
+          {...register("turn.turnTimeLimit.time", {
+            valueAsNumber: true,
+          })}
+        />
+        {errors.turn?.turnTimeLimit?.time && (
+          <ErrorNotice>{errors.turn.turnTimeLimit.time.message}</ErrorNotice>
+        )}
+        <label htmlFor="turn.turnTimeLimit.type">
+          制限時間のターン終了時の扱い
+        </label>
+        <select
+          id="turn.turnTimeLimit.type"
+          {...register("turn.turnTimeLimit.type")}
+        >
+          <option value="persistent">持続</option>
+          <option value="reset">リセット</option>
+        </select>
+      </div>
+      {errors.turn && !errors.turn?.ignoreRoles && (
+        <ErrorNotice>{errors.turn.message}</ErrorNotice>
+      )}
+
       <button
         type="submit"
         className={css({
