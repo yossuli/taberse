@@ -326,7 +326,56 @@ const RuleMakeForm = () => {
       {errors.turn && !errors.turn?.ignoreRoles && (
         <ErrorNotice>{errors.turn.message}</ErrorNotice>
       )}
+      <label htmlFor="decks">デッキ</label>
+      <div
+        className={cx(
+          grid({
+            columns: 2,
+          }),
+        )}
+      >
+        {rolesFields.map((field, index) => (
+          <React.Fragment key={field.id}>
+            <input
+              {...register(`decks.${index}.name`)}
+              onChange={(e) => {
+                update(index, e.target.value);
+                trigger("decks", {
+                  shouldFocus: true,
+                });
+              }}
+            />
+            <button type="button" onClick={() => remove(index)}>
+              削除
+            </button>
+            {errors.decks?.[index] && (
+              <ErrorNotice>{errors.decks[index].message}</ErrorNotice>
+            )}
+            <div
+              className={css({
+                gridColumn: "1/3",
+              })}
+            >
+              {}
+            </div>
+          </React.Fragment>
+        ))}
+        <button
+          type="button"
+          className={css({
+            gridColumn: "1/3",
+          })}
+          onClick={() => {
+            append("");
+          }}
+        >
+          追加
+        </button>
 
+        {errors.decks?.root && (
+          <ErrorNotice>{errors.decks.root.message}</ErrorNotice>
+        )}
+      </div>
       <button
         type="submit"
         className={css({
@@ -360,3 +409,4 @@ const ErrorNotice = ({
     </div>
   );
 };
+4;
