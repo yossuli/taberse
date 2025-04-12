@@ -12,32 +12,36 @@ export const RuleSchema = z.object({
       message: "min must be less than or equal to max",
     }),
   roles: z
-    .array(z.string().min(1))
+    .array(z.object({ name: z.string().min(1) }))
     .nonempty()
     .superRefine((roles, ctx) => {
       roles.forEach((role, index) => {
-        if (roles.filter((_, i) => i !== index).includes(role)) {
+        if (
+          roles.filter((_, i) => i !== index).find((r) => r.name === role.name)
+        ) {
           ctx.addIssue({
-            message: `Role "${role}" is duplicated`,
+            message: `Role "${role.name}" is duplicated`,
             code: z.ZodIssueCode.custom,
-            path: [index],
+            path: [index, "name"],
           });
         }
       });
     }),
   turn: z
     .object({
-      ignoreRoles: z.array(z.string()).superRefine((ignoreRoles, ctx) => {
-        ignoreRoles.forEach((role, index) => {
-          if (ignoreRoles.filter((_, i) => i !== index).includes(role)) {
-            ctx.addIssue({
-              message: `Role "${role}" is duplicated`,
-              code: z.ZodIssueCode.custom,
-              path: [index],
-            });
-          }
-        });
-      }),
+      ignoreRoles: z
+        .array(z.object({ roleName: z.string() }))
+        .superRefine((ignoreRoles, ctx) => {
+          ignoreRoles.forEach((role, index) => {
+            if (ignoreRoles.filter((_, i) => i !== index).includes(role)) {
+              ctx.addIssue({
+                message: `Role "${role}" is duplicated`,
+                code: z.ZodIssueCode.custom,
+                path: [index],
+              });
+            }
+          });
+        }),
       turnTimeLimit: z
         .object({
           time: z.number().positive(),
@@ -46,22 +50,22 @@ export const RuleSchema = z.object({
         .optional(),
     })
     .optional(),
-  decks: z.array(
-    z.object({
-      name: z.string(),
-      deck: z.array(
-        z.object({
-          name: z.string(),
-          categoryName: z.string().optional(),
-          description: z.union([
-            z.string(),
-            z.array(z.object({ h: z.string(), p: z.string() })),
-          ]),
-        }),
-      ),
-      playableRoles: z.array(z.string()),
-    }),
-  ),
+  // decks: z.array(
+  //   z.object({
+  //     name: z.string(),
+  //     deck: z.array(
+  //       z.object({
+  //         name: z.string(),
+  //         categoryName: z.string().optional(),
+  //         description: z.union([
+  //           z.string(),
+  //           z.array(z.object({ h: z.string(), p: z.string() })),
+  //         ]),
+  //       }),
+  //     ),
+  //     playableRoles: z.array(z.string()),
+  //   }),
+  // ),
   //   defaultHand: z.array(
   //     z.discriminatedUnion("type", [
   //       z.object({

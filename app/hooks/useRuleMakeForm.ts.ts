@@ -1,6 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { Routes } from "app/.hc.type";
-import { RuleSchema, type RuleSchemaType } from "app/zodSchemas";
+import type { RuleType } from "app/types";
+import { RuleSchema } from "app/zodSchemas";
 import { hc } from "hono/client";
 import {
   type SubmitErrorHandler,
@@ -16,16 +17,16 @@ export const useRuleMakeForm = () => {
     register,
     trigger,
     formState: { errors },
-  } = useForm<RuleSchemaType>({
+  } = useForm<RuleType>({
     resolver: zodResolver(RuleSchema),
     shouldUnregister: false,
     reValidateMode: "onBlur",
   });
-  const onError: SubmitErrorHandler<RuleSchemaType> = (error) => {
+  const onError: SubmitErrorHandler<RuleType> = (error) => {
     console.error("error", error);
   };
 
-  const onSubmit: SubmitHandler<RuleSchemaType> = (data) => {
+  const onSubmit: SubmitHandler<RuleType> = (data) => {
     client.api.test.game.$post(
       {
         json: data,
