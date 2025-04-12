@@ -33,11 +33,15 @@ export const RuleSchema = z.object({
         .array(z.object({ roleName: z.string() }))
         .superRefine((ignoreRoles, ctx) => {
           ignoreRoles.forEach((role, index) => {
-            if (ignoreRoles.filter((_, i) => i !== index).includes(role)) {
+            if (
+              ignoreRoles
+                .filter((_, i) => i !== index)
+                .find((r) => r.roleName === role.roleName)
+            ) {
               ctx.addIssue({
-                message: `Role "${role}" is duplicated`,
+                message: `Role "${role.roleName}" is duplicated`,
                 code: z.ZodIssueCode.custom,
-                path: [index],
+                path: [index, "roleName"],
               });
             }
           });
