@@ -51,6 +51,7 @@ export default defineConfig({
         defaultValues: {
           alignItems: "center",
           justifyItems: "center",
+          columns: 2,
         },
         transform(props) {
           const { columns, rows, ...rest } = props;

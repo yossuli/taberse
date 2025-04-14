@@ -57,16 +57,13 @@ export const RuleSchema = z.object({
   decks: z.array(
     z.object({
       name: z.string(),
-      // list: z.array(
-      //   z.object({
-      //     name: z.string(),
-      //     categoryName: z.string().optional(),
-      //     description: z.union([
-      //       z.string(),
-      //       z.array(z.object({ h: z.string(), p: z.string() })),
-      //     ]),
-      //   }),
-      // ),
+      list: z.array(
+        z.object({
+          name: z.string().min(1),
+          categoryName: z.string().optional(),
+          description: z.string(),
+        }),
+      ),
       playableRoles: z.array(z.object({ roleName: z.string() })),
     }),
   ),

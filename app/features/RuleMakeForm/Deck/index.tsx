@@ -1,9 +1,10 @@
-import { css, cx } from "@ss/css";
-import { grid } from "@ss/patterns";
+import { css } from "@ss/css";
+import { Grid } from "@ss/jsx";
 import { ErrorNotice } from "app/components/ErrorNotice";
 import type { RuleMakeFormChildrenProps, RuleType } from "app/types";
 import React from "react";
 import type { FieldArrayWithId, UseFieldArrayReturn } from "react-hook-form";
+import { List } from "./List";
 import { PlayableRoles } from "./PlayableRoles";
 
 export const Deck = ({
@@ -22,54 +23,48 @@ export const Deck = ({
   return (
     <>
       <label htmlFor="decks">デッキ</label>
-      <div
-        className={cx(
-          grid({
-            columns: 2,
-          }),
-        )}
-      >
-        <label htmlFor="list">リスト</label>
-        <div
-          className={grid({
-            columns: 2,
-          })}
-        >
-          {deckFields.map((field, index) => (
-            <React.Fragment key={field.id}>
-              <input type="text" {...register(`decks.${index}.name`)} />
-              <button type="button" onClick={() => remove(index)}>
-                削除
-              </button>
-              <PlayableRoles
-                control={control}
-                register={register}
-                trigger={trigger}
-                errors={errors}
-                rolesFields={rolesFields}
-                index={index}
-              />
-              {/* <List
-                control={control}
-                register={register}
-                trigger={trigger}
-                errors={errors}
-                index={index}
-                fieldArrayMethod={fieldArrayMethod}
-              /> */}
-
-              {errors.decks?.[index] && (
-                <ErrorNotice>{errors.decks[index].message}</ErrorNotice>
-              )}
-            </React.Fragment>
-          ))}
-        </div>
+      <Grid>
+        {deckFields.map((field, index) => (
+          <React.Fragment key={field.id}>
+            <label htmlFor="name">デッキ名</label>
+            <input type="text" {...register(`decks.${index}.name`)} />
+            <PlayableRoles
+              control={control}
+              register={register}
+              trigger={trigger}
+              errors={errors}
+              rolesFields={rolesFields}
+              index={index}
+            />
+            <label htmlFor="list">リスト</label>
+            <List
+              control={control}
+              register={register}
+              trigger={trigger}
+              errors={errors}
+              index={index}
+            />
+            <button
+              type="button"
+              onClick={() => remove(index)}
+              className={css({
+                gridColumn: "1/3",
+              })}
+            >
+              削除
+            </button>
+            {errors.decks?.[index] && (
+              <ErrorNotice>{errors.decks[index].message}</ErrorNotice>
+            )}
+          </React.Fragment>
+        ))}
         <button
           type="button"
           onClick={() => {
             append({
               name: "",
               playableRoles: [],
+              list: [],
             });
           }}
           className={css({
@@ -81,7 +76,7 @@ export const Deck = ({
         {errors.decks?.root && (
           <ErrorNotice>{errors.decks.root.message}</ErrorNotice>
         )}
-      </div>
+      </Grid>
     </>
   );
 };
