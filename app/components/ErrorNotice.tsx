@@ -12,7 +12,7 @@ export const ErrorNotice = ({
     <div
       className={cx(
         css({
-          gridColumn: "1/3",
+          gridColumn: "1/-1",
           marginY: "0!",
           bg: "red.700!",
           borderColor: "red.200!",

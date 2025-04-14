@@ -61,6 +61,7 @@ export const RuleSchema = z.object({
         z.object({
           name: z.string().min(1),
           categoryName: z.string().optional(),
+          num: z.number().int().positive(),
           description: z.string(),
         }),
       ),
