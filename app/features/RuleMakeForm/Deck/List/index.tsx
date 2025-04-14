@@ -20,12 +20,16 @@ export const List = ({
     name: `decks.${index}.list`,
   });
   return (
-    <Grid>
+    <Grid columns={4}>
       {fields.map((field, i) => (
         <React.Fragment key={field.id}>
           <input
             id={`decks.${index}.list.${i}.name`}
             {...register(`decks.${index}.list.${i}.name`)}
+            className={css({
+              gridColumn: "1/3",
+              width: "100%",
+            })}
             onBlur={(e) => {
               update(i, {
                 name: e.target.value,
@@ -56,7 +60,7 @@ export const List = ({
           })
         }
         className={css({
-          gridColumn: "1/3",
+          gridColumn: "1/-1",
         })}
       >
         追加
