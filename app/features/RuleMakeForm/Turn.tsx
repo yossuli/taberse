@@ -1,5 +1,4 @@
-import { cx } from "@ss/css";
-import { grid } from "@ss/patterns";
+import { Grid } from "@ss/jsx";
 import { Checklist } from "app/components/Checklist";
 import { ErrorNotice } from "app/components/ErrorNotice";
 import type { RuleMakeFormChildrenProps, RuleType } from "app/types";
@@ -17,13 +16,7 @@ export const Turn = ({
   return (
     <>
       <label htmlFor="turn">ターン</label>
-      <div
-        className={cx(
-          grid({
-            columns: 2,
-          }),
-        )}
-      >
+      <Grid>
         {rolesFields.filter((r) => (r.name ?? "") !== "").length > 0 && (
           <>
             <label htmlFor="turn.skipRoles">スキップするロール</label>
@@ -60,10 +53,10 @@ export const Turn = ({
           <option value="persistent">持続</option>
           <option value="reset">リセット</option>
         </select>
-      </div>
         <ErrorNotice>
           {errors.turn?.ignoreRoles && !errors.turn?.ignoreRoles?.message}
         </ErrorNotice>
+      </Grid>
     </>
   );
 };
