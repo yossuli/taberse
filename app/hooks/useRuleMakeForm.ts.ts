@@ -26,8 +26,8 @@ export const useRuleMakeForm = () => {
     console.error("error", error);
   };
 
-  const onSubmit: SubmitHandler<RuleType> = (data) => {
-    client.api.test.game.$post(
+  const onSubmit: SubmitHandler<RuleType> = async (data) => {
+    const res = await client.api.test.game.$post(
       {
         json: data,
       },
@@ -37,6 +37,8 @@ export const useRuleMakeForm = () => {
         },
       },
     );
+    const json = await res.json();
+    console.log("response", json);
   };
 
   return {

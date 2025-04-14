@@ -19,7 +19,6 @@ export const Deck = ({
   rolesFields: FieldArrayWithId<RuleType, "roles", "id">[];
 }) => {
   const { fields: deckFields, remove, append } = deckFieldArray;
-  console.log("fields", deckFields);
   return (
     <>
       <label htmlFor="decks">デッキ</label>
