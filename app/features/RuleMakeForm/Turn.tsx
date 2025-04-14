@@ -1,6 +1,7 @@
 import { Grid } from "@ss/jsx";
 import { Checklist } from "app/components/Checklist";
 import { ErrorNotice } from "app/components/ErrorNotice";
+import { LabelInput } from "app/components/LabelInput";
 import type { RuleMakeFormChildrenProps, RuleType } from "app/types";
 import type { UseFieldArrayReturn } from "react-hook-form";
 
@@ -34,11 +35,10 @@ export const Turn = ({
             <ErrorNotice>{errors.turn?.ignoreRoles?.root?.message}</ErrorNotice>
           </>
         )}
-        <label htmlFor="turn.turnTimeLimit">ターン制限時間</label>
-        <input
+        <LabelInput
+          label="ターン制限時間"
           type="number"
-          id="turn.turnTimeLimit"
-          {...register("turn.turnTimeLimit.time", {
+          register={register("turn.turnTimeLimit.time", {
             valueAsNumber: true,
           })}
         />

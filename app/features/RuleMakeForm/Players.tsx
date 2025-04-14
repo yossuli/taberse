@@ -1,6 +1,6 @@
-import { cx } from "@ss/css";
-import { grid } from "@ss/patterns";
+import { Grid } from "@ss/jsx";
 import { ErrorNotice } from "app/components/ErrorNotice";
+import { LabelInput } from "app/components/LabelInput";
 import type { RuleMakeFormChildrenProps } from "app/types";
 import { useState } from "react";
 
@@ -13,36 +13,26 @@ export const Players = ({
   return (
     <>
       <label htmlFor="players">プレイヤー数</label>
-
-      <div
-        className={cx(
-          grid({
-            columns: 2,
-          }),
-        )}
-      >
-        <label htmlFor="min">最小人数</label>
-        <input
+      <Grid>
+        <LabelInput
+          label="最小人数"
           type="number"
-          id="min"
-          {...register("players.min", {
+          register={register("players.min", {
             valueAsNumber: true,
             onChange: () => trigger("players"),
           })}
         />
         <ErrorNotice>{errors.players?.min?.message}</ErrorNotice>
-        <label htmlFor="max">最大人数</label>
-        <input
+        <LabelInput
+          label="最大人数"
           type="number"
-          id="max"
-          {...register("players.max", {
+          register={register("players.max", {
             valueAsNumber: true,
             onChange: () => trigger("players"),
           })}
-          onBlur={() => setIsFocused(true)}
         />
         <ErrorNotice>{isFocused && errors.players?.max?.message}</ErrorNotice>
-      </div>
+      </Grid>
       <ErrorNotice>
         {![errors.players?.min, errors.players?.max].some(Boolean) &&
           errors.players?.message}

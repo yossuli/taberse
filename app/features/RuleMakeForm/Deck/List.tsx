@@ -46,15 +46,15 @@ export const List = ({
         </React.Fragment>
       ))}
       <button
-        id="decks.list"
+        id="decks.list.add"
         type="button"
-        onClick={() => {
+        onClick={() =>
           append({
             name: "",
             categoryName: "",
             description: "",
-          });
-        }}
+          })
+        }
         className={css({
           gridColumn: "1/3",
         })}

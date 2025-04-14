@@ -1,11 +1,11 @@
 import { ErrorNotice } from "app/components/ErrorNotice";
+import { LabelInput } from "app/components/LabelInput";
 import type { RuleMakeFormChildrenProps } from "app/types";
 
 export const Title = ({ register, errors }: RuleMakeFormChildrenProps) => {
   return (
     <>
-      <label htmlFor="title">ルール名</label>
-      <input type="text" id="title" {...register("name")} />
+      <LabelInput label="ルール名" register={register("name")} />
       <ErrorNotice>{errors.name?.message}</ErrorNotice>
     </>
   );

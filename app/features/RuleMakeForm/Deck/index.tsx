@@ -1,6 +1,7 @@
 import { css } from "@ss/css";
 import { Grid } from "@ss/jsx";
 import { ErrorNotice } from "app/components/ErrorNotice";
+import { LabelInput } from "app/components/LabelInput";
 import type { RuleMakeFormChildrenProps, RuleType } from "app/types";
 import React from "react";
 import type { FieldArrayWithId, UseFieldArrayReturn } from "react-hook-form";
@@ -25,18 +26,16 @@ export const Deck = ({
       <Grid>
         {deckFields.map((field, index) => (
           <React.Fragment key={field.id}>
-            <label htmlFor={`decks.${index}.name`}>デッキ名</label>
-            <input
-              type="text"
-              id={`decks.${index}.name`}
-              {...register(`decks.${index}.name`)}
+            <LabelInput
+              label="デッキ名"
+              register={register(`decks.${index}.name`)}
             />
             <PlayableRoles
               control={control}
               rolesFields={rolesFields}
               index={index}
             />
-            <label htmlFor="decks.list">リスト</label>
+            <label htmlFor="decks.list.add">リスト</label>
             <List
               control={control}
               register={register}
@@ -58,13 +57,13 @@ export const Deck = ({
         ))}
         <button
           type="button"
-          onClick={() => {
+          onClick={() =>
             append({
               name: "",
               playableRoles: [],
               list: [],
-            });
-          }}
+            })
+          }
           className={css({
             gridColumn: "1/3",
           })}

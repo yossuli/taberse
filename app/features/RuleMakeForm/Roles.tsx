@@ -1,7 +1,8 @@
-import { cx } from "@ss/css";
-import { flex, grid } from "@ss/patterns";
+import { css } from "@ss/css";
+import { Grid } from "@ss/jsx";
 import { ErrorNotice } from "app/components/ErrorNotice";
 import type { RuleMakeFormChildrenProps, RuleType } from "app/types";
+import React from "react";
 import type { UseFieldArrayReturn } from "react-hook-form";
 
 export const Roles = ({
@@ -15,16 +16,9 @@ export const Roles = ({
   return (
     <>
       <label htmlFor="roles">ロール</label>
-      <div className={flex({ direction: "column" })}>
+      <Grid>
         {fields.map((field, index) => (
-          <div
-            key={field.id}
-            className={cx(
-              grid({
-                columns: 2,
-              }),
-            )}
-          >
+          <React.Fragment key={field.id}>
             <input
               {...register(`roles.${index}.name`)}
               onBlur={(e) => {
@@ -36,19 +30,20 @@ export const Roles = ({
               削除
             </button>
             <ErrorNotice>{errors.roles?.[index]?.name?.message}</ErrorNotice>
-          </div>
+          </React.Fragment>
         ))}
         <ErrorNotice>{errors.roles?.root?.message}</ErrorNotice>
         <button
           type="button"
-          onClick={() => {
-            append({ name: "" });
-          }}
+          className={css({
+            gridColumn: "1/3",
+          })}
+          onClick={() => append({ name: "" })}
         >
           追加
         </button>
         <ErrorNotice>{errors.roles?.root?.message}</ErrorNotice>
-      </div>
+      </Grid>
     </>
   );
 };
