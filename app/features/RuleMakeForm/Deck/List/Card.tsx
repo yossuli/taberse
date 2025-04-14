@@ -34,11 +34,12 @@ export const Card = ({
 
   return (
     <React.Fragment key={field.id}>
+      <label htmlFor={`decks.${index}.list.${i}.name`}>カード名</label>
       <input
         id={`decks.${index}.list.${i}.name`}
         {...register(`decks.${index}.list.${i}.name`)}
         className={css({
-          gridColumn: "1/3",
+          gridColumn: "2/-1",
           width: "100%",
         })}
         onBlur={(e) => {
@@ -47,6 +48,14 @@ export const Card = ({
             shouldFocus: true,
           });
         }}
+      />
+      <label htmlFor={`decks.${index}.list.${i}.description`}>説明</label>
+      <textarea
+        {...register(`decks.${index}.list.${i}.description`)}
+        id={`decks.${index}.list.${i}.description`}
+        className={css({
+          gridColumn: "2/-1",
+        })}
       />
       <Grid>
         <input
