@@ -25,14 +25,18 @@ export const Deck = ({
       <Grid>
         {deckFields.map((field, index) => (
           <React.Fragment key={field.id}>
-            <label htmlFor="name">デッキ名</label>
-            <input type="text" {...register(`decks.${index}.name`)} />
+            <label htmlFor={`decks.${index}.name`}>デッキ名</label>
+            <input
+              type="text"
+              id={`decks.${index}.name`}
+              {...register(`decks.${index}.name`)}
+            />
             <PlayableRoles
               control={control}
               rolesFields={rolesFields}
               index={index}
             />
-            <label htmlFor="list">リスト</label>
+            <label htmlFor="decks.list">リスト</label>
             <List
               control={control}
               register={register}
@@ -67,7 +71,6 @@ export const Deck = ({
         >
           追加
         </button>
-
         <ErrorNotice>{errors.decks?.root?.message}</ErrorNotice>
       </Grid>
     </>

@@ -24,6 +24,7 @@ export const List = ({
       {fields.map((field, i) => (
         <React.Fragment key={field.id}>
           <input
+            id={`decks.${index}.list.${i}.name`}
             {...register(`decks.${index}.list.${i}.name`)}
             onChange={(e) => {
               update(i, {
@@ -45,6 +46,7 @@ export const List = ({
         </React.Fragment>
       ))}
       <button
+        id="decks.list"
         type="button"
         onClick={() => {
           append({
