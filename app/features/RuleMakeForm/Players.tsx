@@ -29,6 +29,7 @@ export const Players = ({
           register={register("players.max", {
             valueAsNumber: true,
             onChange: () => trigger("players"),
+            onBlur: () => setIsFocused(true),
           })}
         />
         <ErrorNotice>{isFocused && errors.players?.max?.message}</ErrorNotice>

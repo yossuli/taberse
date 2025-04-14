@@ -20,11 +20,13 @@ export const Roles = ({
         {fields.map((field, index) => (
           <React.Fragment key={field.id}>
             <input
-              {...register(`roles.${index}.name`)}
-              onBlur={(e) => {
-                update(index, { name: e.target.value });
-                trigger?.("roles");
-              }}
+              {...register(`roles.${index}.name`, {
+                onChange: () => trigger("roles"),
+                onBlur: (e) => {
+                  update(index, { name: e.target.value });
+                  trigger("roles");
+                },
+              })}
             />
             <button type="button" onClick={() => remove(index)}>
               削除

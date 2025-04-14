@@ -37,17 +37,17 @@ export const Card = ({
       <label htmlFor={`decks.${index}.list.${i}.name`}>カード名</label>
       <input
         id={`decks.${index}.list.${i}.name`}
-        {...register(`decks.${index}.list.${i}.name`)}
+        {...register(`decks.${index}.list.${i}.name`, {
+          onChange: () => trigger(`decks.${index}.list`),
+          onBlur: (e) => {
+            update(i, { ...field, name: e.target.value });
+            trigger(`decks.${index}.list`);
+          },
+        })}
         className={css({
           gridColumn: "2/-1",
           width: "100%",
         })}
-        onBlur={(e) => {
-          update(i, { ...field, name: e.target.value });
-          trigger(`decks.${index}.list`, {
-            shouldFocus: true,
-          });
-        }}
       />
       <label htmlFor={`decks.${index}.list.${i}.description`}>説明</label>
       <textarea
