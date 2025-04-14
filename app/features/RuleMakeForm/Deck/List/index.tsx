@@ -17,7 +17,7 @@ export const List = ({
     name: `decks.${index}.list`,
   });
   return (
-    <Grid columns={3}>
+    <Grid columns={4}>
       {fields.map((field, i) => (
         <Card
           key={field.id}

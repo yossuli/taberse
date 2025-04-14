@@ -31,7 +31,7 @@ export const Card = ({
     "not" | "add" | "select"
   >(field.categoryName ? "select" : "not");
   const [category, setCategory] = useState(field.categoryName);
-
+  const [isOpenDescription, setIsOpenDescription] = useState(false);
   return (
     <React.Fragment key={field.id}>
       <label htmlFor={`decks.${index}.list.${i}.name`}>カード名</label>
@@ -52,15 +52,40 @@ export const Card = ({
       <ErrorNotice>
         {errors.decks?.[index]?.list?.[i]?.name?.message}
       </ErrorNotice>
-      <label htmlFor={`decks.${index}.list.${i}.description`}>説明</label>
-      <textarea
-        {...register(`decks.${index}.list.${i}.description`)}
-        id={`decks.${index}.list.${i}.description`}
+      <label
+        htmlFor={`decks.${index}.list.${i}.description`}
         className={css({
-          gridColumn: "2/-1",
+          display: "flex!",
+          flexDirection: "row",
+          alignItems: "center",
+          gap: "4px",
         })}
-      />
-      <Grid>
+        onClick={() => setIsOpenDescription((prev) => !prev)}
+        onKeyDown={() => setIsOpenDescription((prev) => !prev)}
+      >
+        説明
+        <div
+          className={css({
+            display: "flex",
+            width: "20px",
+            height: "20px",
+            border: "10px solid #0000",
+            borderLeft: "10px solid var(--text)",
+            transform: isOpenDescription ? "rotate(90deg) translateX(25%)" : "",
+            transition: "transform 0.2s ease-in-out",
+          })}
+        />
+      </label>
+      {isOpenDescription && (
+        <textarea
+          {...register(`decks.${index}.list.${i}.description`)}
+          id={`decks.${index}.list.${i}.description`}
+          className={css({
+            gridColumn: "2/-1",
+          })}
+        />
+      )}
+      <Grid gridColumn="2/3">
         <input
           type="number"
           className={css({ width: "12" })}
