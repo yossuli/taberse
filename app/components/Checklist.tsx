@@ -24,7 +24,7 @@ export const Checklist = <T extends FieldValues, U extends ArrayPath<T>>({
     >
       {labels
         .filter(({ label }) => label !== "")
-        .map(({ label, id }, index) => (
+        .map(({ label, id }) => (
           <div
             className={center({
               flexDirection: "column",
@@ -36,7 +36,6 @@ export const Checklist = <T extends FieldValues, U extends ArrayPath<T>>({
             <label htmlFor={label}>{label}</label>
             <input
               type="checkbox"
-              {...field[index]}
               name={label}
               onChange={(e) => {
                 if (e.target.checked) {
