@@ -1,6 +1,6 @@
 import { cx } from "@ss/css";
 import { grid } from "@ss/patterns";
-import { Checklists } from "app/components/Checklists";
+import { Checklist } from "app/components/Checklist";
 import { ErrorNotice } from "app/components/ErrorNotice";
 import type { RuleMakeFormChildrenProps, RuleType } from "app/types";
 import type { UseFieldArrayReturn } from "react-hook-form";
@@ -27,7 +27,7 @@ export const Turn = ({
         {rolesFields.filter((r) => (r.name ?? "") !== "").length > 0 && (
           <>
             <label htmlFor="turn.skipRoles">スキップするロール</label>
-            <Checklists
+            <Checklist
               field={turnIgnoreFields}
               labels={rolesFields.map((roleField) => ({
                 id: roleField.id,

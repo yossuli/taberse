@@ -1,7 +1,7 @@
 import { center, flex } from "@ss/patterns";
 import type { ArrayPath, FieldArrayWithId, FieldValues } from "react-hook-form";
 
-export const Checklists = <T extends FieldValues, U extends ArrayPath<T>>({
+export const Checklist = <T extends FieldValues, U extends ArrayPath<T>>({
   field,
   labels,
   append,
