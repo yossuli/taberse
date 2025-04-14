@@ -52,13 +52,13 @@ export default defineConfig({
           alignItems: "center",
           justifyItems: "center",
           columns: 2,
+          width: "100%",
         },
         transform(props) {
-          const { columns, rows, ...rest } = props;
+          const { columns, ...rest } = props;
           return {
             display: "grid",
             gridTemplateColumns: `repeat(${columns}, auto)`,
-            gridTemplateRows: `repeat(${rows}, auto)`,
             gap: "2",
             ...rest,
           };

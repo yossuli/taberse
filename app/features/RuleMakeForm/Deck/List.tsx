@@ -26,7 +26,7 @@ export const List = ({
           <input
             id={`decks.${index}.list.${i}.name`}
             {...register(`decks.${index}.list.${i}.name`)}
-            onChange={(e) => {
+            onBlur={(e) => {
               update(i, {
                 name: e.target.value,
                 categoryName: "",
