@@ -1,16 +1,15 @@
-import { css, cx } from "@ss/css";
+import { cx } from "@ss/css";
 import { grid } from "@ss/patterns";
+import { Checklists } from "app/components/Checklists";
 import { ErrorNotice } from "app/components/ErrorNotice";
 import type { RuleMakeFormChildrenProps, RuleType } from "app/types";
-import React from "react";
 import type { UseFieldArrayReturn } from "react-hook-form";
 
 export const Turn = ({
   register,
-  trigger,
   errors,
   rolesFields,
-  fieldArrayMethod: { fields: turnIgnoreFields, append, remove, update },
+  fieldArrayMethod: { fields: turnIgnoreFields, append, remove },
 }: RuleMakeFormChildrenProps & {
   fieldArrayMethod: UseFieldArrayReturn<RuleType, "turn.ignoreRoles">;
   rolesFields: UseFieldArrayReturn<RuleType, "roles">["fields"];
@@ -28,69 +27,17 @@ export const Turn = ({
         {rolesFields.filter((r) => (r.name ?? "") !== "").length > 0 && (
           <>
             <label htmlFor="turn.skipRoles">スキップするロール</label>
-            <div
-              className={cx(
-                grid({
-                  columns: 2,
-                }),
-              )}
-            >
-              {turnIgnoreFields.map((field, index) => (
-                <React.Fragment key={field.id}>
-                  <select
-                    id={`turn.ignoreRoles.${index}.roleName`}
-                    {...register(`turn.ignoreRoles.${index}.roleName`)}
-                    onChange={(e) => {
-                      if (e.target.value === "") {
-                        remove(index);
-                        return;
-                      }
-                      update(index, { roleName: e.target.value });
-                      trigger("turn.ignoreRoles", {
-                        shouldFocus: true,
-                      });
-                    }}
-                  >
-                    <option value="">なし</option>
-                    {rolesFields.map((field) => (
-                      <option key={field.id} value={field.name}>
-                        {field.name}
-                      </option>
-                    ))}
-                  </select>
-                  <button type="button" onClick={() => remove(index)}>
-                    削除
-                  </button>
-                  {errors.turn?.ignoreRoles?.[index]?.roleName && (
-                    <ErrorNotice>
-                      {errors.turn.ignoreRoles[index].roleName.message}
-                    </ErrorNotice>
-                  )}
-                </React.Fragment>
-              ))}
-              {errors.turn?.ignoreRoles?.root && (
-                <ErrorNotice>
-                  {errors.turn.ignoreRoles.root.message}
-                </ErrorNotice>
-              )}
-              <button
-                type="button"
-                className={css({
-                  gridColumn: "1/3",
-                })}
-                onClick={() => {
-                  if (turnIgnoreFields.some((f) => f.roleName === "")) {
-                    return;
-                  }
-                  if (turnIgnoreFields.length >= rolesFields.length) {
-                    return;
-                  }
-                  append({ roleName: "" });
-                }}
-              >
-                追加
-              </button>
-            </div>
+            <Checklists
+              field={turnIgnoreFields}
+              labels={rolesFields.map((roleField) => ({
+                id: roleField.id,
+                label: roleField.name,
+              }))}
+              append={(role) => append({ roleName: role })}
+              remove={(field, value) =>
+                remove(field.findIndex((f) => f.roleName === value))
+              }
+            />
             {errors.turn?.ignoreRoles?.root && (
               <ErrorNotice>{errors.turn.ignoreRoles.root.message}</ErrorNotice>
             )}
