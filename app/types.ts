@@ -1,5 +1,6 @@
 import type { RuleSchema } from "app/zodSchemas";
 import type {
+  Control,
   FieldErrors,
   UseFormRegister,
   UseFormTrigger,
@@ -20,7 +21,7 @@ export type RuleMakeFormChildrenProps = {
   // resetField: UseFormResetField<RuleType>;
   // reset: UseFormReset<RuleType>;
   // unregister: UseFormUnregister<RuleType>;
-  // control: Control<RuleType>;
+  control?: Control<RuleType>;
   register: UseFormRegister<RuleType>;
   // setFocus: UseFormSetFocus<RuleType>;
   // subscribe: UseFromSubscribe<RuleType>;

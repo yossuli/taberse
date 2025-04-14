@@ -54,22 +54,22 @@ export const RuleSchema = z.object({
         .optional(),
     })
     .optional(),
-  // decks: z.array(
-  //   z.object({
-  //     name: z.string(),
-  //     deck: z.array(
-  //       z.object({
-  //         name: z.string(),
-  //         categoryName: z.string().optional(),
-  //         description: z.union([
-  //           z.string(),
-  //           z.array(z.object({ h: z.string(), p: z.string() })),
-  //         ]),
-  //       }),
-  //     ),
-  //     playableRoles: z.array(z.string()),
-  //   }),
-  // ),
+  decks: z.array(
+    z.object({
+      name: z.string(),
+      // list: z.array(
+      //   z.object({
+      //     name: z.string(),
+      //     categoryName: z.string().optional(),
+      //     description: z.union([
+      //       z.string(),
+      //       z.array(z.object({ h: z.string(), p: z.string() })),
+      //     ]),
+      //   }),
+      // ),
+      playableRoles: z.array(z.object({ roleName: z.string() })),
+    }),
+  ),
   //   defaultHand: z.array(
   //     z.discriminatedUnion("type", [
   //       z.object({
