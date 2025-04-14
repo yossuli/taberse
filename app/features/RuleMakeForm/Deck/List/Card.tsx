@@ -49,6 +49,9 @@ export const Card = ({
           width: "100%",
         })}
       />
+      <ErrorNotice>
+        {errors.decks?.[index]?.list?.[i]?.name?.message}
+      </ErrorNotice>
       <label htmlFor={`decks.${index}.list.${i}.description`}>説明</label>
       <textarea
         {...register(`decks.${index}.list.${i}.description`)}
@@ -123,9 +126,6 @@ export const Card = ({
       <button type="button" onClick={() => remove(i)}>
         削除
       </button>
-      <ErrorNotice>
-        {errors.decks?.[index]?.list?.[i]?.name?.message}
-      </ErrorNotice>
     </React.Fragment>
   );
 };
