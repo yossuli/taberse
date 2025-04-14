@@ -1,16 +1,13 @@
 import { css } from "@ss/css";
 import { Grid } from "@ss/jsx";
-import { ErrorNotice } from "app/components/ErrorNotice";
 import type { RuleMakeFormChildrenProps } from "app/types";
-import React from "react";
 import { useFieldArray } from "react-hook-form";
+import { Card } from "./Card";
 
 export const List = ({
   control,
-  register,
-  trigger,
-  errors,
   index,
+  ...ruleMakeFormProps
 }: RuleMakeFormChildrenProps & {
   index: number;
 }) => {
@@ -20,34 +17,18 @@ export const List = ({
     name: `decks.${index}.list`,
   });
   return (
-    <Grid columns={4}>
+    <Grid columns={5}>
       {fields.map((field, i) => (
-        <React.Fragment key={field.id}>
-          <input
-            id={`decks.${index}.list.${i}.name`}
-            {...register(`decks.${index}.list.${i}.name`)}
-            className={css({
-              gridColumn: "1/3",
-              width: "100%",
-            })}
-            onBlur={(e) => {
-              update(i, {
-                name: e.target.value,
-                categoryName: "",
-                description: "",
-              });
-              trigger(`decks.${index}.list`, {
-                shouldFocus: true,
-              });
-            }}
-          />
-          <button type="button" onClick={() => remove(i)}>
-            削除
-          </button>
-          <ErrorNotice>
-            {errors.decks?.[index]?.list?.[i]?.name?.message}
-          </ErrorNotice>
-        </React.Fragment>
+        <Card
+          key={field.id}
+          {...ruleMakeFormProps}
+          index={index}
+          i={i}
+          field={field}
+          fields={fields}
+          update={update}
+          remove={remove}
+        />
       ))}
       <button
         id="decks.list.add"
@@ -56,6 +37,7 @@ export const List = ({
           append({
             name: "",
             categoryName: "",
+            num: 1,
             description: "",
           })
         }

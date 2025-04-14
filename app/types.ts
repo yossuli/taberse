@@ -27,3 +27,5 @@ export type RuleMakeFormChildrenProps = {
   // subscribe: UseFromSubscribe<RuleType>;
   errors: FieldErrors<RuleType>;
 };
+
+export type StrictOmit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
