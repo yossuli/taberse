@@ -9,9 +9,7 @@ export const Description = ({
     <>
       <label htmlFor="description">ルール説明</label>
       <textarea id="description" {...register("description")} />
-      {errors.description && (
-        <ErrorNotice>errors.description.message;</ErrorNotice>
-      )}
+      <ErrorNotice>{errors.description?.message}</ErrorNotice>
     </>
   );
 };

@@ -38,9 +38,7 @@ export const Turn = ({
                 remove(field.findIndex((f) => f.roleName === value))
               }
             />
-            {errors.turn?.ignoreRoles?.root && (
-              <ErrorNotice>{errors.turn.ignoreRoles.root.message}</ErrorNotice>
-            )}
+            <ErrorNotice>{errors.turn?.ignoreRoles?.root?.message}</ErrorNotice>
           </>
         )}
         <label htmlFor="turn.turnTimeLimit">ターン制限時間</label>
@@ -51,9 +49,7 @@ export const Turn = ({
             valueAsNumber: true,
           })}
         />
-        {errors.turn?.turnTimeLimit?.time && (
-          <ErrorNotice>{errors.turn.turnTimeLimit.time.message}</ErrorNotice>
-        )}
+        <ErrorNotice>{errors.turn?.turnTimeLimit?.time?.message}</ErrorNotice>
         <label htmlFor="turn.turnTimeLimit.type">
           制限時間のターン終了時の扱い
         </label>
@@ -65,9 +61,9 @@ export const Turn = ({
           <option value="reset">リセット</option>
         </select>
       </div>
-      {errors.turn && !errors.turn?.ignoreRoles && (
-        <ErrorNotice>{errors.turn.message}</ErrorNotice>
-      )}
+        <ErrorNotice>
+          {errors.turn?.ignoreRoles && !errors.turn?.ignoreRoles?.message}
+        </ErrorNotice>
     </>
   );
 };

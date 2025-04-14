@@ -30,9 +30,7 @@ export const Players = ({
             onChange: () => trigger("players"),
           })}
         />
-        {errors.players?.min && (
-          <ErrorNotice>{errors.players.min.message}</ErrorNotice>
-        )}
+        <ErrorNotice>{errors.players?.min?.message}</ErrorNotice>
         <label htmlFor="max">最大人数</label>
         <input
           type="number"
@@ -43,12 +41,12 @@ export const Players = ({
           })}
           onBlur={() => setIsFocused(true)}
         />
-        {isFocused && errors.players?.max && (
-          <ErrorNotice>{errors.players.max.message}</ErrorNotice>
-        )}
+        <ErrorNotice>{isFocused && errors.players?.max?.message}</ErrorNotice>
       </div>
-      {![errors.players?.min, errors.players?.max].some(Boolean) &&
-        errors.players && <ErrorNotice>{errors.players.message}</ErrorNotice>}
+      <ErrorNotice>
+        {![errors.players?.min, errors.players?.max].some(Boolean) &&
+          errors.players?.message}
+      </ErrorNotice>
     </>
   );
 };

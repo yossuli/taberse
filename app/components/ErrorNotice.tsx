@@ -5,6 +5,9 @@ export const ErrorNotice = ({
 }: {
   children: React.ReactNode;
 }) => {
+  if (!children) {
+    return null;
+  }
   return (
     <div
       className={cx(

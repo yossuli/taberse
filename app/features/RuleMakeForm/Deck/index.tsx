@@ -30,9 +30,6 @@ export const Deck = ({
             <input type="text" {...register(`decks.${index}.name`)} />
             <PlayableRoles
               control={control}
-              register={register}
-              trigger={trigger}
-              errors={errors}
               rolesFields={rolesFields}
               index={index}
             />
@@ -53,9 +50,7 @@ export const Deck = ({
             >
               削除
             </button>
-            {errors.decks?.[index] && (
-              <ErrorNotice>{errors.decks[index].message}</ErrorNotice>
-            )}
+            <ErrorNotice>{errors.decks?.[index]?.message}</ErrorNotice>
           </React.Fragment>
         ))}
         <button
@@ -73,9 +68,8 @@ export const Deck = ({
         >
           追加
         </button>
-        {errors.decks?.root && (
-          <ErrorNotice>{errors.decks.root.message}</ErrorNotice>
-        )}
+
+        <ErrorNotice>{errors.decks?.root?.message}</ErrorNotice>
       </Grid>
     </>
   );

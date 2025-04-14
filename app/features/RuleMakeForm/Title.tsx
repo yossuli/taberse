@@ -6,7 +6,7 @@ export const Title = ({ register, errors }: RuleMakeFormChildrenProps) => {
     <>
       <label htmlFor="title">ルール名</label>
       <input type="text" id="title" {...register("name")} />
-      {errors.name && <ErrorNotice>{errors.name.message}</ErrorNotice>}
+      <ErrorNotice>{errors.name?.message}</ErrorNotice>
     </>
   );
 };

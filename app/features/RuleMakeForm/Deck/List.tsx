@@ -19,7 +19,6 @@ export const List = ({
     control,
     name: `decks.${index}.list`,
   });
-  console.log("errors", errors);
   return (
     <Grid>
       {fields.map((field, i) => (
@@ -40,11 +39,9 @@ export const List = ({
           <button type="button" onClick={() => remove(i)}>
             削除
           </button>
-          {errors.decks?.[index]?.list?.[i]?.name && (
-            <ErrorNotice>
-              {errors.decks[index].list[i].name.message}
-            </ErrorNotice>
-          )}
+          <ErrorNotice>
+            {errors.decks?.[index]?.list?.[i]?.name?.message}
+          </ErrorNotice>
         </React.Fragment>
       ))}
       <button

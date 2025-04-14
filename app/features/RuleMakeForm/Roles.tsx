@@ -62,9 +62,7 @@ export const Roles = ({
         >
           追加
         </button>
-        {errors.roles?.root && (
-          <ErrorNotice>{errors.roles.root.message}</ErrorNotice>
-        )}
+        <ErrorNotice>{errors.roles?.root?.message}</ErrorNotice>
       </div>
     </>
   );

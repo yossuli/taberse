@@ -6,7 +6,7 @@ export const PlayableRoles = ({
   control,
   rolesFields,
   index,
-}: RuleMakeFormChildrenProps & {
+}: Pick<RuleMakeFormChildrenProps, "control"> & {
   rolesFields: FieldArrayWithId<RuleType, "roles", "id">[];
   index: number;
 }) => {
