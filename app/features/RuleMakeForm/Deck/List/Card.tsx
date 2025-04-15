@@ -1,7 +1,11 @@
 import { css } from "@ss/css";
 import { Grid } from "@ss/jsx";
 import { ErrorNotice } from "app/components/ErrorNotice";
-import type { RuleMakeFormChildrenProps, RuleType } from "app/types";
+import type {
+  RuleMakeFormChildrenProps,
+  RuleType,
+  StrictOmit,
+} from "app/types";
 import React, { useState } from "react";
 import type {
   FieldArrayWithId,
@@ -19,7 +23,7 @@ export const Card = ({
   fields,
   update,
   remove,
-}: RuleMakeFormChildrenProps & {
+}: StrictOmit<RuleMakeFormChildrenProps, "control"> & {
   index: number;
   i: number;
   field: FieldArrayWithId<RuleType, `decks.${number}.list`, "id">;

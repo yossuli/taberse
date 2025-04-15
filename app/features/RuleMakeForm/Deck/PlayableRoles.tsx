@@ -18,7 +18,7 @@ export const PlayableRoles = ({
     <>
       <label htmlFor="playableRoles">プレイ可能な役職</label>
       <Checklist
-        field={fields}
+        fields={fields}
         labels={[...rolesFields.map(({ name, id }) => ({ label: name, id }))]}
         append={(roleName) => append({ roleName })}
         remove={(field, value) =>

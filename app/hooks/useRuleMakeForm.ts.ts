@@ -25,7 +25,6 @@ export const useRuleMakeForm = () => {
   const onError: SubmitErrorHandler<RuleType> = (error) => {
     console.error("error", error);
   };
-
   const onSubmit: SubmitHandler<RuleType> = async (data) => {
     const res = await client.api.test.game.$post(
       {

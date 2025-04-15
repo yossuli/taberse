@@ -1,18 +1,20 @@
 import { css } from "@ss/css";
 import { Grid } from "@ss/jsx";
 import { ErrorNotice } from "app/components/ErrorNotice";
-import type { RuleMakeFormChildrenProps, RuleType } from "app/types";
+import type { RuleMakeFormChildrenProps } from "app/types";
 import React from "react";
-import type { UseFieldArrayReturn } from "react-hook-form";
+import { useFieldArray } from "react-hook-form";
 
 export const Roles = ({
   errors,
   trigger,
   register,
-  fieldArrayMethod: { fields, append, remove, update },
-}: RuleMakeFormChildrenProps & {
-  fieldArrayMethod: UseFieldArrayReturn<RuleType>;
-}) => {
+  control,
+}: RuleMakeFormChildrenProps) => {
+  const { fields, append, update, remove } = useFieldArray({
+    control,
+    name: "roles",
+  });
   return (
     <>
       <label htmlFor="roles">ロール</label>

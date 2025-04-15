@@ -2,18 +2,22 @@ import { Grid } from "@ss/jsx";
 import { Checklist } from "app/components/Checklist";
 import { ErrorNotice } from "app/components/ErrorNotice";
 import { LabelInput } from "app/components/LabelInput";
-import type { RuleMakeFormChildrenProps, RuleType } from "app/types";
-import type { UseFieldArrayReturn } from "react-hook-form";
+import type { RuleMakeFormChildrenProps } from "app/types";
+import { useFieldArray } from "react-hook-form";
 
 export const Turn = ({
+  control,
   register,
   errors,
-  rolesFields,
-  fieldArrayMethod: { fields: turnIgnoreFields, append, remove },
-}: RuleMakeFormChildrenProps & {
-  fieldArrayMethod: UseFieldArrayReturn<RuleType, "turn.ignoreRoles">;
-  rolesFields: UseFieldArrayReturn<RuleType, "roles">["fields"];
-}) => {
+}: RuleMakeFormChildrenProps) => {
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "turn.ignoreRoles",
+  });
+  const { fields: rolesFields } = useFieldArray({
+    control,
+    name: "roles",
+  });
   return (
     <>
       <label htmlFor="turn">ターン</label>
@@ -22,7 +26,7 @@ export const Turn = ({
           <>
             <label htmlFor="turn.skipRoles">スキップするロール</label>
             <Checklist
-              field={turnIgnoreFields}
+              fields={fields}
               labels={rolesFields.map((roleField) => ({
                 id: roleField.id,
                 label: roleField.name,

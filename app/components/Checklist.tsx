@@ -2,12 +2,12 @@ import { center, flex } from "@ss/patterns";
 import type { ArrayPath, FieldArrayWithId, FieldValues } from "react-hook-form";
 
 export const Checklist = <T extends FieldValues, U extends ArrayPath<T>>({
-  field,
+  fields,
   labels,
   append,
   remove,
 }: {
-  field: FieldArrayWithId<T, U, "id">[];
+  fields: FieldArrayWithId<T, U, "id">[];
   labels: { id: string; label: string }[];
   append: (label: string) => void;
   remove: (field: FieldArrayWithId<T, U, "id">[], value: string) => void;
@@ -41,7 +41,7 @@ export const Checklist = <T extends FieldValues, U extends ArrayPath<T>>({
                 if (e.target.checked) {
                   append(label);
                 } else {
-                  remove(field, label);
+                  remove(fields, label);
                 }
               }}
             />
