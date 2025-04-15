@@ -92,7 +92,7 @@ export const Card = ({
       <Grid gridColumn="2/3">
         <input
           type="number"
-          className={css({ width: "12" })}
+          className={css({ width: "14" })}
           {...register(`decks.${index}.list.${i}.num`, {
             valueAsNumber: true,
           })}
@@ -106,21 +106,18 @@ export const Card = ({
               onChange={(e) => {
                 if (e.target.value === "add") {
                   setIsSelectCategory("add");
-                  update(i, {
-                    name: field.name,
-                    num: field.num,
-                    description: field.description,
-                  });
                   return;
                 }
               }}
-              defaultValue={field.categoryName}
+              defaultValue={field.categoryName || fields[0].categoryName}
             >
               <option value="add">追加</option>
               {fields
                 .filter((f) => f.categoryName)
                 .map(({ categoryName }, j) => (
-                  <option key={j}>{categoryName}</option>
+                  <option key={j} value={categoryName}>
+                    {categoryName}
+                  </option>
                 ))}
             </select>
           ),

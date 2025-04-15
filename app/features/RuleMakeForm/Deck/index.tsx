@@ -40,15 +40,6 @@ export const Deck = ({
               errors={errors}
               index={index}
             />
-            <button
-              type="button"
-              onClick={() => remove(index)}
-              className={css({
-                gridColumn: "1/3",
-              })}
-            >
-              削除
-            </button>
             <ErrorNotice>{errors.decks?.[index]?.message}</ErrorNotice>
           </React.Fragment>
         ))}
