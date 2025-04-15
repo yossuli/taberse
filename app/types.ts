@@ -4,13 +4,14 @@ import type {
   FieldErrors,
   UseFormRegister,
   UseFormTrigger,
+  UseFormWatch,
 } from "react-hook-form";
 import type { z } from "zod";
 
 export type RuleType = z.infer<typeof RuleSchema>;
 
 export type RuleMakeFormChildrenProps = {
-  // watch: UseFormWatch<RuleType>;
+  watch: UseFormWatch<RuleType>;
   // getValues: UseFormGetValues<RuleType>;
   // getFieldState: UseFormGetFieldState<RuleType>;
   // setError: UseFormSetError<RuleType>;

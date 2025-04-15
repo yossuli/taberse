@@ -16,6 +16,7 @@ export const useRuleMakeForm = () => {
     handleSubmit,
     register,
     trigger,
+    watch,
     formState: { errors },
   } = useForm<RuleType>({
     resolver: zodResolver(RuleSchema),
@@ -45,6 +46,7 @@ export const useRuleMakeForm = () => {
     onSubmit: handleSubmit(onSubmit, onError),
     register,
     trigger,
+    watch,
     errors,
   };
 };

@@ -7,6 +7,7 @@ import { useFieldArray } from "react-hook-form";
 
 export const Turn = ({
   control,
+  watch,
   register,
   errors,
 }: RuleMakeFormChildrenProps) => {
@@ -14,23 +15,17 @@ export const Turn = ({
     control,
     name: "turn.ignoreRoles",
   });
-  const { fields: rolesFields } = useFieldArray({
-    control,
-    name: "roles",
-  });
+  const rolesFields = watch("roles");
   return (
     <>
       <label htmlFor="turn">ターン</label>
       <Grid>
-        {rolesFields.filter((r) => (r.name ?? "") !== "").length > 0 && (
+        {rolesFields?.filter((r) => (r.name ?? "") !== "").length > 0 && (
           <>
             <label htmlFor="turn.skipRoles">スキップするロール</label>
             <Checklist
               fields={fields}
-              labels={rolesFields.map((roleField) => ({
-                id: roleField.id,
-                label: roleField.name,
-              }))}
+              labels={rolesFields.map((roleField) => roleField.name)}
               append={(role) => append({ roleName: role })}
               remove={(field, value) =>
                 remove(field.findIndex((f) => f.roleName === value))

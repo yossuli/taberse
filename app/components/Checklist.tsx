@@ -8,7 +8,7 @@ export const Checklist = <T extends FieldValues, U extends ArrayPath<T>>({
   remove,
 }: {
   fields: FieldArrayWithId<T, U, "id">[];
-  labels: { id: string; label: string }[];
+  labels: string[];
   append: (label: string) => void;
   remove: (field: FieldArrayWithId<T, U, "id">[], value: string) => void;
 }) => {
@@ -23,15 +23,15 @@ export const Checklist = <T extends FieldValues, U extends ArrayPath<T>>({
       })}
     >
       {labels
-        .filter(({ label }) => label !== "")
-        .map(({ label, id }) => (
+        .filter((label) => label !== "")
+        .map((label, index) => (
           <div
             className={center({
               flexDirection: "column",
               gap: 1,
               minWidth: "fit-content",
             })}
-            key={id}
+            key={index}
           >
             <label htmlFor={label}>{label}</label>
             <input
