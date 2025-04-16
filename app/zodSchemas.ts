@@ -82,22 +82,22 @@ export const RuleSchema = z.object({
       playableRoles: z.array(z.object({ roleName: z.string() })),
     }),
   ),
-  //   defaultHand: z.array(
-  //     z.discriminatedUnion("type", [
-  //       z.object({
-  //         type: z.literal("random"),
-  //         roleFor: z.string(),
-  //         number: z.number().int().positive(),
-  //         deckFrom: z.string(),
-  //       }),
-  //       z.object({
-  //         type: z.literal("fixed"),
-  //         roleFor: z.string(),
-  //         number: z.number().int().positive(),
-  //         cards: z.array(z.string()),
-  //       }),
-  //     ]),
-  //   ),
+  defaultHand: z.array(
+    z.discriminatedUnion("type", [
+      z.object({
+        type: z.literal("random"),
+        roleFor: z.string(),
+        number: z.number().int().positive(),
+        deckFrom: z.string(),
+      }),
+      z.object({
+        type: z.literal("fixed"),
+        roleFor: z.string(),
+        deckFrom: z.string(),
+        cards: z.array(z.object({ name: z.string(), num: z.number() })),
+      }),
+    ]),
+  ),
   //   fieldArea: z.array(
   //     z.object({
   //       name: z.string(),

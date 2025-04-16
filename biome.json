@@ -73,10 +73,6 @@
       "security": {},
       "style": {
         "noDefaultExport": "off",
-        "noImplicitBoolean": {
-          "level": "error",
-          "fix": "safe"
-        },
         "noNegationElse": "warn",
         "noYodaExpression": {
           "level": "error",

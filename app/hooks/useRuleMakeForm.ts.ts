@@ -22,6 +22,39 @@ export const useRuleMakeForm = () => {
     resolver: zodResolver(RuleSchema),
     shouldUnregister: false,
     reValidateMode: "onBlur",
+    defaultValues: {
+      name: "special game name",
+      players: {
+        min: 1,
+        max: 1,
+      },
+      roles: [{ name: "default" }],
+      decks: [
+        {
+          name: "default",
+          playableRoles: [],
+          list: [
+            {
+              name: "default",
+              num: 1,
+            },
+          ],
+        },
+      ],
+      defaultHand: [
+        {
+          type: "fixed",
+          roleFor: "default",
+          deckFrom: "default",
+          cards: [
+            {
+              name: "default",
+              num: 1,
+            },
+          ],
+        },
+      ],
+    },
   });
   const onError: SubmitErrorHandler<RuleType> = (error) => {
     console.error("error", error);

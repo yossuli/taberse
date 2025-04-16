@@ -31,6 +31,9 @@ export default defineConfig({
       width: "fit-content",
       margin: "auto",
     },
+    "*": {
+      wordBreak: "keep-all",
+    },
   },
   outdir: "./app/styled-system",
   importMap: {
