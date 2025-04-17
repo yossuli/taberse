@@ -4,6 +4,7 @@ import { useRuleMakeForm } from "app/hooks/useRuleMakeForm.ts";
 import { Deck } from "./Deck";
 import { DefaultHand } from "./DefaultHand";
 import { Description } from "./Description";
+import { FieldArea } from "./FieldArea";
 import { Players } from "./Players";
 import { Roles } from "./Roles";
 import { Title } from "./Title";
@@ -28,6 +29,7 @@ export const RuleMakeForm = () => {
       <Turn {...ruleMakeForm} />
       <Deck {...ruleMakeForm} />
       <DefaultHand {...ruleMakeForm} />
+      <FieldArea {...ruleMakeForm} />
       <button
         type="submit"
         className={css({

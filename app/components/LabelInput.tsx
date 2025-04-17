@@ -6,10 +6,12 @@ export const LabelInput = ({
   register,
   label,
   type = "text",
+  className,
 }: {
   register: UseFormRegisterReturn;
   label: string;
   type?: React.HTMLInputTypeAttribute;
+  className?: string;
 }) => (
   <React.Fragment>
     <label htmlFor={register.name}>{label}</label>
@@ -17,9 +19,13 @@ export const LabelInput = ({
       type={type}
       id={register.name}
       {...register}
-      className={css({
-        width: "100%",
-      })}
+      className={
+        className ??
+        css({
+          width: "100%",
+          gridColumn: "2/-1",
+        })
+      }
     />
   </React.Fragment>
 );

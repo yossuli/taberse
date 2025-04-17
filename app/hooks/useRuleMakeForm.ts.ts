@@ -54,6 +54,16 @@ export const useRuleMakeForm = () => {
           ],
         },
       ],
+      fieldArea: [
+        {
+          name: "default",
+          roleFor: "default",
+          fieldSize: {
+            width: 1,
+            height: 1,
+          },
+        },
+      ],
     },
   });
   const onError: SubmitErrorHandler<RuleType> = (error) => {
