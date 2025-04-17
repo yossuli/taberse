@@ -23,12 +23,19 @@ export const RuleMakeForm = () => {
       })}
     >
       <Title {...ruleMakeForm} />
+      <hr />
       <Description {...ruleMakeForm} />
+      <hr />
       <Players {...ruleMakeForm} />
+      <hr />
       <Roles {...ruleMakeForm} />
+      <hr />
       <Turn {...ruleMakeForm} />
+      <hr />
       <Deck {...ruleMakeForm} />
+      <hr />
       <DefaultHand {...ruleMakeForm} />
+      <hr />
       <FieldArea {...ruleMakeForm} />
       <button
         type="submit"

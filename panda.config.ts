@@ -31,6 +31,10 @@ export default defineConfig({
       width: "fit-content",
       margin: "auto",
     },
+    hr: {
+      width: "100%",
+      gridColumn: "1/-1",
+    },
     "*": {
       wordBreak: "keep-all",
     },
