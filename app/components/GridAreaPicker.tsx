@@ -85,55 +85,56 @@ export const GridAreaPicker = <T extends FieldValues, U extends ArrayPath<T>>({
   };
 
   return (
-    <Grid
-      className={className}
-      style={{
-        gridTemplateColumns: `repeat(${x}, 1fr)`,
-      }}
-    >
-      {Array.from({ length: y }, (_, i) =>
-        // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: <explanation>
-        Array.from({ length: x }, (_, j) => {
-          const { isSelected, index } = isCellSelectedIndex(i, j, areas);
-          if (isSelected && !(isSelected.t === i && isSelected.l === j)) {
-            return null;
-          }
-          return (
-            <div
-              key={`${i}-${j}`}
-              onMouseDown={() => handleMouseDown(i, j)}
-              onMouseMove={() => handleMoonMouseMove(i, j)}
-              onMouseUp={handleMouseUp}
-              className={flex({
-                width: "100%",
-                height: "100%",
-                cursor: "pointer",
-                justifyContent: "center",
-                alignItems: "center",
-                aspectRatio: isSelected ? undefined : 1,
-              })}
-              style={{
-                backgroundColor: isSelected
-                  ? (isSelected?.color ?? "var(--accent)")
-                  : "white",
-                ...(isSelected && {
-                  gridColumn: `${isSelected.l + 1}/${isSelected.r + 2}`,
-                  gridRow: `${isSelected.t + 1}/${isSelected.b + 2}`,
-                  minWidth: `${100 / x}%`,
-                  minHeight: `${100 / y}%`,
-                }),
-              }}
-            >
-              {isSelected && (
-                <input
-                  {...register(index)}
-                  onMouseDown={(e) => e.stopPropagation()}
-                />
-              )}
-            </div>
-          );
-        }),
-      )}
-    </Grid>
+    <div className={className}>
+      <Grid
+        style={{
+          gridTemplateColumns: `repeat(${x}, 1fr)`,
+        }}
+      >
+        {Array.from({ length: y }, (_, i) =>
+          // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: <explanation>
+          Array.from({ length: x }, (_, j) => {
+            const { isSelected, index } = isCellSelectedIndex(i, j, areas);
+            if (isSelected && !(isSelected.t === i && isSelected.l === j)) {
+              return null;
+            }
+            return (
+              <div
+                key={`${i}-${j}`}
+                onMouseDown={() => handleMouseDown(i, j)}
+                onMouseMove={() => handleMoonMouseMove(i, j)}
+                onMouseUp={handleMouseUp}
+                className={flex({
+                  height: "100%",
+                  width: "100%",
+                  cursor: "pointer",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  aspectRatio: isSelected ? undefined : 1,
+                })}
+                style={{
+                  backgroundColor: isSelected
+                    ? (isSelected?.color ?? "var(--accent)")
+                    : "white",
+                  ...(isSelected && {
+                    gridColumn: `${isSelected.l + 1}/${isSelected.r + 2}`,
+                    gridRow: `${isSelected.t + 1}/${isSelected.b + 2}`,
+                    minWidth: `${100 / x}%`,
+                    minHeight: `${100 / y}%`,
+                  }),
+                }}
+              >
+                {isSelected && (
+                  <input
+                    {...register(index)}
+                    onMouseDown={(e) => e.stopPropagation()}
+                  />
+                )}
+              </div>
+            );
+          }),
+        )}
+      </Grid>
+    </div>
   );
 };
