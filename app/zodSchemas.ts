@@ -115,7 +115,7 @@ export const RuleSchema = z.object({
           name: z.string(),
           description: z.string(),
           color: z.string(),
-          position: z.object({
+          area: z.object({
             l: z.number().int().nonnegative(),
             t: z.number().int().nonnegative(),
             r: z.number().int().nonnegative(),

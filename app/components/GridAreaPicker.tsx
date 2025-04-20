@@ -1,59 +1,50 @@
 import { Grid } from "@ss/jsx";
 import { flex } from "@ss/patterns";
+import type { Area, Pos } from "app/types";
+import { isInArea } from "app/utils/isInArea";
 import { useState } from "react";
-import type {
-  ArrayPath,
-  FieldValues,
-  UseFormRegisterReturn,
-} from "react-hook-form";
+import type { UseFormRegisterReturn } from "react-hook-form";
 
-export const GridAreaPicker = <T extends FieldValues, U extends ArrayPath<T>>({
+type AreaWithColor = Area & { color?: string };
+
+export const GridAreaPicker = ({
   areas,
   append,
   fieldSize: { x, y },
   className,
   register,
 }: {
-  areas: {
-    t: number;
-    l: number;
-    b: number;
-    r: number;
-    color: string;
-  }[];
-  append: (position: { t: number; l: number; b: number; r: number }) => void;
-  fieldSize: {
-    x: number;
-    y: number;
-  };
+  areas: AreaWithColor[];
+  append: (area: Area) => void;
+  fieldSize: Pos;
   className: string;
   register: (index: number) => UseFormRegisterReturn;
 }) => {
-  const [dragStart, setDragStart] = useState<{
-    row: number;
-    col: number;
-  } | null>(null);
-  const [dragEnd, setDragEnd] = useState<{ row: number; col: number } | null>(
-    null,
-  );
+  const [dragStart, setDragStart] = useState<Pos | null>(null);
+  const [dragEnd, setDragEnd] = useState<Pos | null>(null);
 
-  const handleMouseDown = (row: number, col: number) => {
-    setDragStart({ row, col });
+  const handleMouseDown = (y: number, x: number) => {
+    setDragStart({ y, x });
     setDragEnd(null);
   };
 
-  const handleMoonMouseMove = (row: number, col: number) => {
+  const handleMoonMouseMove = (y: number, x: number) => {
     if (dragStart) {
-      setDragEnd({ row, col });
+      setDragEnd({ y, x });
     }
   };
 
-  const handleMouseUp = () => {
+  const handleMouseUp = (isSelected?: AreaWithColor) => {
+    if (isSelected) {
+      setDragStart(null);
+      setDragEnd(null);
+      return;
+    }
     if (dragStart && dragEnd) {
-      const t = Math.min(dragStart.row, dragEnd.row);
-      const l = Math.min(dragStart.col, dragEnd.col);
-      const b = Math.max(dragStart.row, dragEnd.row);
-      const r = Math.max(dragStart.col, dragEnd.col);
+      const t = Math.min(dragStart.y, dragEnd.y);
+      const l = Math.min(dragStart.x, dragEnd.x);
+      const b = Math.max(dragStart.y, dragEnd.y);
+      const r = Math.max(dragStart.x, dragEnd.x);
       append({ t, l, b, r });
     }
     setDragStart(null);
@@ -61,23 +52,13 @@ export const GridAreaPicker = <T extends FieldValues, U extends ArrayPath<T>>({
   };
 
   const isCellSelectedIndex = (
-    row: number,
-    col: number,
-    areas: {
-      t: number;
-      l: number;
-      b: number;
-      r: number;
-      color?: string;
-    }[],
+    y: number,
+    x: number,
+    areas: AreaWithColor[],
   ) => {
     for (let i = 0; i < areas.length; i++) {
       const area = areas[i];
-      if (
-        [area.t <= row, area.l <= col, area.b >= row, area.r >= col].every(
-          Boolean,
-        )
-      ) {
+      if (isInArea(area, { x, y })) {
         return { isSelected: area, index: i };
       }
     }
@@ -103,7 +84,7 @@ export const GridAreaPicker = <T extends FieldValues, U extends ArrayPath<T>>({
                 key={`${i}-${j}`}
                 onMouseDown={() => handleMouseDown(i, j)}
                 onMouseMove={() => handleMoonMouseMove(i, j)}
-                onMouseUp={handleMouseUp}
+                onMouseUp={() => handleMouseUp(isSelected)}
                 className={flex({
                   height: "100%",
                   width: "100%",

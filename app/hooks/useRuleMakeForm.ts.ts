@@ -65,7 +65,7 @@ export const useRuleMakeForm = () => {
           field: [
             {
               name: "default",
-              position: {
+              area: {
                 l: 0,
                 t: 0,
                 r: 0,

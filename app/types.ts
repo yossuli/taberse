@@ -30,3 +30,15 @@ export type RuleMakeFormChildrenProps = {
 };
 
 export type StrictOmit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
+
+export type Area = {
+  t: number;
+  l: number;
+  b: number;
+  r: number;
+};
+
+export type Pos = {
+  x: number;
+  y: number;
+};

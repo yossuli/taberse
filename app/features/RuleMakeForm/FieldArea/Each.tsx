@@ -79,16 +79,16 @@ export const Each = ({
       </div>
       <GridAreaPicker
         register={(i) => register(`fieldArea.${index}.field.${i}.name`)}
-        areas={fields.map(({ position, color }) => ({
+        areas={fields.map(({ area: position, color }) => ({
           ...position,
           color,
         }))}
-        append={(position): void => {
+        append={(area): void => {
           append({
             name: "",
             description: "",
             color: "var(--accent)",
-            position,
+            area,
             operableRoles: [],
             visibleRoles: [],
           });
