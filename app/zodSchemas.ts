@@ -110,21 +110,21 @@ export const RuleSchema = z.object({
         width: z.number().positive(),
         height: z.number().positive(),
       }),
-      // field: z.array(
-      //   z.object({
-      //     name: z.string(),
-      //     description: z.string(),
-      //     color: z.string(),
-      //     position: z.object({
-      //       l: z.number().int().nonnegative(),
-      //       t: z.number().int().nonnegative(),
-      //       r: z.number().int().nonnegative(),
-      //       b: z.number().int().nonnegative(),
-      //     }),
-      //     operableRoles: z.array(z.object({ name: z.string() })),
-      //     visibleRoles: z.array(z.object({ name: z.string() })),
-      //   }),
-      // ),
+      field: z.array(
+        z.object({
+          name: z.string(),
+          description: z.string(),
+          color: z.string(),
+          position: z.object({
+            l: z.number().int().nonnegative(),
+            t: z.number().int().nonnegative(),
+            r: z.number().int().nonnegative(),
+            b: z.number().int().nonnegative(),
+          }),
+          operableRoles: z.array(z.object({ name: z.string() })),
+          visibleRoles: z.array(z.object({ name: z.string() })),
+        }),
+      ),
     }),
   ),
   //   dice: z
