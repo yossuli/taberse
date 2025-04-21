@@ -6,7 +6,10 @@ export const LabelInput = ({
   register,
   label,
   type = "text",
-  className,
+  className = css({
+    width: "100%",
+    gridColumn: "2/-1",
+  }),
   gridColumnStart,
   gridColumnEnd,
 }: {
@@ -30,13 +33,7 @@ export const LabelInput = ({
       type={type}
       id={register.name}
       {...register}
-      className={
-        className ??
-        css({
-          width: "100%",
-          gridColumn: "2/-1",
-        })
-      }
+      className={className}
       style={{
         gridColumnStart: gridColumnStart ? gridColumnStart + 1 : "",
         gridColumnEnd,

@@ -1,5 +1,4 @@
 import { css } from "@ss/css";
-import React from "react";
 import type { UseFormRegisterReturn } from "react-hook-form";
 
 export const LabelSelect = ({
@@ -10,22 +9,41 @@ export const LabelSelect = ({
     gridColumn: "2/-1",
   }),
   register,
+  gridColumnStart,
+  gridColumnEnd,
 }: {
   label: string;
   options: string[];
   className?: string;
   register: UseFormRegisterReturn;
+  gridColumnStart?: number;
+  gridColumnEnd?: number;
 }) => {
   return (
-    <React.Fragment>
-      <label htmlFor={register.name}>{label}</label>
-      <select id={register.name} className={className} {...register}>
+    <>
+      <label
+        htmlFor={register.name}
+        style={{
+          gridColumnStart,
+        }}
+      >
+        {label}
+      </label>
+      <select
+        id={register.name}
+        className={className}
+        {...register}
+        style={{
+          gridColumnStart: gridColumnStart ? gridColumnStart + 1 : "",
+          gridColumnEnd,
+        }}
+      >
         {options.map((option, i) => (
           <option value={option} key={i}>
             {option || "選択"}
           </option>
         ))}
       </select>
-    </React.Fragment>
+    </>
   );
 };
