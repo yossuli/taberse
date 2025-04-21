@@ -38,6 +38,9 @@ export default defineConfig({
     "*": {
       wordBreak: "keep-all",
     },
+    "d_grid > div": {
+      width: "100%",
+    },
   },
   outdir: "./app/styled-system",
   importMap: {

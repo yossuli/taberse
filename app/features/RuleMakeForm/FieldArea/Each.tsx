@@ -1,5 +1,5 @@
 import { css } from "@ss/css";
-import { grid } from "@ss/patterns";
+import { Grid } from "@ss/jsx";
 import { AccordionDescription } from "app/components/AccordionDescription";
 import { GridAreaPicker } from "app/components/GridAreaPicker";
 import { LabelInput } from "app/components/LabelInput";
@@ -33,33 +33,11 @@ export const Each = ({
       <LabelInput
         register={register(`fieldArea.${index}.name`)}
         label="フィールド名"
-        className={css({ gridColumn: "2/-1", width: "100%" })}
       />
-      <label htmlFor="">該当ロール</label>
-      <select
-        {...register(`fieldArea.${index}.roleFor`)}
-        className={css({
-          gridColumn: "2/-1",
-          width: "100%",
-        })}
-      >
-        {roleNames.map((name, i) => (
-          <option value={name} key={i}>
-            {name}
-          </option>
-        ))}
-      </select>
-      <div
-        className={grid({
-          gridColumn: "1/-1",
-          width: "100%",
-          columns: 6,
-        })}
-      >
+      <Grid columns={8} gridColumn="1/-1">
         <AccordionDescription
           register={register(`fieldArea.${index}.description`)}
         />
-
         <LabelInput
           register={register(`fieldArea.${index}.fieldSize.width`, {
             valueAsNumber: true,
@@ -67,6 +45,7 @@ export const Each = ({
           label="幅"
           className={css({ width: 14 })}
           type="number"
+          gridColumnStart={2}
         />
         <LabelInput
           register={register(`fieldArea.${index}.fieldSize.height`, {
@@ -76,17 +55,20 @@ export const Each = ({
           className={css({ width: 14 })}
           type="number"
         />
-        <button type="button" onClick={() => remove(index)}>
-          削除
-        </button>
-      </div>
+        <LabelSelect
+          label="該当ロール"
+          options={roleNames}
+          register={register(`fieldArea.${index}.roleFor`)}
+          className={css({ gridColumn: "" })}
+        />
+      </Grid>
       <GridAreaPicker
         register={(i) => register(`fieldArea.${index}.field.${i}.name`)}
         areas={fields.map(({ area: position, color }) => ({
           ...position,
           color,
         }))}
-        append={(area): void => {
+        append={(area) => {
           append({
             name: "",
             description: "",
@@ -99,7 +81,7 @@ export const Each = ({
         fieldSize={{ x: fieldSize.width, y: fieldSize.height }}
         className={css({
           gridColumn: "1/3",
-          gridRow: "4/9",
+          gridRow: "3/9",
         })}
       />
       <LabelSelect
@@ -110,7 +92,7 @@ export const Each = ({
           onChange: async (e) => setAreaName(e.target.value),
           name: "fieldName",
         }}
-        className={css({ gridColumn: "3/-1" })}
+        gridColumnStart={3}
       />
       {areaName && (
         <>

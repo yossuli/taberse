@@ -2,6 +2,7 @@ import { css } from "@ss/css";
 import { Grid } from "@ss/jsx";
 import { ErrorNotice } from "app/components/ErrorNotice";
 import type { RuleMakeFormChildrenProps } from "app/types";
+import React from "react";
 import { useFieldArray } from "react-hook-form";
 import { Each } from "./Each";
 
@@ -12,7 +13,7 @@ export const FieldArea = ({
   watch,
   trigger,
 }: RuleMakeFormChildrenProps) => {
-  const { fields, append } = useFieldArray({
+  const { fields, append, remove } = useFieldArray({
     control,
     name: "fieldArea",
   });
@@ -22,16 +23,26 @@ export const FieldArea = ({
       <label htmlFor="fieldArea">プレイフィールド</label>
       <Grid columns={4}>
         {fields.map((_, index) => (
-          <Each
-            key={index}
-            register={register}
-            index={index}
-            roleNames={roleNames}
-            watch={watch}
-            control={control}
-            trigger={trigger}
-            errors={errors}
-          />
+          <React.Fragment key={index}>
+            <Each
+              register={register}
+              index={index}
+              roleNames={roleNames}
+              watch={watch}
+              control={control}
+              trigger={trigger}
+              errors={errors}
+            />
+            <button
+              type="button"
+              className={css({
+                gridColumn: "1/-1",
+              })}
+              onClick={() => remove(index)}
+            >
+              削除
+            </button>
+          </React.Fragment>
         ))}
         <ErrorNotice>{errors.fieldArea?.root?.message}</ErrorNotice>
         <button
