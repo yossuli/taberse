@@ -3,7 +3,10 @@ import { grid } from "@ss/patterns";
 import { AccordionDescription } from "app/components/AccordionDescription";
 import { GridAreaPicker } from "app/components/GridAreaPicker";
 import { LabelInput } from "app/components/LabelInput";
+import { LabelSelect } from "app/components/LabelSelect";
+import { LabelTextarea } from "app/components/LabelTextarea";
 import type { RuleMakeFormChildrenProps } from "app/types";
+import { fakeRegister } from "app/utils/fakeRegister";
 import { useState } from "react";
 import { useFieldArray } from "react-hook-form";
 
@@ -96,27 +99,29 @@ export const Each = ({
         fieldSize={{ x: fieldSize.width, y: fieldSize.height }}
         className={css({
           gridColumn: "1/3",
-          gridRowStart: "4",
-          gridRowEnd: "8",
+          gridRow: "4/9",
         })}
       />
-      <label htmlFor="">フィールド名</label>
-      <select onChange={(e) => setAreaName(e.target.value)}>
-        <option value="">選択</option>
-        {fields.map(({ name }, i) => (
-          <option value={name} key={i}>
-            {name}
-          </option>
-        ))}
-      </select>
+      <LabelSelect
+        label="フィールド名"
+        options={["", ...fields.map(({ name }) => name)]}
+        register={{
+          ...fakeRegister,
+          onChange: async (e) => setAreaName(e.target.value),
+          name: "fieldName",
+        }}
+        className={css({ gridColumn: "3/-1" })}
+      />
       {areaName && (
         <>
-          <label htmlFor="description">説明</label>
-          <textarea
-            id="description"
-            {...register(`fieldArea.${index}.field.${areaIndex}.description`)}
+          <LabelTextarea
+            label="説明"
+            register={register(
+              `fieldArea.${index}.field.${areaIndex}.description`,
+            )}
             className={css({
               gridColumn: "3/-1",
+              gridRowStart: 7,
               width: "100%",
             })}
           />
@@ -125,6 +130,7 @@ export const Each = ({
             label="フィールドの色"
             type="color"
             className={css({ width: 14, gridColumn: "-2/-1" })}
+            gridColumnStart={3}
           />
         </>
       )}
