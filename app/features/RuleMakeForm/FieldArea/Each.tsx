@@ -114,6 +114,24 @@ export const Each = ({
             className={css({ width: 14, gridColumn: "-2/-1" })}
             gridColumnStart={3}
           />
+          <LabelSelect
+            label="操作可能ロール"
+            options={roleNames}
+            register={register(
+              `fieldArea.${index}.field.${areaIndex}.operableRoles`,
+            )}
+            gridColumnStart={3}
+            gridColumnEnd={-1}
+          />
+          <LabelSelect
+            label="表示ロール"
+            options={roleNames}
+            register={register(
+              `fieldArea.${index}.field.${areaIndex}.visibleRoles`,
+            )}
+            gridColumnStart={3}
+            gridColumnEnd={-1}
+          />
         </>
       )}
     </>
