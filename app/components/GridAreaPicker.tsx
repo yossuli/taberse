@@ -3,7 +3,7 @@ import { Grid } from "@ss/jsx";
 import { center } from "@ss/patterns";
 import type { Area, Pos } from "app/types";
 import { isInArea } from "app/utils/isInArea";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import type { UseFormRegisterReturn } from "react-hook-form";
 
 type AreaWithColor = Area & { color?: string };
@@ -25,6 +25,8 @@ export const GridAreaPicker = ({
 }) => {
   const [dragStart, setDragStart] = useState<Pos | null>(null);
   const [dragEnd, setDragEnd] = useState<Pos | null>(null);
+  const ref = useRef<HTMLDivElement>(null);
+  const { width, height } = ref.current?.getBoundingClientRect() ?? {};
 
   const handleMouseDown = (y: number, x: number) => {
     setDragStart({ y, x });
@@ -73,8 +75,16 @@ export const GridAreaPicker = ({
       <Grid
         style={{
           gridTemplateColumns: `repeat(${x}, 1fr)`,
-          aspectRatio: x / y,
+          ...(ref.current && {
+            width: `${width}px`,
+            height: `${height}px`,
+          }),
         }}
+        className={css({
+          aspectRatio: 1,
+          overflow: "scroll",
+        })}
+        ref={ref}
       >
         {Array.from({ length: y }, (_, i) =>
           // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: <explanation>
@@ -99,6 +109,7 @@ export const GridAreaPicker = ({
                   },
                   _hover: {
                     "& > div": {
+                      position: "absolute",
                       overflow: "visible",
                       zIndex: 1,
                       width: "fit-content",
