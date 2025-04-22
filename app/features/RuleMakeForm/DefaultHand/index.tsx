@@ -23,7 +23,7 @@ export const DefaultHand = ({
   return (
     <>
       <label htmlFor="decks.list.add">初期手札</label>
-      <Grid columns={8}>
+      <Grid columns={3}>
         ロール
         <span
           className={flex({

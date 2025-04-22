@@ -21,7 +21,7 @@ export const TypeSelect = ({
         })
       }
     >
-      <option value="random">ランダム</option>
+      <option value="random">無作為</option>
       <option value="fixed">固定</option>
     </select>
   );

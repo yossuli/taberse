@@ -1,3 +1,5 @@
+import { Flex } from "@ss/jsx";
+import { center } from "@ss/patterns";
 import { ErrorNotice } from "app/components/ErrorNotice";
 import type { RuleMakeFormChildrenProps } from "app/types";
 import { Fixed } from "./Fixed";
@@ -19,20 +21,30 @@ export const Each = ({
   const { type, deckFrom } = watch(`defaultHand.${index}`);
   return (
     <>
-      {type === "fixed" && (
-        <Fixed
-          register={register}
-          trigger={trigger}
-          watch={watch}
-          control={control}
-          index={index}
-          deckFrom={deckFrom}
-          deckNames={deckNames}
-        />
-      )}
-      {type === "random" && (
-        <Random register={register} index={index} deckNames={deckNames} />
-      )}
+      <Flex
+        gap={2}
+        className={center({
+          width: "100%",
+          "& > select": {
+            height: "fit-content",
+          },
+        })}
+      >
+        {type === "fixed" && (
+          <Fixed
+            register={register}
+            trigger={trigger}
+            watch={watch}
+            control={control}
+            index={index}
+            deckFrom={deckFrom}
+            deckNames={deckNames}
+          />
+        )}
+        {type === "random" && (
+          <Random register={register} index={index} deckNames={deckNames} />
+        )}
+      </Flex>
       <input
         type="button"
         className=""
