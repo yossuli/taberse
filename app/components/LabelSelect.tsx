@@ -13,7 +13,7 @@ export const LabelSelect = ({
   gridColumnEnd,
 }: {
   label: string;
-  options: string[];
+  options: string[] | [string, string][];
   className?: string;
   register: Partial<UseFormRegisterReturn>;
   gridColumnStart?: number;
@@ -39,8 +39,11 @@ export const LabelSelect = ({
         }}
       >
         {options.map((option, i) => (
-          <option value={option} key={i}>
-            {option || "選択"}
+          <option
+            value={typeof option === "string" ? option : option[0]}
+            key={i}
+          >
+            {(typeof option === "string" ? option : option[1]) || "選択"}
           </option>
         ))}
       </select>
