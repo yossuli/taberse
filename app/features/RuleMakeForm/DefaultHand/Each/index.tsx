@@ -1,6 +1,5 @@
 import { ErrorNotice } from "app/components/ErrorNotice";
-import type { RuleMakeFormChildrenProps, RuleType } from "app/types";
-import type { FieldArrayWithId } from "react-hook-form";
+import type { RuleMakeFormChildrenProps } from "app/types";
 import { Fixed } from "./Fixed";
 import { Random } from "./Random";
 
@@ -11,13 +10,13 @@ export const Each = ({
   control,
   errors,
   index,
-  field: { type, deckFrom },
+  remove,
 }: RuleMakeFormChildrenProps & {
   index: number;
-  field: FieldArrayWithId<RuleType, "defaultHand", "id">;
+  remove: (index: number) => void;
 }) => {
   const deckNames = watch("decks")?.map(({ name }) => name);
-
+  const { type, deckFrom } = watch(`defaultHand.${index}`);
   return (
     <>
       {type === "fixed" && (
@@ -34,6 +33,12 @@ export const Each = ({
       {type === "random" && (
         <Random register={register} index={index} deckNames={deckNames} />
       )}
+      <input
+        type="button"
+        className=""
+        onClick={() => remove(index)}
+        value="削除"
+      />
       <ErrorNotice>{errors.defaultHand?.[index]?.message}</ErrorNotice>
     </>
   );

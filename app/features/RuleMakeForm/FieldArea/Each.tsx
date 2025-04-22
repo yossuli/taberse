@@ -20,7 +20,7 @@ export const Each = ({
   roleNames: string[];
 }) => {
   const [areaName, setAreaName] = useState("");
-  const { append, remove } = useFieldArray({
+  const { append } = useFieldArray({
     control,
     name: `fieldArea.${index}.field`,
   });
@@ -81,6 +81,8 @@ export const Each = ({
         className={css({
           gridColumn: "1/3",
           gridRow: "3/9",
+          width: "100%",
+          height: "100%",
         })}
       />
       <LabelSelect
@@ -101,7 +103,7 @@ export const Each = ({
             )}
             className={css({
               gridColumn: "3/-1",
-              gridRowStart: 7,
+              gridRowStart: 5,
               width: "100%",
             })}
           />

@@ -2,6 +2,7 @@ import { Grid } from "@ss/jsx";
 import { Checklist } from "app/components/Checklist";
 import { ErrorNotice } from "app/components/ErrorNotice";
 import { LabelInput } from "app/components/LabelInput";
+import { LabelSelect } from "app/components/LabelSelect";
 import type { RuleMakeFormChildrenProps } from "app/types";
 import { useFieldArray } from "react-hook-form";
 
@@ -42,16 +43,14 @@ export const Turn = ({
           })}
         />
         <ErrorNotice>{errors.turn?.turnTimeLimit?.time?.message}</ErrorNotice>
-        <label htmlFor="turn.turnTimeLimit.type">
-          制限時間のターン終了時の扱い
-        </label>
-        <select
-          id="turn.turnTimeLimit.type"
-          {...register("turn.turnTimeLimit.type")}
-        >
-          <option value="persistent">持続</option>
-          <option value="reset">リセット</option>
-        </select>
+        <LabelSelect
+          label="制限時間のターン終了時の扱い"
+          options={[
+            ["persistent", "持続"],
+            ["reset", "リセット"],
+          ]}
+          register={register("turn.turnTimeLimit.type")}
+        />
         <ErrorNotice>
           {errors.turn?.ignoreRoles && !errors.turn?.ignoreRoles?.message}
         </ErrorNotice>

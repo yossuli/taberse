@@ -1,4 +1,5 @@
 import { ErrorNotice } from "app/components/ErrorNotice";
+import { LabelTextarea } from "app/components/LabelTextarea";
 import type { RuleMakeFormChildrenProps } from "app/types";
 
 export const Description = ({
@@ -7,8 +8,7 @@ export const Description = ({
 }: RuleMakeFormChildrenProps) => {
   return (
     <>
-      <label htmlFor="description">ルール説明</label>
-      <textarea id="description" {...register("description")} />
+      <LabelTextarea register={register("description")} label="ルール説明" />
       <ErrorNotice>{errors.description?.message}</ErrorNotice>
     </>
   );

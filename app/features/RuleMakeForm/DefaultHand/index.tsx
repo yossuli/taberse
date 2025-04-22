@@ -23,27 +23,17 @@ export const DefaultHand = ({
   return (
     <>
       <label htmlFor="decks.list.add">初期手札</label>
-      <Grid columns={7}>
-        <span
-          className={flex({
-            borderBottom: "1px solid var(--border)",
-            width: "100%",
-            justifyContent: "center",
-          })}
-        >
-          ロール
-        </span>
+      <Grid columns={8}>
+        ロール
         <span
           className={flex({
             gridColumn: "2/-1",
-            borderBottom: "1px solid var(--border)",
-            width: "100%",
-            justifyContent: "center",
           })}
         >
           設定
         </span>
-        {fields.map((field, index) => (
+        <hr />
+        {fields.map((_, index) => (
           <React.Fragment key={index}>
             <select
               {...register(`defaultHand.${index}.roleFor`, {})}
@@ -57,12 +47,12 @@ export const DefaultHand = ({
             </select>
             <Each
               index={index}
-              field={field}
               register={register}
               trigger={trigger}
               watch={watch}
               control={control}
               errors={errors}
+              remove={remove}
             />
             <ErrorNotice>{errors.defaultHand?.root?.message}</ErrorNotice>
           </React.Fragment>
@@ -75,9 +65,14 @@ export const DefaultHand = ({
           onClick={() =>
             append({
               roleFor: roleNames?.[0],
-              type: "random",
-              number: 1,
+              type: "fixed",
               deckFrom: deckName,
+              cards: [
+                {
+                  name: "default",
+                  num: 1,
+                },
+              ],
             })
           }
         >
