@@ -1,5 +1,6 @@
+import { css } from "@ss/css";
 import { Grid } from "@ss/jsx";
-import { flex } from "@ss/patterns";
+import { center } from "@ss/patterns";
 import type { Area, Pos } from "app/types";
 import { isInArea } from "app/utils/isInArea";
 import { useState } from "react";
@@ -70,6 +71,7 @@ export const GridAreaPicker = ({
       <Grid
         style={{
           gridTemplateColumns: `repeat(${x}, 1fr)`,
+          aspectRatio: x / y,
         }}
       >
         {Array.from({ length: y }, (_, i) =>
@@ -85,13 +87,21 @@ export const GridAreaPicker = ({
                 onMouseDown={() => handleMouseDown(i, j)}
                 onMouseMove={() => handleMoonMouseMove(i, j)}
                 onMouseUp={() => handleMouseUp(isSelected)}
-                className={flex({
-                  height: "100%",
+                className={center({
+                  padding: 2,
                   width: "100%",
-                  cursor: "pointer",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  aspectRatio: isSelected ? undefined : 1,
+                  height: "100%",
+                  "& > div": {
+                    overflow: "hidden",
+                    width: "unset!",
+                  },
+                  _hover: {
+                    "& > div": {
+                      overflow: "visible",
+                      zIndex: 1,
+                      width: "fit-content",
+                    },
+                  },
                 })}
                 style={{
                   backgroundColor: isSelected
