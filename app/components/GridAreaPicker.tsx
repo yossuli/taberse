@@ -11,12 +11,14 @@ type AreaWithColor = Area & { color?: string };
 export const GridAreaPicker = ({
   areas,
   append,
+  remove,
   fieldSize: { x, y },
   className,
   register,
 }: {
   areas: AreaWithColor[];
   append: (area: Area) => void;
+  remove: (index: number) => void;
   fieldSize: Pos;
   className: string;
   register: (index: number) => UseFormRegisterReturn;
@@ -116,10 +118,24 @@ export const GridAreaPicker = ({
                 }}
               >
                 {isSelected && (
-                  <input
-                    {...register(index)}
-                    onMouseDown={(e) => e.stopPropagation()}
-                  />
+                  <Grid>
+                    <input
+                      {...register(index)}
+                      onMouseDown={(e) => e.stopPropagation()}
+                    />
+                    <input
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        remove(index);
+                      }}
+                      className={css({
+                        gridColumn: "-2/-1",
+                        borderColor: "black!",
+                      })}
+                      value="削除"
+                    />
+                  </Grid>
                 )}
               </div>
             );

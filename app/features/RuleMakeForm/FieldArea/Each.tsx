@@ -20,7 +20,7 @@ export const Each = ({
   roleNames: string[];
 }) => {
   const [areaName, setAreaName] = useState("");
-  const { append } = useFieldArray({
+  const { append, remove } = useFieldArray({
     control,
     name: `fieldArea.${index}.field`,
   });
@@ -77,6 +77,7 @@ export const Each = ({
             visibleRoles: [],
           });
         }}
+        remove={remove}
         fieldSize={{ x: fieldSize.width, y: fieldSize.height }}
         className={css({
           gridColumn: "1/3",
@@ -87,7 +88,7 @@ export const Each = ({
       />
       <LabelSelect
         label="フィールド名"
-        options={["", ...fields.map(({ name }) => name)]}
+        options={["", ...fields.map(({ name }) => name).filter(Boolean)]}
         register={{
           onChange: async (e) => setAreaName(e.target.value),
           name: "fieldName",
