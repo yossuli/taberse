@@ -11,7 +11,7 @@ export const Roles = ({
   register,
   control,
 }: RuleMakeFormChildrenProps) => {
-  const { fields, append, update, remove } = useFieldArray({
+  const { fields, append, remove } = useFieldArray({
     control,
     name: "roles",
   });
@@ -24,13 +24,16 @@ export const Roles = ({
             <input
               {...register(`roles.${index}.name`, {
                 onChange: () => trigger("roles"),
-                onBlur: (e) => {
-                  update(index, { name: e.target.value });
-                  trigger("roles");
-                },
+                onBlur: () => trigger("roles"),
               })}
             />
-            <button type="button" onClick={() => remove(index)}>
+            <button
+              type="button"
+              onClick={() => {
+                remove(index);
+                trigger("roles");
+              }}
+            >
               削除
             </button>
             <ErrorNotice>{errors.roles?.[index]?.name?.message}</ErrorNotice>
@@ -43,10 +46,11 @@ export const Roles = ({
             gridColumn: "1/3",
           })}
           onClick={() => append({ name: "" })}
+          disabled={!!errors.roles && fields.length > 0}
         >
           追加
         </button>
-        <ErrorNotice>{errors.roles?.root?.message}</ErrorNotice>
+        <ErrorNotice>{errors.roles?.message}</ErrorNotice>
       </Grid>
     </>
   );

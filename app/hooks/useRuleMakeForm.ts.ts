@@ -20,10 +20,8 @@ export const useRuleMakeForm = () => {
     formState: { errors },
   } = useForm<RuleType>({
     resolver: zodResolver(RuleSchema),
-    shouldUnregister: false,
     reValidateMode: "onBlur",
     defaultValues: {
-      name: "special game name",
       players: {
         min: 1,
         max: 1,
@@ -36,6 +34,7 @@ export const useRuleMakeForm = () => {
           list: [
             {
               name: "default",
+              description: "",
               num: 1,
             },
           ],
