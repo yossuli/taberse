@@ -8,7 +8,7 @@ export const LabelTextarea = ({
   gridColumnStart,
   gridColumnEnd,
 }: {
-  register: UseFormRegisterReturn;
+  register: Partial<UseFormRegisterReturn>;
   label: string;
   className?: string;
   gridColumnStart?: number;

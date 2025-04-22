@@ -6,7 +6,6 @@ import { LabelInput } from "app/components/LabelInput";
 import { LabelSelect } from "app/components/LabelSelect";
 import { LabelTextarea } from "app/components/LabelTextarea";
 import type { RuleMakeFormChildrenProps } from "app/types";
-import { fakeRegister } from "app/utils/fakeRegister";
 import { useState } from "react";
 import { useFieldArray } from "react-hook-form";
 
@@ -88,7 +87,6 @@ export const Each = ({
         label="フィールド名"
         options={["", ...fields.map(({ name }) => name)]}
         register={{
-          ...fakeRegister,
           onChange: async (e) => setAreaName(e.target.value),
           name: "fieldName",
         }}

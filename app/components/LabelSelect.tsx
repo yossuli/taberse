@@ -15,7 +15,7 @@ export const LabelSelect = ({
   label: string;
   options: string[];
   className?: string;
-  register: UseFormRegisterReturn;
+  register: Partial<UseFormRegisterReturn>;
   gridColumnStart?: number;
   gridColumnEnd?: number;
 }) => {

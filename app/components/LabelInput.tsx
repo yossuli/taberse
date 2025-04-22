@@ -13,7 +13,7 @@ export const LabelInput = ({
   gridColumnStart,
   gridColumnEnd,
 }: {
-  register: UseFormRegisterReturn;
+  register: Partial<UseFormRegisterReturn>;
   label: string;
   type?: React.HTMLInputTypeAttribute;
   className?: string;
