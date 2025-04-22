@@ -2,6 +2,7 @@ import { css } from "@ss/css";
 import { Grid } from "@ss/jsx";
 import { AccordionDescription } from "app/components/AccordionDescription";
 import { ErrorNotice } from "app/components/ErrorNotice";
+import { LabelInput } from "app/components/LabelInput";
 import type {
   RuleMakeFormChildrenProps,
   RuleType,
@@ -21,37 +22,28 @@ export const Card = ({
   index,
   i,
   field,
-  fields,
+  watch,
   update,
   remove,
 }: StrictOmit<RuleMakeFormChildrenProps, "control"> & {
   index: number;
   i: number;
   field: FieldArrayWithId<RuleType, `decks.${number}.list`, "id">;
-  fields: FieldArrayWithId<RuleType, `decks.${number}.list`, "id">[];
   update: UseFieldArrayUpdate<RuleType, `decks.${number}.list`>;
   remove: UseFieldArrayRemove;
 }) => {
   const [isSelectCategory, setIsSelectCategory] = useState<
     "not" | "add" | "select"
   >(field.categoryName ? "select" : "not");
-  const [category, setCategory] = useState(field.categoryName);
+  const fields = watch(`decks.${index}.list`);
   return (
     <React.Fragment key={field.id}>
-      <label htmlFor={`decks.${index}.list.${i}.name`}>カード名</label>
-      <input
-        id={`decks.${index}.list.${i}.name`}
-        {...register(`decks.${index}.list.${i}.name`, {
+      <LabelInput
+        register={register(`decks.${index}.list.${i}.name`, {
           onChange: () => trigger(`decks.${index}.list`),
-          onBlur: (e) => {
-            update(i, { ...field, name: e.target.value });
-            trigger(`decks.${index}.list`);
-          },
+          onBlur: () => trigger(`decks.${index}.list`),
         })}
-        className={css({
-          gridColumn: "2/-1",
-          width: "100%",
-        })}
+        label="カード名"
       />
       <ErrorNotice>
         {errors.decks?.[index]?.list?.[i]?.name?.message}
@@ -73,15 +65,21 @@ export const Card = ({
         {
           select: (
             <select
-              onChange={(e) => {
-                if (e.target.value === "add") {
-                  setIsSelectCategory("add");
-                  return;
-                }
-              }}
+              {...register(`decks.${index}.list.${i}.categoryName`, {
+                onChange: (e) => {
+                  if (e.target.value === "") {
+                    setIsSelectCategory("add");
+                    update(i, {
+                      ...field,
+                      categoryName: undefined,
+                    });
+                    return;
+                  }
+                },
+              })}
               defaultValue={field.categoryName || fields[0].categoryName}
             >
-              <option value="add">追加</option>
+              <option value="">追加</option>
               {fields
                 .filter((f) => f.categoryName)
                 .map(({ categoryName }, j) => (
@@ -107,14 +105,9 @@ export const Card = ({
           ),
           add: (
             <input
-              onChange={(e) => setCategory(e.target.value)}
-              onBlur={() => {
-                setIsSelectCategory("select");
-                update(i, {
-                  ...field,
-                  categoryName: category,
-                });
-              }}
+              {...register(`decks.${index}.list.${i}.categoryName`, {
+                onBlur: () => setIsSelectCategory("select"),
+              })}
             />
           ),
         }[isSelectCategory]

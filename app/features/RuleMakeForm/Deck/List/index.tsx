@@ -25,7 +25,6 @@ export const List = ({
           index={index}
           i={i}
           field={field}
-          fields={fields}
           update={update}
           remove={remove}
         />
