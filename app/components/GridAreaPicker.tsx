@@ -118,7 +118,7 @@ export const GridAreaPicker = ({
                 })}
                 style={{
                   backgroundColor: isSelected
-                    ? (isSelected?.color ?? "var(--accent)")
+                    ? isSelected?.color || "var(--accent)"
                     : "white",
                   ...(isSelected && {
                     gridColumn: `${isSelected.l + 1}/${isSelected.r + 2}`,

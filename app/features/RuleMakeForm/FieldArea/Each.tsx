@@ -1,6 +1,7 @@
 import { css } from "@ss/css";
 import { Grid } from "@ss/jsx";
 import { AccordionDescription } from "app/components/AccordionDescription";
+import { ErrorNotice } from "app/components/ErrorNotice";
 import { GridAreaPicker } from "app/components/GridAreaPicker";
 import { LabelInput } from "app/components/LabelInput";
 import { LabelSelect } from "app/components/LabelSelect";
@@ -11,8 +12,10 @@ import { useFieldArray } from "react-hook-form";
 
 export const Each = ({
   register,
+  trigger,
   watch,
   control,
+  errors,
   index,
   roleNames,
 }: RuleMakeFormChildrenProps & {
@@ -27,12 +30,17 @@ export const Each = ({
   const fields = watch(`fieldArea.${index}.field`);
   const fieldSize = watch(`fieldArea.${index}.fieldSize`);
   const areaIndex = fields.findIndex(({ name }) => name === areaName);
+  const fieldSizeError =
+    errors?.fieldArea?.[index]?.fieldSize?.message ||
+    errors?.fieldArea?.[index]?.fieldSize?.width?.message ||
+    errors?.fieldArea?.[index]?.fieldSize?.height?.message;
   return (
     <>
       <LabelInput
         register={register(`fieldArea.${index}.name`)}
         label="フィールド名"
       />
+      <ErrorNotice>{errors?.fieldArea?.[index]?.name?.message}</ErrorNotice>
       <Grid columns={8} gridColumn="1/-1">
         <AccordionDescription
           register={register(`fieldArea.${index}.description`)}
@@ -40,6 +48,7 @@ export const Each = ({
         <LabelInput
           register={register(`fieldArea.${index}.fieldSize.width`, {
             valueAsNumber: true,
+            onChange: () => trigger(`fieldArea.${index}`),
           })}
           label="幅"
           className={css({ width: 14 })}
@@ -49,6 +58,7 @@ export const Each = ({
         <LabelInput
           register={register(`fieldArea.${index}.fieldSize.height`, {
             valueAsNumber: true,
+            onChange: () => trigger(`fieldArea.${index}`),
           })}
           label="高さ"
           className={css({ width: 14 })}
@@ -61,8 +71,17 @@ export const Each = ({
           className={css({ gridColumn: "" })}
         />
       </Grid>
+      <ErrorNotice>{fieldSizeError}</ErrorNotice>
       <GridAreaPicker
-        register={(i) => register(`fieldArea.${index}.field.${i}.name`)}
+        register={(i) =>
+          register(`fieldArea.${index}.field.${i}.name`, {
+            onChange: () => trigger(`fieldArea.${index}.field`),
+            onBlur: (e) => {
+              trigger(`fieldArea.${index}.field`);
+              setAreaName(e.target.value);
+            },
+          })
+        }
         areas={fields.map(({ area: position, color }) => ({
           ...position,
           color,
@@ -71,7 +90,7 @@ export const Each = ({
           append({
             name: "",
             description: "",
-            color: "var(--accent)",
+            color: "",
             area,
             operableRoles: [],
             visibleRoles: [],
@@ -81,7 +100,8 @@ export const Each = ({
         fieldSize={{ x: fieldSize.width, y: fieldSize.height }}
         className={css({
           gridColumn: "1/3",
-          gridRow: "3/9",
+          gridRowStart: fieldSizeError ? 4 : 3,
+          gridRowEnd: fieldSizeError ? 10 : 9,
           width: "100%",
           height: "100%",
         })}
@@ -133,6 +153,10 @@ export const Each = ({
             gridColumnStart={3}
             gridColumnEnd={-1}
           />
+          <ErrorNotice>
+            {errors?.fieldArea?.[index]?.field?.[areaIndex]?.name?.message ||
+              errors?.fieldArea?.[index]?.field?.[areaIndex]?.area?.message}
+          </ErrorNotice>
         </>
       )}
     </>
