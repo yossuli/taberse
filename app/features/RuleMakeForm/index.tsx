@@ -40,6 +40,8 @@ export const RuleMakeForm = () => {
       <FieldArea {...ruleMakeForm} />
       <hr />
       <Dice {...ruleMakeForm} />
+      <hr />
+      <RankingBy {...ruleMakeForm} />
       <button
         type="submit"
         className={css({

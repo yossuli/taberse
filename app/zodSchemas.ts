@@ -195,8 +195,7 @@ export const RuleSchema = z.object({
         }
       });
     }),
-  //   rankingBy: z.enum(["hands", "points", "manual", "none"]),
-  // })
+  rankingBy: z.enum(["hands", "points", "manual", "none"]),
   // .refine(
   //   ({ turn, roles }) =>
   //     turn?.skipRoles.every((role) => roles.includes(role)) ?? true,
