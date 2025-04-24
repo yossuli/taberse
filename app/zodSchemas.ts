@@ -101,10 +101,7 @@ export const RuleSchema = z.object({
       .object({
         name: z.string(),
         description: z.string(),
-        roleFor: z.union([
-          z.literal("main"),
-          z.intersection(z.string(), z.object({})),
-        ]),
+        roleFor: z.string(),
         fieldSize: z.object({
           width: z.number().positive(),
           height: z.number().positive(),
@@ -114,7 +111,7 @@ export const RuleSchema = z.object({
             z.object({
               name: z.string(),
               description: z.string(),
-              color: z.string().regex(/^(#([0-9a-f]{3}|[0-9a-f]{6})|)$/i, {
+              color: z.string().regex(/^(#([0-9a-f]{3}|[0-9a-f]{6})|())$/i, {
                 message: "Invalid color format",
               }),
               area: z.object({
@@ -143,19 +140,28 @@ export const RuleSchema = z.object({
       })
       .superRefine((fieldArea, ctx) => {
         fieldArea.field.forEach(({ area, name }, index) => {
-          if (
-            area.r > fieldArea.fieldSize.width ||
-            area.b > fieldArea.fieldSize.height
-          ) {
+          if (area.b >= fieldArea.fieldSize.height) {
             ctx.addIssue({
               message: `Field "${name}" is out of fieldSize`,
               code: z.ZodIssueCode.custom,
               path: [index, "area"],
             });
             ctx.addIssue({
-              message: `This fieldArea must have a ${fieldArea.fieldSize.width} x ${fieldArea.fieldSize.height} size`,
+              message: `This fieldArea size should be ${fieldArea.fieldSize.width} x ${fieldArea.fieldSize.height + 1}`,
               code: z.ZodIssueCode.custom,
-              path: [index, "fieldSize"],
+              path: ["fieldSize"],
+            });
+          }
+          if (area.r >= fieldArea.fieldSize.width) {
+            ctx.addIssue({
+              message: `Field "${name}" is out of fieldSize`,
+              code: z.ZodIssueCode.custom,
+              path: [index, "area"],
+            });
+            ctx.addIssue({
+              message: `This fieldArea size should be ${fieldArea.fieldSize.width + 1} x ${fieldArea.fieldSize.height}`,
+              code: z.ZodIssueCode.custom,
+              path: ["fieldSize"],
             });
           }
         });
