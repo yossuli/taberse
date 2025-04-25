@@ -18,7 +18,7 @@ export const Each = ({
   remove: (index: number) => void;
 }) => {
   const deckNames = watch("decks")?.map(({ name }) => name);
-  const { type, deckFrom } = watch(`defaultHands.${index}`);
+  const { type } = watch(`defaultHands.${index}`);
   return (
     <>
       <Flex
@@ -37,7 +37,6 @@ export const Each = ({
             watch={watch}
             control={control}
             index={index}
-            deckFrom={deckFrom}
             deckNames={deckNames}
           />
         )}

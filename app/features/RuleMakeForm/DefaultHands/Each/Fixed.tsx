@@ -9,17 +9,16 @@ export const Fixed = ({
   watch,
   control,
   index,
-  deckFrom,
   deckNames,
 }: StrictOmit<RuleMakeFormChildrenProps, "errors"> & {
   index: number;
-  deckFrom: string;
   deckNames: string[];
 }) => {
   const { fields, append, update, remove } = useFieldArray({
     control,
     name: `defaultHands.${index}.cards`,
   });
+  const deckFrom = watch(`defaultHands.${index}`)?.deckFrom;
   const cardNames = watch("decks")
     ?.find(({ name }) => name === deckFrom)
     ?.list.map(({ name, num }) => ({ label: name, max: num }));
