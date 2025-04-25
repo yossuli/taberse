@@ -120,8 +120,8 @@ export const RuleSchema = z.object({
                 r: z.number().int().nonnegative(),
                 b: z.number().int().nonnegative(),
               }),
-              operableRoles: z.array(z.object({ name: z.string() })),
-              visibleRoles: z.array(z.object({ name: z.string() })),
+              operableRoles: z.array(z.object({ roleName: z.string() })),
+              visibleRoles: z.array(z.object({ roleName: z.string() })),
             }),
           )
           .superRefine((field, ctx) => {

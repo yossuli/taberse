@@ -9,6 +9,8 @@ import { LabelTextarea } from "app/components/LabelTextarea";
 import type { RuleMakeFormChildrenProps } from "app/types";
 import { useState } from "react";
 import { useFieldArray } from "react-hook-form";
+import { OperableRoles } from "./OperableRoles";
+import { VisibleRoles } from "./VisibleRoles";
 
 export const Each = ({
   register,
@@ -135,23 +137,17 @@ export const Each = ({
             className={css({ width: 14, gridColumn: "-2/-1" })}
             gridColumnStart={3}
           />
-          <LabelSelect
-            label="操作可能ロール"
-            options={roleNames}
-            register={register(
-              `fieldArea.${index}.field.${areaIndex}.operableRoles`,
-            )}
-            gridColumnStart={3}
-            gridColumnEnd={-1}
+          <OperableRoles
+            control={control}
+            index={index}
+            areaIndex={areaIndex}
+            roleNames={roleNames}
           />
-          <LabelSelect
-            label="表示ロール"
-            options={roleNames}
-            register={register(
-              `fieldArea.${index}.field.${areaIndex}.visibleRoles`,
-            )}
-            gridColumnStart={3}
-            gridColumnEnd={-1}
+          <VisibleRoles
+            control={control}
+            index={index}
+            areaIndex={areaIndex}
+            roleNames={roleNames}
           />
           <ErrorNotice>
             {errors?.fieldArea?.[index]?.field?.[areaIndex]?.name?.message ||

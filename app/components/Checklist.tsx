@@ -1,3 +1,4 @@
+import { cx } from "@ss/css";
 import { center, flex } from "@ss/patterns";
 import {
   type ArrayPath,
@@ -15,6 +16,7 @@ export const Checklist = <T extends FieldValues, U extends ArrayPath<T>>({
   checkOn,
   checkOff,
   name,
+  className,
 }: {
   control: Control<T>;
   labels: string[];
@@ -23,6 +25,7 @@ export const Checklist = <T extends FieldValues, U extends ArrayPath<T>>({
     remove: UseFieldArrayRemove,
   ) => (field: FieldArrayWithId<T, U, "id">[], value: string) => void;
   name: U;
+  className?: string;
 }) => {
   const { fields, append, remove } = useFieldArray({
     control,
@@ -30,13 +33,16 @@ export const Checklist = <T extends FieldValues, U extends ArrayPath<T>>({
   });
   return (
     <div
-      className={flex({
-        direction: "row",
-        overflowX: "scroll",
-        width: "100%",
-        gap: "1",
-        justifyContent: "space-around",
-      })}
+      className={cx(
+        flex({
+          direction: "row",
+          overflowX: "scroll",
+          width: "100%",
+          gap: "1",
+          justifyContent: "space-around",
+        }),
+        className,
+      )}
     >
       {labels
         .filter((label) => label !== "")
