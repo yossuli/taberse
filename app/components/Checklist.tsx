@@ -1,17 +1,33 @@
 import { center, flex } from "@ss/patterns";
-import type { ArrayPath, FieldArrayWithId, FieldValues } from "react-hook-form";
+import {
+  type ArrayPath,
+  type Control,
+  type FieldArrayWithId,
+  type FieldValues,
+  type UseFieldArrayAppend,
+  type UseFieldArrayRemove,
+  useFieldArray,
+} from "react-hook-form";
 
 export const Checklist = <T extends FieldValues, U extends ArrayPath<T>>({
-  fields,
+  control,
   labels,
-  append,
-  remove,
+  checkOn,
+  checkOff,
+  name,
 }: {
-  fields: FieldArrayWithId<T, U, "id">[];
+  control: Control<T>;
   labels: string[];
-  append: (label: string) => void;
-  remove: (field: FieldArrayWithId<T, U, "id">[], value: string) => void;
+  checkOn: (append: UseFieldArrayAppend<T, U>) => (value: string) => void;
+  checkOff: (
+    remove: UseFieldArrayRemove,
+  ) => (field: FieldArrayWithId<T, U, "id">[], value: string) => void;
+  name: U;
 }) => {
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name,
+  });
   return (
     <div
       className={flex({
@@ -39,9 +55,9 @@ export const Checklist = <T extends FieldValues, U extends ArrayPath<T>>({
               name={label}
               onChange={(e) => {
                 if (e.target.checked) {
-                  append(label);
+                  checkOn(append)(label);
                 } else {
-                  remove(fields, label);
+                  checkOff(remove)(fields, label);
                 }
               }}
             />
