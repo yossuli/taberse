@@ -7,7 +7,7 @@ import React from "react";
 import { useFieldArray } from "react-hook-form";
 import { Each } from "./Each";
 
-export const DefaultHand = ({
+export const DefaultHands = ({
   register,
   trigger,
   watch,

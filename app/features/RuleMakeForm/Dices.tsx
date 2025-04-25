@@ -6,7 +6,7 @@ import type { RuleMakeFormChildrenProps } from "app/types";
 import React from "react";
 import { useFieldArray } from "react-hook-form";
 
-export const Dice = ({
+export const Dices = ({
   errors,
   trigger,
   register,
@@ -14,27 +14,27 @@ export const Dice = ({
 }: RuleMakeFormChildrenProps) => {
   const { fields, append, remove } = useFieldArray({
     control,
-    name: "dice",
+    name: "dices",
   });
   return (
     <>
-      <label htmlFor="dice">サイコロ</label>
+      <label htmlFor="dices">サイコロ</label>
       <Grid columns={7}>
         {fields.map((field, index) => (
           <React.Fragment key={field.id}>
             <LabelInput
               label="サイコロ名"
-              register={register(`dice.${index}.name`, {
-                onChange: () => trigger("dice"),
-                onBlur: () => trigger("dice"),
+              register={register(`dices.${index}.name`, {
+                onChange: () => trigger("dices"),
+                onBlur: () => trigger("dices"),
               })}
             />
-            <ErrorNotice>{errors.dice?.[index]?.name?.message}</ErrorNotice>
+            <ErrorNotice>{errors.dices?.[index]?.name?.message}</ErrorNotice>
             <LabelInput
               label="最小値"
-              register={register(`dice.${index}.range.min`, {
-                onChange: () => trigger("dice"),
-                onBlur: () => trigger("dice"),
+              register={register(`dices.${index}.range.min`, {
+                onChange: () => trigger("dices"),
+                onBlur: () => trigger("dices"),
               })}
               type="number"
               gridColumnStart={1}
@@ -42,9 +42,9 @@ export const Dice = ({
             />
             <LabelInput
               label="最大値"
-              register={register(`dice.${index}.range.max`, {
-                onChange: () => trigger("dice"),
-                onBlur: () => trigger("dice"),
+              register={register(`dices.${index}.range.max`, {
+                onChange: () => trigger("dices"),
+                onBlur: () => trigger("dices"),
               })}
               type="number"
               gridColumnStart={3}
@@ -52,24 +52,24 @@ export const Dice = ({
             />
             <LabelInput
               label="刻み"
-              register={register(`dice.${index}.range.step`, {
-                onChange: () => trigger("dice"),
-                onBlur: () => trigger("dice"),
+              register={register(`dices.${index}.range.step`, {
+                onChange: () => trigger("dices"),
+                onBlur: () => trigger("dices"),
               })}
               type="number"
               gridColumnStart={5}
               gridColumnEnd={7}
             />
             <ErrorNotice>
-              {errors.dice?.[index]?.range?.min?.message ||
-                errors.dice?.[index]?.range?.max?.message ||
-                errors.dice?.[index]?.range?.step?.message}
+              {errors.dices?.[index]?.range?.min?.message ||
+                errors.dices?.[index]?.range?.max?.message ||
+                errors.dices?.[index]?.range?.step?.message}
             </ErrorNotice>
             <input
               type="button"
               onClick={() => {
                 remove(index);
-                trigger("dice");
+                trigger("dices");
               }}
               value="削除"
             />
@@ -79,7 +79,7 @@ export const Dice = ({
       <button
         type="button"
         onClick={() => append({ name: "", range: { min: 1, max: 6, step: 1 } })}
-        disabled={!!errors.dice && fields.length > 0}
+        disabled={!!errors.dices && fields.length > 0}
         className={css({
           gridColumn: "1/3",
         })}

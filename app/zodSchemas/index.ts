@@ -3,7 +3,7 @@ import { decksSchema } from "./decksSchema";
 import { defaultHandsSchema } from "./defaultHandsSchema";
 import { dicesSchema } from "./diceSchema";
 import { fieldAreasSchema } from "./fieldAreasSchema";
-import { playerSchema } from "./players";
+import { playerSchema } from "./playerSchema";
 import { rolesSchema } from "./rolesSchema";
 import { turnSchema } from "./turnSchema";
 
@@ -16,7 +16,7 @@ export const RuleSchema = z.object({
   decks: decksSchema,
   defaultHands: defaultHandsSchema,
   fieldAreas: fieldAreasSchema,
-  dice: dicesSchema,
+  dices: dicesSchema,
   rankingBy: z.enum(["hands", "points", "manual", "none"]),
   // .refine(
   //   ({ turn, roles }) =>

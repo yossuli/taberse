@@ -8,7 +8,7 @@ import { useFieldArray } from "react-hook-form";
 import { List } from "./List";
 import { PlayableRoles } from "./PlayableRoles";
 
-export const Deck = ({
+export const Decks = ({
   register,
   trigger,
   watch,

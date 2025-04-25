@@ -1,16 +1,16 @@
 import { css } from "@ss/css";
 import { grid } from "@ss/patterns";
 import { useRuleMakeForm } from "app/hooks/useRuleMakeForm.ts";
-import { Deck } from "./Deck";
-import { DefaultHand } from "./DefaultHand";
+import { Decks } from "./Decks";
+import { DefaultHands } from "./DefaultHands";
 import { Description } from "./Description";
-import { Dice } from "./Dice";
+import { Dices } from "./Dices";
 import { FieldAreas } from "./FieldArea";
-import { Players } from "./Players";
+import { Player } from "./Player";
+import { RankingBy } from "./RankingBy";
 import { Roles } from "./Roles";
 import { Title } from "./Title";
 import { Turn } from "./Turn";
-import { RankingBy } from "./RankingBy";
 
 export const RuleMakeForm = () => {
   const { onSubmit, ...ruleMakeForm } = useRuleMakeForm();
@@ -28,19 +28,19 @@ export const RuleMakeForm = () => {
       <hr />
       <Description {...ruleMakeForm} />
       <hr />
-      <Players {...ruleMakeForm} />
+      <Player {...ruleMakeForm} />
       <hr />
       <Roles {...ruleMakeForm} />
       <hr />
       <Turn {...ruleMakeForm} />
       <hr />
-      <Deck {...ruleMakeForm} />
+      <Decks {...ruleMakeForm} />
       <hr />
-      <DefaultHand {...ruleMakeForm} />
+      <DefaultHands {...ruleMakeForm} />
       <hr />
       <FieldAreas {...ruleMakeForm} />
       <hr />
-      <Dice {...ruleMakeForm} />
+      <Dices {...ruleMakeForm} />
       <hr />
       <RankingBy {...ruleMakeForm} />
       <button

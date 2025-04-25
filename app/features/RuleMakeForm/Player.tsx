@@ -4,7 +4,7 @@ import { LabelInput } from "app/components/LabelInput";
 import type { RuleMakeFormChildrenProps } from "app/types";
 import { useState } from "react";
 
-export const Players = ({
+export const Player = ({
   register,
   trigger,
   errors,

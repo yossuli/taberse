@@ -1,4 +1,4 @@
-import { playerSchema } from "app/zodSchemas/players";
+import { playerSchema } from "app/zodSchemas/playerSchema";
 
 export const player = {
   min: 1,
