@@ -49,5 +49,8 @@ export default defineConfig(({ mode }) => {
       }),
       tsconfigPaths(),
     ],
+    test: {
+      include: ["./app/**/*.ts"],
+    },
   };
 });
