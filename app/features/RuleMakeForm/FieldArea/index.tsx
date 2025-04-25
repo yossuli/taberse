@@ -6,7 +6,7 @@ import React from "react";
 import { useFieldArray } from "react-hook-form";
 import { Each } from "./Each";
 
-export const FieldArea = ({
+export const FieldAreas = ({
   errors,
   register,
   control,
@@ -15,12 +15,12 @@ export const FieldArea = ({
 }: RuleMakeFormChildrenProps) => {
   const { fields, append, remove } = useFieldArray({
     control,
-    name: "fieldArea",
+    name: "fieldAreas",
   });
   const roleNames = watch("roles")?.map(({ name }) => name);
   return (
     <>
-      <label htmlFor="fieldArea">プレイフィールド</label>
+      <label htmlFor="`fieldAreas">プレイフィールド</label>
       <Grid columns={4}>
         {fields.map((_, index) => (
           <React.Fragment key={index}>
@@ -44,7 +44,7 @@ export const FieldArea = ({
             </button>
           </React.Fragment>
         ))}
-        <ErrorNotice>{errors.fieldArea?.root?.message}</ErrorNotice>
+        <ErrorNotice>{errors.fieldAreas?.root?.message}</ErrorNotice>
         <button
           type="button"
           className={css({

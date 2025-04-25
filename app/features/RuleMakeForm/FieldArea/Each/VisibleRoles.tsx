@@ -24,7 +24,7 @@ export const VisibleRoles = ({
       </label>
       <Checklist
         control={control}
-        name={`fieldArea.${index}.field.${areaIndex}.visibleRoles`}
+        name={`fieldAreas.${index}.field.${areaIndex}.visibleRoles`}
         labels={roleNames}
         checkOn={(append) => (value) => append({ roleName: value })}
         checkOff={(remove) => (field, value) =>

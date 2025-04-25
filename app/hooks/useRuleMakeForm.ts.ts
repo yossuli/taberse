@@ -22,7 +22,7 @@ export const useRuleMakeForm = () => {
     resolver: zodResolver(RuleSchema),
     reValidateMode: "onBlur",
     defaultValues: {
-      players: {
+      player: {
         min: 1,
         max: 1,
       },
@@ -40,7 +40,7 @@ export const useRuleMakeForm = () => {
           ],
         },
       ],
-      defaultHand: [
+      defaultHands: [
         {
           type: "fixed",
           roleFor: "default",
@@ -53,7 +53,7 @@ export const useRuleMakeForm = () => {
           ],
         },
       ],
-      fieldArea: [
+      fieldAreas: [
         {
           name: "default",
           roleFor: "default",

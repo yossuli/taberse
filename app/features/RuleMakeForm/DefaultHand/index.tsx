@@ -16,7 +16,7 @@ export const DefaultHand = ({
 }: RuleMakeFormChildrenProps) => {
   const { fields, append, remove, update } = useFieldArray({
     control,
-    name: "defaultHand",
+    name: "defaultHands",
   });
   const roleNames = watch("roles")?.map(({ name }) => name);
   const deckName = watch("decks")?.[0]?.name;
@@ -36,7 +36,7 @@ export const DefaultHand = ({
         {fields.map((_, index) => (
           <React.Fragment key={index}>
             <select
-              {...register(`defaultHand.${index}.roleFor`, {})}
+              {...register(`defaultHands.${index}.roleFor`, {})}
               value={roleNames?.[0]}
             >
               {roleNames?.map((roleName, i) => (
@@ -54,7 +54,7 @@ export const DefaultHand = ({
               errors={errors}
               remove={remove}
             />
-            <ErrorNotice>{errors.defaultHand?.root?.message}</ErrorNotice>
+            <ErrorNotice>{errors.defaultHands?.root?.message}</ErrorNotice>
           </React.Fragment>
         ))}
         <button

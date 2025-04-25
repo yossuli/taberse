@@ -18,7 +18,7 @@ export const Fixed = ({
 }) => {
   const { fields, append, update, remove } = useFieldArray({
     control,
-    name: `defaultHand.${index}.cards`,
+    name: `defaultHands.${index}.cards`,
   });
   const cardNames = watch("decks")
     ?.find(({ name }) => name === deckFrom)

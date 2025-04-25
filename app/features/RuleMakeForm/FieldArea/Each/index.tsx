@@ -27,30 +27,30 @@ export const Each = ({
   const [areaName, setAreaName] = useState("");
   const { append, remove } = useFieldArray({
     control,
-    name: `fieldArea.${index}.field`,
+    name: `fieldAreas.${index}.field`,
   });
-  const fields = watch(`fieldArea.${index}.field`);
-  const fieldSize = watch(`fieldArea.${index}.fieldSize`);
+  const fields = watch(`fieldAreas.${index}.field`);
+  const fieldSize = watch(`fieldAreas.${index}.fieldSize`);
   const areaIndex = fields.findIndex(({ name }) => name === areaName);
   const fieldSizeError =
-    errors?.fieldArea?.[index]?.fieldSize?.message ||
-    errors?.fieldArea?.[index]?.fieldSize?.width?.message ||
-    errors?.fieldArea?.[index]?.fieldSize?.height?.message;
+    errors?.fieldAreas?.[index]?.fieldSize?.message ||
+    errors?.fieldAreas?.[index]?.fieldSize?.width?.message ||
+    errors?.fieldAreas?.[index]?.fieldSize?.height?.message;
   return (
     <>
       <LabelInput
-        register={register(`fieldArea.${index}.name`)}
+        register={register(`fieldAreas.${index}.name`)}
         label="フィールド名"
       />
-      <ErrorNotice>{errors?.fieldArea?.[index]?.name?.message}</ErrorNotice>
+      <ErrorNotice>{errors?.fieldAreas?.[index]?.name?.message}</ErrorNotice>
       <Grid columns={8} gridColumn="1/-1">
         <AccordionDescription
-          register={register(`fieldArea.${index}.description`)}
+          register={register(`fieldAreas.${index}.description`)}
         />
         <LabelInput
-          register={register(`fieldArea.${index}.fieldSize.width`, {
+          register={register(`fieldAreas.${index}.fieldSize.width`, {
             valueAsNumber: true,
-            onChange: () => trigger(`fieldArea.${index}`),
+            onChange: () => trigger(`fieldAreas.${index}`),
           })}
           label="幅"
           className={css({ width: 14 })}
@@ -58,9 +58,9 @@ export const Each = ({
           gridColumnStart={2}
         />
         <LabelInput
-          register={register(`fieldArea.${index}.fieldSize.height`, {
+          register={register(`fieldAreas.${index}.fieldSize.height`, {
             valueAsNumber: true,
-            onChange: () => trigger(`fieldArea.${index}`),
+            onChange: () => trigger(`fieldAreas.${index}`),
           })}
           label="高さ"
           className={css({ width: 14 })}
@@ -69,17 +69,17 @@ export const Each = ({
         <LabelSelect
           label="該当ロール"
           options={roleNames}
-          register={register(`fieldArea.${index}.roleFor`)}
+          register={register(`fieldAreas.${index}.roleFor`)}
           className={css({ gridColumn: "" })}
         />
       </Grid>
       <ErrorNotice>{fieldSizeError}</ErrorNotice>
       <GridAreaPicker
         register={(i) =>
-          register(`fieldArea.${index}.field.${i}.name`, {
-            onChange: () => trigger(`fieldArea.${index}.field`),
+          register(`fieldAreas.${index}.field.${i}.name`, {
+            onChange: () => trigger(`fieldAreas.${index}.field`),
             onBlur: (e) => {
-              trigger(`fieldArea.${index}.field`);
+              trigger(`fieldAreas.${index}.field`);
               setAreaName(e.target.value);
             },
           })
@@ -122,7 +122,7 @@ export const Each = ({
           <LabelTextarea
             label="説明"
             register={register(
-              `fieldArea.${index}.field.${areaIndex}.description`,
+              `fieldAreas.${index}.field.${areaIndex}.description`,
             )}
             className={css({
               gridColumn: "3/-1",
@@ -131,7 +131,7 @@ export const Each = ({
             })}
           />
           <LabelInput
-            register={register(`fieldArea.${index}.field.${areaIndex}.color`)}
+            register={register(`fieldAreas.${index}.field.${areaIndex}.color`)}
             label="フィールドの色"
             type="color"
             className={css({ width: 14, gridColumn: "-2/-1" })}
@@ -150,8 +150,8 @@ export const Each = ({
             roleNames={roleNames}
           />
           <ErrorNotice>
-            {errors?.fieldArea?.[index]?.field?.[areaIndex]?.name?.message ||
-              errors?.fieldArea?.[index]?.field?.[areaIndex]?.area?.message}
+            {errors?.fieldAreas?.[index]?.field?.[areaIndex]?.name?.message ||
+              errors?.fieldAreas?.[index]?.field?.[areaIndex]?.area?.message}
           </ErrorNotice>
         </>
       )}

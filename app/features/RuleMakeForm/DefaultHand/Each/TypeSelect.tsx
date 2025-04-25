@@ -13,7 +13,7 @@ export const TypeSelect = ({
 }) => {
   return (
     <select
-      {...register(`defaultHand.${index}.type`)}
+      {...register(`defaultHands.${index}.type`)}
       className={
         isTypeFixed &&
         css({

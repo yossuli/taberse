@@ -23,7 +23,7 @@ export const Random = ({
       から
       <input
         type="number"
-        {...register(`defaultHand.${index}.number`, {
+        {...register(`defaultHands.${index}.number`, {
           valueAsNumber: true,
         })}
         className={css({

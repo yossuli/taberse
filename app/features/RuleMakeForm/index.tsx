@@ -5,11 +5,12 @@ import { Deck } from "./Deck";
 import { DefaultHand } from "./DefaultHand";
 import { Description } from "./Description";
 import { Dice } from "./Dice";
-import { FieldArea } from "./FieldArea";
+import { FieldAreas } from "./FieldArea";
 import { Players } from "./Players";
 import { Roles } from "./Roles";
 import { Title } from "./Title";
 import { Turn } from "./Turn";
+import { RankingBy } from "./RankingBy";
 
 export const RuleMakeForm = () => {
   const { onSubmit, ...ruleMakeForm } = useRuleMakeForm();
@@ -37,7 +38,7 @@ export const RuleMakeForm = () => {
       <hr />
       <DefaultHand {...ruleMakeForm} />
       <hr />
-      <FieldArea {...ruleMakeForm} />
+      <FieldAreas {...ruleMakeForm} />
       <hr />
       <Dice {...ruleMakeForm} />
       <hr />

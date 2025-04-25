@@ -11,7 +11,7 @@ export const ImportDeckSelect = ({
   index: number;
 }) => {
   return (
-    <select {...register(`defaultHand.${index}.deckFrom`)}>
+    <select {...register(`defaultHands.${index}.deckFrom`)}>
       {deckNames?.map((deckName, i) => (
         <option key={i} value={deckName}>
           {deckName}

@@ -18,7 +18,7 @@ export const Each = ({
   remove: (index: number) => void;
 }) => {
   const deckNames = watch("decks")?.map(({ name }) => name);
-  const { type, deckFrom } = watch(`defaultHand.${index}`);
+  const { type, deckFrom } = watch(`defaultHands.${index}`);
   return (
     <>
       <Flex
@@ -51,7 +51,7 @@ export const Each = ({
         onClick={() => remove(index)}
         value="削除"
       />
-      <ErrorNotice>{errors.defaultHand?.[index]?.message}</ErrorNotice>
+      <ErrorNotice>{errors.defaultHands?.[index]?.message}</ErrorNotice>
     </>
   );
 };

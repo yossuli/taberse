@@ -12,31 +12,31 @@ export const Players = ({
   const [isFocused, setIsFocused] = useState(false);
   return (
     <>
-      <label htmlFor="players">プレイヤー数</label>
+      <label htmlFor="player">プレイヤー数</label>
       <Grid>
         <LabelInput
           label="最小人数"
           type="number"
-          register={register("players.min", {
+          register={register("player.min", {
             valueAsNumber: true,
-            onChange: () => trigger("players"),
+            onChange: () => trigger("player"),
           })}
         />
-        <ErrorNotice>{errors.players?.min?.message}</ErrorNotice>
+        <ErrorNotice>{errors.player?.min?.message}</ErrorNotice>
         <LabelInput
           label="最大人数"
           type="number"
-          register={register("players.max", {
+          register={register("player.max", {
             valueAsNumber: true,
-            onChange: () => trigger("players"),
+            onChange: () => trigger("player"),
             onBlur: () => setIsFocused(true),
           })}
         />
-        <ErrorNotice>{isFocused && errors.players?.max?.message}</ErrorNotice>
+        <ErrorNotice>{isFocused && errors.player?.max?.message}</ErrorNotice>
       </Grid>
       <ErrorNotice>
-        {![errors.players?.min, errors.players?.max].some(Boolean) &&
-          errors.players?.message}
+        {![errors.player?.min, errors.player?.max].some(Boolean) &&
+          errors.player?.message}
       </ErrorNotice>
     </>
   );
