@@ -8,12 +8,8 @@ import type {
   RuleType,
   StrictOmit,
 } from "app/types";
-import React, { useState } from "react";
-import type {
-  FieldArrayWithId,
-  UseFieldArrayRemove,
-  UseFieldArrayUpdate,
-} from "react-hook-form";
+import { useState } from "react";
+import type { UseFieldArrayRemove, UseFieldArrayUpdate } from "react-hook-form";
 
 export const Card = ({
   register,
@@ -21,23 +17,22 @@ export const Card = ({
   errors,
   index,
   i,
-  field,
   watch,
   update,
   remove,
 }: StrictOmit<RuleMakeFormChildrenProps, "control"> & {
   index: number;
   i: number;
-  field: FieldArrayWithId<RuleType, `decks.${number}.list`, "id">;
   update: UseFieldArrayUpdate<RuleType, `decks.${number}.list`>;
   remove: UseFieldArrayRemove;
 }) => {
+  const fields = watch(`decks.${index}.list`);
+  const field = fields[i];
   const [isSelectCategory, setIsSelectCategory] = useState<
     "not" | "add" | "select"
-  >(field.categoryName ? "select" : "not");
-  const fields = watch(`decks.${index}.list`);
+  >("not");
   return (
-    <React.Fragment key={field.id}>
+    <>
       <LabelInput
         register={register(`decks.${index}.list.${i}.name`, {
           onChange: () => trigger(`decks.${index}.list`),
@@ -69,6 +64,9 @@ export const Card = ({
                 onChange: (e) => {
                   if (e.target.value === "") {
                     setIsSelectCategory("add");
+                    return;
+                  }
+                  if (field.categoryName === "none") {
                     update(i, {
                       ...field,
                       categoryName: undefined,
@@ -77,16 +75,21 @@ export const Card = ({
                   }
                 },
               })}
-              defaultValue={field.categoryName || fields[0].categoryName}
+              value={field.categoryName ?? fields[0].categoryName}
             >
               <option value="">追加</option>
-              {fields
-                .filter((f) => f.categoryName)
-                .map(({ categoryName }, j) => (
-                  <option key={j} value={categoryName}>
-                    {categoryName}
-                  </option>
-                ))}
+              <option value="none">未選択</option>
+              {Array.from(
+                new Set(
+                  fields
+                    .filter((f) => f.categoryName)
+                    .map(({ categoryName }) => categoryName),
+                ),
+              ).map((categoryName, j) => (
+                <option key={j} value={categoryName}>
+                  {categoryName}
+                </option>
+              ))}
             </select>
           ),
           not: (
@@ -115,6 +118,6 @@ export const Card = ({
       <button type="button" onClick={() => remove(i)}>
         削除
       </button>
-    </React.Fragment>
+    </>
   );
 };

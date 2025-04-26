@@ -18,13 +18,12 @@ export const List = ({
   });
   return (
     <Grid columns={4}>
-      {fields.map((field, i) => (
+      {fields.map(({ id }, i) => (
         <Card
-          key={field.id}
+          key={id}
           {...ruleMakeFormProps}
           index={index}
           i={i}
-          field={field}
           update={update}
           remove={remove}
         />
@@ -35,7 +34,6 @@ export const List = ({
         onClick={() =>
           append({
             name: "",
-            categoryName: "",
             num: 1,
             description: "",
           })
