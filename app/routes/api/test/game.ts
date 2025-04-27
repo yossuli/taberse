@@ -1,6 +1,6 @@
 import { clerkMiddleware, getAuth } from "@hono/clerk-auth";
 import { zValidator } from "@hono/zod-validator";
-import { RuleSchema } from "app/zodSchemas";
+import { RuleSchema } from "app/zodSchemas/ruleMakeForm";
 import { createRoute } from "honox/factory";
 import { getPrismaClient } from "../../../utils/getPrismsClient";
 

@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { Routes } from "app/.hc.type";
 import type { RuleType } from "app/types";
-import { RuleSchema } from "app/zodSchemas";
+import { RuleSchema } from "app/zodSchemas/ruleMakeForm";
 import { hc } from "hono/client";
 import {
   type SubmitErrorHandler,

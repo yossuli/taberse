@@ -1,4 +1,4 @@
-import type { RuleSchema } from "app/zodSchemas";
+import type { RuleSchema } from "app/zodSchemas/ruleMakeForm";
 import type {
   Control,
   FieldErrors,
