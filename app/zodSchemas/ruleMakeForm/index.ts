@@ -27,10 +27,16 @@ export const RuleSchema = z
       ) ?? true,
     ({ turn, roles }) => ({
       message: `turn.ignoreRoles (${turn?.ignoreRoles
-        .filter(({ roleName }) => !roles.find((role) => role.name === roleName))
-        .join(
-          ", ",
-        )}) are not in roles (${roles.reduce((prev, curr) => `${prev}, ${curr.name}`, "")})`,
+        .reduce(
+          (prev, curr) =>
+            roles.map(({ name }) => name).includes(curr.roleName)
+              ? prev
+              : `${prev}, ${curr.roleName}`,
+          "",
+        )
+        .slice(
+          2,
+        )}) are not in roles (${roles.reduce((prev, curr) => `${prev}, ${curr.name}`, "").slice(2)})`,
     }),
   )
   .refine(
