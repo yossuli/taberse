@@ -1,9 +1,8 @@
 import { decksSchema } from "app/zodSchemas/ruleMakeForm/decksSchema";
 import type { z } from "zod";
-
 export const decks: z.infer<typeof decksSchema> = [
   {
-    name: "",
+    name: "default",
     list: [
       {
         name: "default",
@@ -12,7 +11,7 @@ export const decks: z.infer<typeof decksSchema> = [
         description: "",
       },
     ],
-    playableRoles: [{ roleName: "" }],
+    playableRoles: [{ roleName: "default" }],
   },
 ];
 

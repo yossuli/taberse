@@ -13,7 +13,7 @@ export const fieldAreas: z.infer<typeof fieldAreasSchema> = [
     field: [
       {
         name: "default",
-        description: "default",
+        description: "",
         color: "#000000",
         area: { l: 0, t: 0, r: 0, b: 0 },
         operableRoles: [{ roleName: "default" }],

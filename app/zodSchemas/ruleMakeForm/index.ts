@@ -20,111 +20,138 @@ export const RuleSchema = z
     dices: dicesSchema,
     rankingBy: z.enum(["hands", "points", "manual", "none"]),
   })
-  // .refine(
-  //   ({ turn, roles }) =>
-  //     turn?.skipRoles.every((role) => roles.includes(role)) ?? true,
-  //   ({ turn, roles }) => ({
-  //     message: `${turn?.skipRoles
-  //       .filter((role) => !roles.includes(role))
-  //       .join(", ")} are not in roles: ${roles.join(", ")}`,
-  //   }),
-  // )
-  // .refine(
-  //   ({ decks, roles }) =>
-  //     decks.every((deck) =>
-  //       deck.playableRoles.every((role) => roles.includes(role)),
-  //     ),
-  //   ({ decks, roles }) => ({
-  //     message: `${decks
-  //       .flatMap((deck) => deck.playableRoles)
-  //       .filter((role) => !roles.includes(role))}
-  //       are not in roles: ${roles.join(", ")}`,
-  //   }),
-  // )
-  // .refine(
-  //   ({ defaultHand, roles }) =>
-  //     defaultHand.every(({ roleFor }) => roles.includes(roleFor)),
-  //   ({ defaultHand, roles }) => ({
-  //     message: `${defaultHand
-  //       .filter(({ roleFor }) => !roles.includes(roleFor))
-  //       .map(({ roleFor }) => roleFor)
-  //       .join(", ")} are not in roles: ${roles.join(", ")}`,
-  //   }),
-  // )
-  // .refine(
-  //   ({ fieldArea, roles }) =>
-  //     fieldArea.every(({ roleFor }) => roles.includes(roleFor)),
-  //   ({ fieldArea, roles }) => ({
-  //     message: `${fieldArea
-  //       .filter(({ roleFor }) => !roles.includes(roleFor))
-  //       .map(({ roleFor }) => roleFor)
-  //       .join(", ")} are not in roles: ${roles.join(", ")}`,
-  //   }),
-  // )
-  // .refine(
-  //   ({ fieldArea, roles }) =>
-  //     fieldArea.every(({ field }) =>
-  //       field.every(({ operableRoles }) =>
-  //         operableRoles.every((role) => [...roles, "main"].includes(role)),
-  //       ),
-  //     ),
-  //   ({ fieldArea, roles }) => ({
-  //     message: `${fieldArea
-  //       .flatMap(({ field }) =>
-  //         field.flatMap(({ operableRoles }) => operableRoles),
-  //       )
-  //       .filter((role) => ![...roles, "main"].includes(role))}
-  //       are not in roles: ${roles.join(", ")}`,
-  //   }),
-  // )
-  // .refine(
-  //   ({ fieldArea, roles }) =>
-  //     fieldArea.every(({ field }) =>
-  //       field.every(({ visibleRoles }) =>
-  //         visibleRoles.every((role) => [...roles, "main"].includes(role)),
-  //       ),
-  //     ),
-  //   ({ fieldArea, roles }) => ({
-  //     message: `${fieldArea
-  //       .flatMap(({ field }) =>
-  //         field.flatMap(({ visibleRoles }) => visibleRoles),
-  //       )
-  //       .filter((role) => ![...roles, "main"].includes(role))}
-  //       are not in roles: ${roles.join(", ")}`,
-  //   }),
-  // )
-  // .refine(({ defaultHand, decks }) =>
-  //   defaultHand.every((defaultHandElm) => {
-  //     if (defaultHandElm.type === "random") {
-  //       return decks.map(({ name }) => name).includes(defaultHandElm.deckFrom);
-  //     }
-  //     return true;
-  //   }),
-  // )
-  // .refine(({ defaultHand, decks }) =>
-  //   defaultHand.every((defaultHandElm) => {
-  //     if (defaultHandElm.type === "fixed") {
-  //       const cardNames = decks
-  //         .flatMap(({ deck }) => deck)
-  //         .map(({ name }) => name);
-  //       return defaultHandElm.cards.every((card) => cardNames.includes(card));
-  //     }
-  //     return true;
-  //   }),
-  // )
-  // .refine(
-  //   ({ fieldArea }) =>
-  //     fieldArea.every(({ field }) =>
-  //       field.every(
-  //         ({ position }) => position.l < position.r && position.t < position.b,
-  //       ),
-  //     ),
-  //   ({ fieldArea }) => ({
-  //     message: `${fieldArea
-  //       .flatMap(({ field }) => field.flatMap(({ position }) => position))
-  //       .filter(
-  //         (position) => position.l > position.r || position.t > position.b,
-  //       )}
-  //       are not in fieldArea: ${fieldArea.map(({ name }) => name).join(", ")}`,
-  //   }),
-  // );
+  .refine(
+    ({ turn, roles }) =>
+      turn?.ignoreRoles.every(({ roleName }) =>
+        roles.find((role) => role.name === roleName),
+      ) ?? true,
+    ({ turn, roles }) => ({
+      message: `turn.ignoreRoles (${turn?.ignoreRoles
+        .filter(({ roleName }) => !roles.find((role) => role.name === roleName))
+        .join(
+          ", ",
+        )}) are not in roles (${roles.reduce((prev, curr) => `${prev}, ${curr.name}`, "")})`,
+    }),
+  )
+  .refine(
+    ({ decks, roles }) =>
+      decks.every((deck) =>
+        deck.playableRoles.every(({ roleName }) =>
+          roles.find((role) => role.name === roleName),
+        ),
+      ),
+    ({ decks, roles }) => ({
+      message: `decks.index.deck.playableRoles (${decks
+        .flatMap((deck) => deck.playableRoles)
+        .map((deck) => deck.roleName)
+        .filter((roleName) => !roles.find((role) => role.name === roleName))
+        .join(
+          ", ",
+        )}) are not in roles (${roles.reduce((prev, curr) => `${prev}, ${curr.name}`, "")})`,
+    }),
+  )
+  .refine(
+    ({ defaultHands, roles }) =>
+      defaultHands.every(({ roleFor }) =>
+        roles.find((role) => role.name === roleFor),
+      ),
+    ({ defaultHands, roles }) => ({
+      message: `defaultHands.roleFor (${defaultHands
+        .map(({ roleFor }) => roleFor)
+        .filter((roleFor) => !roles.find((role) => role.name === roleFor))
+        .join(
+          ", ",
+        )}) are not in roles (${roles.reduce((prev, curr) => `${prev}, ${curr.name}`, "")})`,
+    }),
+  )
+  .refine(
+    ({ fieldAreas, roles }) =>
+      fieldAreas.every(({ field }) =>
+        field.every(({ operableRoles }) =>
+          operableRoles.every(({ roleName }) =>
+            roles.find((role) => role.name === roleName),
+          ),
+        ),
+      ),
+    ({ fieldAreas, roles }) => ({
+      message: `fieldAreas.index.field.operableRoles (${fieldAreas
+        .flatMap(({ field }) =>
+          field.flatMap(({ operableRoles }) => operableRoles),
+        )
+        .filter(({ roleName }) =>
+          roles.find((role) => role.name !== roleName),
+        )}) are not in roles: ${roles.join(", ")}`,
+    }),
+  )
+  .refine(
+    ({ fieldAreas, roles }) =>
+      fieldAreas.every(({ field }) =>
+        field.every(({ visibleRoles }) =>
+          visibleRoles.every(({ roleName }) =>
+            roles.find((role) => role.name === roleName),
+          ),
+        ),
+      ),
+    ({ fieldAreas, roles }) => ({
+      message: `${fieldAreas
+        .flatMap(({ field }) =>
+          field.flatMap(({ visibleRoles }) => visibleRoles),
+        )
+        .filter(({ roleName }) => roles.find((role) => role.name !== roleName))}
+      are not in roles (${roles.join(", ")})`,
+    }),
+  )
+  .refine(
+    ({ defaultHands, decks }) =>
+      defaultHands.every((defaultHandsElm) => {
+        if (defaultHandsElm.type === "random") {
+          return decks
+            .map(({ name }) => name)
+            .includes(defaultHandsElm.deckFrom);
+        }
+        return true;
+      }),
+    ({ defaultHands, decks }) => ({
+      message: `defaultHands.deckFrom (${defaultHands
+        .filter((defaultHandsElm) => defaultHandsElm.type === "random")
+        .map((defaultHandsElm) => defaultHandsElm.deckFrom)
+        .filter((deckFrom) => !decks.map(({ name }) => name).includes(deckFrom))
+        .join(
+          ", ",
+        )}) are not in decks (${decks.map(({ name }) => name).join(", ")})`,
+    }),
+  )
+  .refine(
+    ({ defaultHands, decks }) =>
+      defaultHands.every((defaultHandsElm) => {
+        if (defaultHandsElm.type === "fixed") {
+          const cardNames = (
+            decks.find(({ name }) => name === defaultHandsElm.deckFrom)?.list ??
+            []
+          ).map(({ name }) => name);
+          return defaultHandsElm.cards.every((card) =>
+            cardNames.find((name) => name !== card.name),
+          );
+        }
+        return true;
+      }),
+    ({ defaultHands, decks }) => ({
+      message: `defaultHands.cards (${defaultHands
+        .filter((defaultHandsElm) => defaultHandsElm.type === "fixed")
+        .map((defaultHandsElm) =>
+          defaultHandsElm.cards
+            .map((card) => card.name)
+            .filter(
+              (cardName) =>
+                !decks
+                  .find(({ name }) => name === defaultHandsElm.deckFrom)
+                  ?.list.map(({ name }) => name)
+                  .includes(cardName),
+            )
+            .join(", "),
+        )
+        .join(
+          "\n",
+        )}) are not in decks (${decks.map(({ name }) => name).join(", ")})`,
+    }),
+  );

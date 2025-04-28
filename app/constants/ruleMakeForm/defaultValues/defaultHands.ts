@@ -6,7 +6,7 @@ export const defaultHands: z.infer<typeof defaultHandsSchema> = [
     type: "random",
     roleFor: "default",
     number: 1,
-    deckFrom: "deck",
+    deckFrom: "default",
   },
 ];
 
