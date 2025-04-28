@@ -7,17 +7,19 @@ import { playerSchema } from "./playerSchema";
 import { rolesSchema } from "./rolesSchema";
 import { turnSchema } from "./turnSchema";
 
-export const RuleSchema = z.object({
-  name: z.string().min(1),
-  description: z.string(),
-  player: playerSchema,
-  roles: rolesSchema,
-  turn: turnSchema.optional(),
-  decks: decksSchema,
-  defaultHands: defaultHandsSchema,
-  fieldAreas: fieldAreasSchema,
-  dices: dicesSchema,
-  rankingBy: z.enum(["hands", "points", "manual", "none"]),
+export const RuleSchema = z
+  .object({
+    name: z.string().min(1),
+    description: z.string(),
+    player: playerSchema,
+    roles: rolesSchema,
+    turn: turnSchema.optional(),
+    decks: decksSchema,
+    defaultHands: defaultHandsSchema,
+    fieldAreas: fieldAreasSchema,
+    dices: dicesSchema,
+    rankingBy: z.enum(["hands", "points", "manual", "none"]),
+  })
   // .refine(
   //   ({ turn, roles }) =>
   //     turn?.skipRoles.every((role) => roles.includes(role)) ?? true,
@@ -126,4 +128,3 @@ export const RuleSchema = z.object({
   //       are not in fieldArea: ${fieldArea.map(({ name }) => name).join(", ")}`,
   //   }),
   // );
-});

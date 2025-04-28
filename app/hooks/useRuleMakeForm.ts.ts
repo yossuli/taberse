@@ -1,5 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { Routes } from "app/.hc.type";
+import { defaultValues } from "app/constants/ruleMakeForm/defaultValues";
 import type { RuleType } from "app/types";
 import { RuleSchema } from "app/zodSchemas/ruleMakeForm";
 import { hc } from "hono/client";
@@ -21,60 +22,7 @@ export const useRuleMakeForm = () => {
   } = useForm<RuleType>({
     resolver: zodResolver(RuleSchema),
     reValidateMode: "onBlur",
-    defaultValues: {
-      player: {
-        min: 1,
-        max: 1,
-      },
-      roles: [{ name: "default" }],
-      decks: [
-        {
-          name: "default",
-          playableRoles: [],
-          list: [
-            {
-              name: "default",
-              description: "",
-              num: 1,
-            },
-          ],
-        },
-      ],
-      defaultHands: [
-        {
-          type: "fixed",
-          roleFor: "default",
-          deckFrom: "default",
-          cards: [
-            {
-              name: "default",
-              num: 1,
-            },
-          ],
-        },
-      ],
-      fieldAreas: [
-        {
-          name: "default",
-          roleFor: "default",
-          fieldSize: {
-            width: 1,
-            height: 1,
-          },
-          field: [
-            {
-              name: "default",
-              area: {
-                l: 0,
-                t: 0,
-                r: 0,
-                b: 0,
-              },
-            },
-          ],
-        },
-      ],
-    },
+    defaultValues,
   });
   const onError: SubmitErrorHandler<RuleType> = (error) => {
     console.error("error", error);
