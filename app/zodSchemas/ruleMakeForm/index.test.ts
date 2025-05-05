@@ -1,4 +1,7 @@
 import { defaultValues } from "app/constants/ruleMakeForm/defaultValues";
+import { decks } from "app/constants/ruleMakeForm/defaultValues/decks";
+import { defaultHands } from "app/constants/ruleMakeForm/defaultValues/defaultHands";
+import { fieldAreas } from "app/constants/ruleMakeForm/defaultValues/fieldAreas";
 import { expectWithValidateError } from "app/utils/expectWithValidateError";
 import { RuleSchema } from ".";
 
@@ -64,7 +67,7 @@ if (import.meta.vitest) {
       ],
       decks: [
         {
-          ...defaultValues.decks[0],
+          ...decks[0],
           playableRoles: [
             { roleName: "default" },
             { roleName: "test" },
@@ -88,9 +91,9 @@ if (import.meta.vitest) {
         { name: "test3" },
       ],
       decks: [
-        defaultValues.decks[0],
+        decks[0],
         {
-          ...defaultValues.decks[0],
+          ...decks[0],
           playableRoles: [
             { roleName: "default" },
             { roleName: "test" },
@@ -118,7 +121,7 @@ if (import.meta.vitest) {
       ],
       defaultHands: [
         {
-          ...defaultValues.defaultHands[0],
+          ...defaultHands[0],
           roleFor: "default",
         },
       ],
@@ -138,11 +141,11 @@ if (import.meta.vitest) {
       ],
       defaultHands: [
         {
-          ...defaultValues.defaultHands[0],
+          ...defaultHands[0],
           roleFor: "default",
         },
         {
-          ...defaultValues.defaultHands[0],
+          ...defaultHands[0],
           roleFor: "test4", // this is not in roles
         },
       ],
@@ -164,10 +167,10 @@ if (import.meta.vitest) {
       ],
       fieldAreas: [
         {
-          ...defaultValues.fieldAreas[0],
+          ...fieldAreas[0],
           field: [
             {
-              ...defaultValues.fieldAreas[0].field[0],
+              ...fieldAreas[0].field[0],
               operableRoles: [
                 { roleName: "default" },
                 { roleName: "test" },
@@ -192,14 +195,14 @@ if (import.meta.vitest) {
         { name: "test3" },
       ],
       fieldAreas: [
-        defaultValues.fieldAreas[0],
+        fieldAreas[0],
         {
-          ...defaultValues.fieldAreas[0],
+          ...fieldAreas[0],
           name: "test1",
           field: [
-            defaultValues.fieldAreas[0].field[0],
+            fieldAreas[0].field[0],
             {
-              ...defaultValues.fieldAreas[0].field[0],
+              ...fieldAreas[0].field[0],
               name: "test",
               operableRoles: [
                 { roleName: "default" },
@@ -231,10 +234,10 @@ if (import.meta.vitest) {
       ],
       fieldAreas: [
         {
-          ...defaultValues.fieldAreas[0],
+          ...fieldAreas[0],
           field: [
             {
-              ...defaultValues.fieldAreas[0].field[0],
+              ...fieldAreas[0].field[0],
               visibleRoles: [
                 { roleName: "default" },
                 { roleName: "test" },
@@ -260,13 +263,13 @@ if (import.meta.vitest) {
         { name: "test3" },
       ],
       fieldAreas: [
-        defaultValues.fieldAreas[0],
+        fieldAreas[0],
         {
-          ...defaultValues.fieldAreas[0],
+          ...fieldAreas[0],
           field: [
-            defaultValues.fieldAreas[0].field[0],
+            fieldAreas[0].field[0],
             {
-              ...defaultValues.fieldAreas[0].field[0],
+              ...fieldAreas[0].field[0],
               visibleRoles: [
                 { roleName: "default" },
                 { roleName: "test" },
@@ -289,12 +292,12 @@ if (import.meta.vitest) {
     const okValues = {
       ...defaultValues,
       decks: [
-        { ...defaultValues.decks[0], name: "deck1" },
-        { ...defaultValues.decks[0], name: "deck2" },
+        { ...decks[0], name: "deck1" },
+        { ...decks[0], name: "deck2" },
       ],
       defaultHands: [
         {
-          ...defaultValues.defaultHands[0],
+          ...defaultHands[0],
           type: "random",
           deckFrom: "deck1",
         },
@@ -307,17 +310,17 @@ if (import.meta.vitest) {
     const failedValue = {
       ...defaultValues,
       decks: [
-        { ...defaultValues.decks[0], name: "deck1" },
-        { ...defaultValues.decks[0], name: "deck2" },
+        { ...decks[0], name: "deck1" },
+        { ...decks[0], name: "deck2" },
       ],
       defaultHands: [
         {
-          ...defaultValues.defaultHands[0],
+          ...defaultHands[0],
           type: "random",
           deckFrom: "deck1",
         },
         {
-          ...defaultValues.defaultHands[0],
+          ...defaultHands[0],
           type: "random",
           deckFrom: "deck3", // this is not in decks
         },
