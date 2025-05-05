@@ -47,13 +47,27 @@ export const RuleSchema = z
         ),
       ),
     ({ decks, roles }) => ({
-      message: `decks.index.deck.playableRoles (${decks
-        .flatMap((deck) => deck.playableRoles)
-        .map((deck) => deck.roleName)
-        .filter((roleName) => !roles.find((role) => role.name === roleName))
-        .join(
-          ", ",
-        )}) are not in roles (${roles.reduce((prev, curr) => `${prev}, ${curr.name}`, "")})`,
+      message: `decks[${decks.findIndex(({ playableRoles }) =>
+        playableRoles.some(
+          (role) => !roles.map((role) => role.name).includes(role.roleName),
+        ),
+      )}].deck.playableRoles (${(
+        decks.find(({ playableRoles }) =>
+          playableRoles.some(
+            (role) => !roles.map((role) => role.name).includes(role.roleName),
+          ),
+        )?.playableRoles ?? []
+      )
+        .reduce(
+          (prev, { roleName }) =>
+            roles.map((role) => role.name).includes(roleName)
+              ? prev
+              : `${prev}, ${roleName}`,
+          "",
+        )
+        .slice(2)}) are not in roles (${roles
+        .reduce((prev, curr) => `${prev}, ${curr.name}`, "")
+        .slice(2)})`,
     }),
   )
   .refine(
@@ -67,7 +81,7 @@ export const RuleSchema = z
         .filter((roleFor) => !roles.find((role) => role.name === roleFor))
         .join(
           ", ",
-        )}) are not in roles (${roles.reduce((prev, curr) => `${prev}, ${curr.name}`, "")})`,
+        )}) are not in roles (${roles.reduce((prev, curr) => `${prev}, ${curr.name}`, "").slice(2)})`,
     }),
   )
   .refine(
@@ -80,13 +94,52 @@ export const RuleSchema = z
         ),
       ),
     ({ fieldAreas, roles }) => ({
-      message: `fieldAreas.index.field.operableRoles (${fieldAreas
-        .flatMap(({ field }) =>
-          field.flatMap(({ operableRoles }) => operableRoles),
+      message: `fieldAreas[${fieldAreas.findIndex(({ field }) =>
+        field.find(({ operableRoles }) =>
+          operableRoles.some(
+            ({ roleName }) => !roles.map(({ name }) => name).includes(roleName),
+          ),
+        ),
+      )}].field[${fieldAreas
+        .find(({ field }) =>
+          field.find(({ operableRoles }) =>
+            operableRoles.some(
+              ({ roleName }) =>
+                !roles.map(({ name }) => name).includes(roleName),
+            ),
+          ),
         )
-        .filter(({ roleName }) =>
-          roles.find((role) => role.name !== roleName),
-        )}) are not in roles: ${roles.join(", ")}`,
+        ?.field.findIndex(({ operableRoles }) =>
+          operableRoles.some(
+            ({ roleName }) => !roles.map(({ name }) => name).includes(roleName),
+          ),
+        )}].operableRoles (${(
+        fieldAreas
+          .find(({ field }) =>
+            field.find(({ operableRoles }) =>
+              operableRoles.some(
+                ({ roleName }) =>
+                  !roles.map(({ name }) => name).includes(roleName),
+              ),
+            ),
+          )
+          ?.field.find(({ operableRoles }) =>
+            operableRoles.some(
+              ({ roleName }) =>
+                !roles.map(({ name }) => name).includes(roleName),
+            ),
+          )?.operableRoles ?? []
+      )
+        .reduce(
+          (prev, { roleName }) =>
+            roles.map(({ name }) => name).includes(roleName)
+              ? prev
+              : `${prev}, ${roleName}`,
+          "",
+        )
+        .slice(
+          2,
+        )}) are not in roles (${roles.map(({ name }) => name).join(", ")})`,
     }),
   )
   .refine(
@@ -99,12 +152,52 @@ export const RuleSchema = z
         ),
       ),
     ({ fieldAreas, roles }) => ({
-      message: `${fieldAreas
-        .flatMap(({ field }) =>
-          field.flatMap(({ visibleRoles }) => visibleRoles),
+      message: `fieldAreas[${fieldAreas.findIndex(({ field }) =>
+        field.find(({ visibleRoles }) =>
+          visibleRoles.some(
+            ({ roleName }) => !roles.map(({ name }) => name).includes(roleName),
+          ),
+        ),
+      )}].field[${fieldAreas
+        .find(({ field }) =>
+          field.find(({ visibleRoles }) =>
+            visibleRoles.some(
+              ({ roleName }) =>
+                !roles.map(({ name }) => name).includes(roleName),
+            ),
+          ),
         )
-        .filter(({ roleName }) => roles.find((role) => role.name !== roleName))}
-      are not in roles (${roles.join(", ")})`,
+        ?.field.findIndex(({ visibleRoles }) =>
+          visibleRoles.some(
+            ({ roleName }) => !roles.map(({ name }) => name).includes(roleName),
+          ),
+        )}].visibleRoles (${(
+        fieldAreas
+          .find(({ field }) =>
+            field.find(({ visibleRoles }) =>
+              visibleRoles.some(
+                ({ roleName }) =>
+                  !roles.map(({ name }) => name).includes(roleName),
+              ),
+            ),
+          )
+          ?.field.find(({ visibleRoles }) =>
+            visibleRoles.some(
+              ({ roleName }) =>
+                !roles.map(({ name }) => name).includes(roleName),
+            ),
+          )?.visibleRoles ?? []
+      )
+        .reduce(
+          (prev, { roleName }) =>
+            roles.map(({ name }) => name).includes(roleName)
+              ? prev
+              : `${prev}, ${roleName}`,
+          "",
+        )
+        .slice(
+          2,
+        )}) are not in roles (${roles.map(({ name }) => name).join(", ")})`,
     }),
   )
   .refine(
