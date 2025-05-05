@@ -222,35 +222,86 @@ export const RuleSchema = z
   )
   .refine(
     ({ defaultHands, decks }) =>
-      defaultHands.every((defaultHandsElm) => {
-        if (defaultHandsElm.type === "fixed") {
-          const cardNames = (
-            decks.find(({ name }) => name === defaultHandsElm.deckFrom)?.list ??
-            []
-          ).map(({ name }) => name);
-          return defaultHandsElm.cards.every((card) =>
-            cardNames.find((name) => name !== card.name),
-          );
-        }
-        return true;
-      }),
+      defaultHands.find(
+        (defaultHandsElm) =>
+          defaultHandsElm.type === "fixed" &&
+          defaultHandsElm.cards.some(
+            (card) =>
+              !decks
+                .find(({ name }) => name === defaultHandsElm.deckFrom)
+                ?.list.map(({ name }) => name)
+                .includes(card.name),
+          ),
+      ) === undefined,
     ({ defaultHands, decks }) => ({
-      message: `defaultHands.cards (${defaultHands
-        .filter((defaultHandsElm) => defaultHandsElm.type === "fixed")
-        .map((defaultHandsElm) =>
-          defaultHandsElm.cards
-            .map((card) => card.name)
-            .filter(
-              (cardName) =>
+      message: `defaultHands.cards (${(
+        defaultHands.find(
+          (defaultHandsElm) =>
+            defaultHandsElm.type === "fixed" &&
+            defaultHandsElm.cards.some(
+              (card) =>
                 !decks
                   .find(({ name }) => name === defaultHandsElm.deckFrom)
                   ?.list.map(({ name }) => name)
-                  .includes(cardName),
-            )
-            .join(", "),
+                  .includes(card.name),
+            ),
+        ) as { cards: { name: string; num: number }[]; deckFrom: string }
+      )?.cards
+        .reduce(
+          (prev, { name }) =>
+            decks
+              .find(
+                ({ name }) =>
+                  name ===
+                  defaultHands.find(
+                    (defaultHandsElm) =>
+                      defaultHandsElm.type === "fixed" &&
+                      defaultHandsElm.cards.some(
+                        (card) =>
+                          !decks
+                            .find(
+                              ({ name }) => name === defaultHandsElm.deckFrom,
+                            )
+                            ?.list.map(({ name }) => name)
+                            .includes(card.name),
+                      ),
+                  )?.deckFrom,
+              )
+              ?.list.map(({ name }) => name)
+              .includes(name)
+              ? prev
+              : `${prev}, ${name}`,
+          "",
         )
-        .join(
-          "\n",
-        )}) are not in decks (${decks.map(({ name }) => name).join(", ")})`,
+        .slice(2)}) are not in decks: ${
+        defaultHands.find(
+          (defaultHandsElm) =>
+            defaultHandsElm.type === "fixed" &&
+            defaultHandsElm.cards.some(
+              (card) =>
+                !decks
+                  .find(({ name }) => name === defaultHandsElm.deckFrom)
+                  ?.list.map(({ name }) => name)
+                  .includes(card.name),
+            ),
+        )?.deckFrom
+      } (${decks
+        .find(
+          ({ name }) =>
+            name ===
+            defaultHands.find(
+              (defaultHandsElm) =>
+                defaultHandsElm.type === "fixed" &&
+                defaultHandsElm.cards.some(
+                  (card) =>
+                    !decks
+                      .find(({ name }) => name === defaultHandsElm.deckFrom)
+                      ?.list.map(({ name }) => name)
+                      .includes(card.name),
+                ),
+            )?.deckFrom,
+        )
+        ?.list.map(({ name }) => name)
+        .join(", ")})`,
     }),
   );

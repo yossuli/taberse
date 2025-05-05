@@ -266,10 +266,12 @@ if (import.meta.vitest) {
         fieldAreas[0],
         {
           ...fieldAreas[0],
+          name: "test",
           field: [
             fieldAreas[0].field[0],
             {
               ...fieldAreas[0].field[0],
+              name: "test",
               visibleRoles: [
                 { roleName: "default" },
                 { roleName: "test" },
@@ -330,6 +332,54 @@ if (import.meta.vitest) {
     expect(validate.success).toBe(false);
     expect(validate.error?.issues[0].message).toBe(
       "defaultHands.deckFrom (deck3) are not in decks (deck1, deck2)",
+    );
+  });
+
+  it("defaultHands[number].type === fixed の .cards は decks.name === defaultHands[number].deckFrom の .list にすべて含まれる", () => {
+    const okValues = {
+      ...defaultValues,
+      decks: [
+        { ...decks[0], name: "deck1" },
+        { ...decks[0], name: "deck2" },
+      ],
+      defaultHands: [
+        {
+          type: "fixed",
+          roleFor: "default",
+          deckFrom: "deck1",
+          cards: [{ name: "default", num: 1 }],
+        },
+      ],
+    };
+    const validate = RuleSchema.safeParse(okValues);
+    expectWithValidateError(validate).toBe(true);
+  });
+  it("decks.name === defaultHands[number].deckFrom の .list に含まれない defaultHands[number].type === fixed の .cards はエラー", () => {
+    const failedValue = {
+      ...defaultValues,
+      decks: [
+        { ...decks[0], name: "deck1" },
+        { ...decks[0], name: "deck2" },
+      ],
+      defaultHands: [
+        {
+          ...defaultHands[0],
+          type: "fixed",
+          deckFrom: "deck1",
+          cards: [{ name: "default", num: 1 }],
+        },
+        {
+          ...defaultHands[0],
+          type: "fixed",
+          deckFrom: "deck2",
+          cards: [{ name: "test", num: 1 }], // this is not in decks
+        },
+      ],
+    };
+    const validate = RuleSchema.safeParse(failedValue);
+    expect(validate.success).toBe(false);
+    expect(validate.error?.issues[0].message).toBe(
+      "defaultHands.cards (test) are not in decks: deck2 (default)",
     );
   });
 }
