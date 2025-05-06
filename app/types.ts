@@ -42,3 +42,11 @@ export type Pos = {
   x: number;
   y: number;
 };
+
+export type RecursiveNonNullable<T> = T extends Function
+  ? T
+  : T extends object
+    ? {
+        [K in keyof T]-?: RecursiveNonNullable<T[K]>;
+      }
+    : NonNullable<T>;

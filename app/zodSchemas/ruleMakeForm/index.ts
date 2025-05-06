@@ -2,6 +2,7 @@ import { empty2False } from "app/utils/empty2False";
 import { findWithIndexResult } from "app/utils/findWithIndex";
 import { objArr2StrArr } from "app/utils/objArr2StrArr";
 
+import { deepAsserted } from "app/utils/deepAsserted";
 import { wrap } from "app/utils/wrap";
 import { z } from "zod";
 import { decksSchema } from "./decksSchema";
@@ -55,10 +56,11 @@ export const RuleSchema = z
     });
 
     wrap("decks[number].deck.playableRoles", () => {
-      const [deckWithOutliers, index] =
+      const [deckWithOutliers, index] = deepAsserted(
         findWithIndexResult(decks, ({ playableRoles }) =>
           playableRoles.some(({ roleName }) => !roleNames?.includes(roleName)),
-        ) ?? [];
+        ),
+      );
       const outliers = objArr2StrArr(
         deckWithOutliers?.playableRoles.filter(
           ({ roleName }) => !roleNames?.includes(roleName),
@@ -90,7 +92,7 @@ export const RuleSchema = z
     });
 
     wrap("fieldAreas[number].field[number].operableRoles", () => {
-      const [_1, i, result] =
+      const [_1, i, [_2, j, outliers]] = deepAsserted(
         findWithIndexResult(fieldAreas, ({ field }) =>
           findWithIndexResult(field, ({ operableRoles }) =>
             empty2False(
@@ -99,8 +101,8 @@ export const RuleSchema = z
               ),
             ),
           ),
-        ) ?? [];
-      const [_2, j, outliers] = result ?? [];
+        ),
+      );
 
       if (outliers) {
         ctx.addIssue({
@@ -114,7 +116,7 @@ export const RuleSchema = z
     });
 
     wrap("fieldAreas[number].field[number].visibleRoles", () => {
-      const [_3, i, result] =
+      const [_3, i, [_4, j, outliers]] = deepAsserted(
         findWithIndexResult(fieldAreas, ({ field }) =>
           findWithIndexResult(field, ({ visibleRoles }) =>
             empty2False(
@@ -123,8 +125,8 @@ export const RuleSchema = z
               ),
             ),
           ),
-        ) ?? [];
-      const [_4, j, outliers] = result ?? [];
+        ),
+      );
 
       if (outliers) {
         ctx.addIssue({
@@ -158,7 +160,7 @@ export const RuleSchema = z
       const fixedDefaultHands = defaultHands.filter(
         (hand) => hand.type === "fixed",
       );
-      const [deck, index, result] =
+      const [{ deckFrom }, index, result] = deepAsserted(
         findWithIndexResult(fixedDefaultHands, ({ deckFrom, cards }) =>
           empty2False(
             new Set(objArr2StrArr(cards, "name")).difference(
@@ -170,8 +172,8 @@ export const RuleSchema = z
               ),
             ),
           ),
-        ) ?? [];
-      const { deckFrom } = deck ?? {};
+        ),
+      );
 
       if (result) {
         ctx.addIssue({
