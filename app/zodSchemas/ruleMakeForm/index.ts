@@ -39,57 +39,58 @@ export const RuleSchema = z
     });
 
     wrap("turn?.ignoreRoles", () => {
-      const failedRoleNames = objArr2StrArr(
+      const outliers = objArr2StrArr(
         turn?.ignoreRoles.filter(
           ({ roleName }) => !roleNames?.includes(roleName),
         ),
         "roleName",
       );
-      if (failedRoleNames?.length) {
+
+      if (outliers) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: template("turn.ignoreRoles", failedRoleNames).roles,
+          message: template("turn.ignoreRoles", outliers).roles,
         });
       }
     });
 
     wrap("decks[number].deck.playableRoles", () => {
-      const [failedDeck, failedDeckIndex] =
+      const [deckWithOutliers, index] =
         findWithIndexResult(decks, ({ playableRoles }) =>
           playableRoles.some(({ roleName }) => !roleNames?.includes(roleName)),
         ) ?? [];
-      const failedDeckPlayableRoles = objArr2StrArr(
-        failedDeck?.playableRoles.filter(
+      const outliers = objArr2StrArr(
+        deckWithOutliers?.playableRoles.filter(
           ({ roleName }) => !roleNames?.includes(roleName),
         ),
         "roleName",
       );
-      if (failedDeckPlayableRoles?.length) {
+
+      if (outliers) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: template(
-            `decks[${failedDeckIndex}].deck.playableRoles`,
-            failedDeckPlayableRoles,
-          ).roles,
+          message: template(`decks[${index}].deck.playableRoles`, outliers)
+            .roles,
         });
       }
     });
 
     wrap("defaultHands.roleFor", () => {
-      const failedDefaultHands = objArr2StrArr(
+      const outliers = objArr2StrArr(
         defaultHands.filter(({ roleFor }) => !roleNames?.includes(roleFor)),
         "roleFor",
       );
-      if (failedDefaultHands?.length) {
+
+      if (outliers) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: template("defaultHands.roleFor", failedDefaultHands).roles,
+          message: template("defaultHands.roleFor", outliers).roles,
         });
       }
     });
 
     wrap("fieldAreas[number].field[number].operableRoles", () => {
-      const [_1, failedFieldAreaIndex, failedFieldAreaResult] =
+      const [_1, i, result] =
         findWithIndexResult(fieldAreas, ({ field }) =>
           findWithIndexResult(field, ({ operableRoles }) =>
             empty2False(
@@ -99,21 +100,21 @@ export const RuleSchema = z
             ),
           ),
         ) ?? [];
-      const [_2, failedFieldIndex, failedOperableRoles] =
-        failedFieldAreaResult ?? [];
-      if (failedOperableRoles) {
+      const [_2, j, outliers] = result ?? [];
+
+      if (outliers) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           message: template(
-            `fieldAreas[${failedFieldAreaIndex}].field[${failedFieldIndex}].operableRoles`,
-            objArr2StrArr(failedOperableRoles, "roleName"),
+            `fieldAreas[${i}].field[${j}].operableRoles`,
+            objArr2StrArr(outliers, "roleName"),
           ).roles,
         });
       }
     });
 
     wrap("fieldAreas[number].field[number].visibleRoles", () => {
-      const [_3, failedVisibleRolesFieldAreaIndex, failedVisibleRolesResult] =
+      const [_3, i, result] =
         findWithIndexResult(fieldAreas, ({ field }) =>
           findWithIndexResult(field, ({ visibleRoles }) =>
             empty2False(
@@ -123,21 +124,21 @@ export const RuleSchema = z
             ),
           ),
         ) ?? [];
-      const [_4, failedVisibleRolesFieldIndex, failedVisibleRoles] =
-        failedVisibleRolesResult ?? [];
-      if (failedVisibleRoles) {
+      const [_4, j, outliers] = result ?? [];
+
+      if (outliers) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           message: template(
-            `fieldAreas[${failedVisibleRolesFieldAreaIndex}].field[${failedVisibleRolesFieldIndex}].visibleRoles`,
-            objArr2StrArr(failedVisibleRoles, "roleName"),
+            `fieldAreas[${i}].field[${j}].visibleRoles`,
+            objArr2StrArr(outliers, "roleName"),
           ).roles,
         });
       }
     });
 
     wrap("defaultHands[type === random].deckFrom", () => {
-      const failedDeckFrom = objArr2StrArr(
+      const outliers = objArr2StrArr(
         defaultHands.filter(
           ({ type, deckFrom }) =>
             type === "random" &&
@@ -145,10 +146,10 @@ export const RuleSchema = z
         ),
         "deckFrom",
       );
-      if (failedDeckFrom?.length) {
+      if (outliers) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: template("defaultHands.deckFrom", failedDeckFrom).decks,
+          message: template("defaultHands.deckFrom", outliers).decks,
         });
       }
     });
@@ -157,11 +158,7 @@ export const RuleSchema = z
       const fixedDefaultHands = defaultHands.filter(
         (hand) => hand.type === "fixed",
       );
-      const [
-        failedFixedDefaultHands,
-        failedFixedDefaultHandsIndex,
-        failedCards,
-      ] =
+      const [deck, index, result] =
         findWithIndexResult(fixedDefaultHands, ({ deckFrom, cards }) =>
           empty2False(
             new Set(objArr2StrArr(cards, "name")).difference(
@@ -174,18 +171,19 @@ export const RuleSchema = z
             ),
           ),
         ) ?? [];
-      const { deckFrom } = failedFixedDefaultHands ?? {};
-      if (failedCards) {
+      const { deckFrom } = deck ?? {};
+
+      if (result) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           message: template(
-            `defaultHands[${failedFixedDefaultHandsIndex}].cards`,
-            Array.from(failedCards),
+            `defaultHands[${index}].cards`,
+            Array.from(result),
             deckFrom,
-            decks
-              .find(({ name }) => name === deckFrom)
-              ?.list.map(({ name }) => name)
-              .join(", "),
+            objArr2StrArr(
+              decks.find(({ name }) => name === deckFrom)?.list,
+              "name",
+            )?.join(", "),
           ).deckList,
         });
       }
