@@ -1,3 +1,6 @@
+import { empty2False } from "app/utils/empty2False";
+import { findWithIndexResult } from "app/utils/findWithIndex";
+import { objArr2StrArr } from "app/utils/objArr2StrArr";
 import { z } from "zod";
 import { decksSchema } from "./decksSchema";
 import { defaultHandsSchema } from "./defaultHandsSchema";
@@ -20,288 +23,160 @@ export const RuleSchema = z
     dices: dicesSchema,
     rankingBy: z.enum(["hands", "points", "manual", "none"]),
   })
-  .refine(
-    ({ turn, roles }) =>
-      turn?.ignoreRoles.every(({ roleName }) =>
-        roles.find((role) => role.name === roleName),
-      ) ?? true,
-    ({ turn, roles }) => ({
-      message: `turn.ignoreRoles (${turn?.ignoreRoles
-        .reduce(
-          (prev, curr) =>
-            roles.map(({ name }) => name).includes(curr.roleName)
-              ? prev
-              : `${prev}, ${curr.roleName}`,
-          "",
-        )
-        .slice(
-          2,
-        )}) are not in roles (${roles.reduce((prev, curr) => `${prev}, ${curr.name}`, "").slice(2)})`,
-    }),
-  )
-  .refine(
-    ({ decks, roles }) =>
-      decks.every((deck) =>
-        deck.playableRoles.every(({ roleName }) =>
-          roles.find((role) => role.name === roleName),
-        ),
+  .superRefine(({ turn, roles, decks, defaultHands, fieldAreas }, ctx) => {
+    const roleNames = objArr2StrArr(roles, "name");
+    const deckNames = objArr2StrArr(decks, "name");
+    const template = (
+      targetPropName: string,
+      targetProp?: string[],
+      ...opt: (string | undefined)[]
+    ) => ({
+      roles: `${targetPropName} (${targetProp?.join(", ")}) are not in roles (${roleNames?.join(", ")})`,
+      decks: `${targetPropName} (${targetProp?.join(", ")}) are not in decks (${deckNames?.join(", ")})`,
+      deckList: `${targetPropName} (${targetProp?.join(", ")}) are not in decks: ${opt[0]} (${opt[1]})`,
+    });
+
+    // turn?.ignoreRoles
+    const failedIgnoreRoleNames = objArr2StrArr(
+      turn?.ignoreRoles.filter(
+        ({ roleName }) => !roleNames?.includes(roleName),
       ),
-    ({ decks, roles }) => ({
-      message: `decks[${decks.findIndex(({ playableRoles }) =>
-        playableRoles.some(
-          (role) => !roles.map((role) => role.name).includes(role.roleName),
-        ),
-      )}].deck.playableRoles (${(
-        decks.find(({ playableRoles }) =>
-          playableRoles.some(
-            (role) => !roles.map((role) => role.name).includes(role.roleName),
-          ),
-        )?.playableRoles ?? []
-      )
-        .reduce(
-          (prev, { roleName }) =>
-            roles.map((role) => role.name).includes(roleName)
-              ? prev
-              : `${prev}, ${roleName}`,
-          "",
-        )
-        .slice(2)}) are not in roles (${roles
-        .reduce((prev, curr) => `${prev}, ${curr.name}`, "")
-        .slice(2)})`,
-    }),
-  )
-  .refine(
-    ({ defaultHands, roles }) =>
-      defaultHands.every(({ roleFor }) =>
-        roles.find((role) => role.name === roleFor),
+      "roleName",
+    );
+    if (failedIgnoreRoleNames?.length) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: template("turn.ignoreRoles", failedIgnoreRoleNames).roles,
+      });
+    }
+
+    // decks[number].deck.playableRoles
+    const [failedDeck, failedDeckIndex] =
+      findWithIndexResult(decks, ({ playableRoles }) =>
+        playableRoles.some(({ roleName }) => !roleNames?.includes(roleName)),
+      ) ?? [];
+    const failedDeckPlayableRoles = objArr2StrArr(
+      failedDeck?.playableRoles.filter(
+        ({ roleName }) => !roleNames?.includes(roleName),
       ),
-    ({ defaultHands, roles }) => ({
-      message: `defaultHands.roleFor (${defaultHands
-        .map(({ roleFor }) => roleFor)
-        .filter((roleFor) => !roles.find((role) => role.name === roleFor))
-        .join(
-          ", ",
-        )}) are not in roles (${roles.reduce((prev, curr) => `${prev}, ${curr.name}`, "").slice(2)})`,
-    }),
-  )
-  .refine(
-    ({ fieldAreas, roles }) =>
-      fieldAreas.every(({ field }) =>
-        field.every(({ operableRoles }) =>
-          operableRoles.every(({ roleName }) =>
-            roles.find((role) => role.name === roleName),
+      "roleName",
+    );
+    if (failedDeckPlayableRoles?.length) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: template(
+          `decks[${failedDeckIndex}].deck.playableRoles`,
+          failedDeckPlayableRoles,
+        ).roles,
+      });
+    }
+
+    // defaultHands.roleFor
+    const failedDefaultHands = objArr2StrArr(
+      defaultHands.filter(({ roleFor }) => !roleNames?.includes(roleFor)),
+      "roleFor",
+    );
+    if (failedDefaultHands?.length) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: template("defaultHands.roleFor", failedDefaultHands).roles,
+      });
+    }
+
+    // fieldAreas[number].field[number].operableRoles
+    const [_1, failedFieldAreaIndex, failedFieldAreaResult] =
+      findWithIndexResult(fieldAreas, ({ field }) =>
+        findWithIndexResult(field, ({ operableRoles }) =>
+          empty2False(
+            operableRoles.filter(
+              ({ roleName }) => !roleNames?.includes(roleName),
+            ),
           ),
         ),
+      ) ?? [];
+    const [_2, failedFieldIndex, failedOperableRoles] =
+      failedFieldAreaResult ?? [];
+    if (failedOperableRoles) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: template(
+          `fieldAreas[${failedFieldAreaIndex}].field[${failedFieldIndex}].operableRoles`,
+          objArr2StrArr(failedOperableRoles, "roleName"),
+        ).roles,
+      });
+    }
+
+    // fieldAreas[number].field[number].visibleRoles
+    const [_3, failedVisibleRolesFieldAreaIndex, failedVisibleRolesResult] =
+      findWithIndexResult(fieldAreas, ({ field }) =>
+        findWithIndexResult(field, ({ visibleRoles }) =>
+          empty2False(
+            visibleRoles.filter(
+              ({ roleName }) => !roleNames?.includes(roleName),
+            ),
+          ),
+        ),
+      ) ?? [];
+    const [_4, failedVisibleRolesFieldIndex, failedVisibleRoles] =
+      failedVisibleRolesResult ?? [];
+    if (failedVisibleRoles) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: template(
+          `fieldAreas[${failedVisibleRolesFieldAreaIndex}].field[${failedVisibleRolesFieldIndex}].visibleRoles`,
+          objArr2StrArr(failedVisibleRoles, "roleName"),
+        ).roles,
+      });
+    }
+
+    // defaultHands[type === random].deckFrom
+    const failedDeckFrom = objArr2StrArr(
+      defaultHands.filter(
+        ({ type, deckFrom }) =>
+          type === "random" &&
+          !decks.map(({ name }) => name).includes(deckFrom),
       ),
-    ({ fieldAreas, roles }) => ({
-      message: `fieldAreas[${fieldAreas.findIndex(({ field }) =>
-        field.find(({ operableRoles }) =>
-          operableRoles.some(
-            ({ roleName }) => !roles.map(({ name }) => name).includes(roleName),
-          ),
-        ),
-      )}].field[${fieldAreas
-        .find(({ field }) =>
-          field.find(({ operableRoles }) =>
-            operableRoles.some(
-              ({ roleName }) =>
-                !roles.map(({ name }) => name).includes(roleName),
-            ),
-          ),
-        )
-        ?.field.findIndex(({ operableRoles }) =>
-          operableRoles.some(
-            ({ roleName }) => !roles.map(({ name }) => name).includes(roleName),
-          ),
-        )}].operableRoles (${(
-        fieldAreas
-          .find(({ field }) =>
-            field.find(({ operableRoles }) =>
-              operableRoles.some(
-                ({ roleName }) =>
-                  !roles.map(({ name }) => name).includes(roleName),
-              ),
-            ),
-          )
-          ?.field.find(({ operableRoles }) =>
-            operableRoles.some(
-              ({ roleName }) =>
-                !roles.map(({ name }) => name).includes(roleName),
-            ),
-          )?.operableRoles ?? []
-      )
-        .reduce(
-          (prev, { roleName }) =>
-            roles.map(({ name }) => name).includes(roleName)
-              ? prev
-              : `${prev}, ${roleName}`,
-          "",
-        )
-        .slice(
-          2,
-        )}) are not in roles (${roles.map(({ name }) => name).join(", ")})`,
-    }),
-  )
-  .refine(
-    ({ fieldAreas, roles }) =>
-      fieldAreas.every(({ field }) =>
-        field.every(({ visibleRoles }) =>
-          visibleRoles.every(({ roleName }) =>
-            roles.find((role) => role.name === roleName),
-          ),
-        ),
-      ),
-    ({ fieldAreas, roles }) => ({
-      message: `fieldAreas[${fieldAreas.findIndex(({ field }) =>
-        field.find(({ visibleRoles }) =>
-          visibleRoles.some(
-            ({ roleName }) => !roles.map(({ name }) => name).includes(roleName),
-          ),
-        ),
-      )}].field[${fieldAreas
-        .find(({ field }) =>
-          field.find(({ visibleRoles }) =>
-            visibleRoles.some(
-              ({ roleName }) =>
-                !roles.map(({ name }) => name).includes(roleName),
-            ),
-          ),
-        )
-        ?.field.findIndex(({ visibleRoles }) =>
-          visibleRoles.some(
-            ({ roleName }) => !roles.map(({ name }) => name).includes(roleName),
-          ),
-        )}].visibleRoles (${(
-        fieldAreas
-          .find(({ field }) =>
-            field.find(({ visibleRoles }) =>
-              visibleRoles.some(
-                ({ roleName }) =>
-                  !roles.map(({ name }) => name).includes(roleName),
-              ),
-            ),
-          )
-          ?.field.find(({ visibleRoles }) =>
-            visibleRoles.some(
-              ({ roleName }) =>
-                !roles.map(({ name }) => name).includes(roleName),
-            ),
-          )?.visibleRoles ?? []
-      )
-        .reduce(
-          (prev, { roleName }) =>
-            roles.map(({ name }) => name).includes(roleName)
-              ? prev
-              : `${prev}, ${roleName}`,
-          "",
-        )
-        .slice(
-          2,
-        )}) are not in roles (${roles.map(({ name }) => name).join(", ")})`,
-    }),
-  )
-  .refine(
-    ({ defaultHands, decks }) =>
-      defaultHands.every((defaultHandsElm) => {
-        if (defaultHandsElm.type === "random") {
-          return decks
-            .map(({ name }) => name)
-            .includes(defaultHandsElm.deckFrom);
-        }
-        return true;
-      }),
-    ({ defaultHands, decks }) => ({
-      message: `defaultHands.deckFrom (${defaultHands
-        .filter((defaultHandsElm) => defaultHandsElm.type === "random")
-        .map((defaultHandsElm) => defaultHandsElm.deckFrom)
-        .filter((deckFrom) => !decks.map(({ name }) => name).includes(deckFrom))
-        .join(
-          ", ",
-        )}) are not in decks (${decks.map(({ name }) => name).join(", ")})`,
-    }),
-  )
-  .refine(
-    ({ defaultHands, decks }) =>
-      defaultHands.find(
-        (defaultHandsElm) =>
-          defaultHandsElm.type === "fixed" &&
-          defaultHandsElm.cards.some(
-            (card) =>
-              !decks
-                .find(({ name }) => name === defaultHandsElm.deckFrom)
-                ?.list.map(({ name }) => name)
-                .includes(card.name),
-          ),
-      ) === undefined,
-    ({ defaultHands, decks }) => ({
-      message: `defaultHands.cards (${(
-        defaultHands.find(
-          (defaultHandsElm) =>
-            defaultHandsElm.type === "fixed" &&
-            defaultHandsElm.cards.some(
-              (card) =>
-                !decks
-                  .find(({ name }) => name === defaultHandsElm.deckFrom)
-                  ?.list.map(({ name }) => name)
-                  .includes(card.name),
-            ),
-        ) as { cards: { name: string; num: number }[]; deckFrom: string }
-      )?.cards
-        .reduce(
-          (prev, { name }) =>
-            decks
-              .find(
-                ({ name }) =>
-                  name ===
-                  defaultHands.find(
-                    (defaultHandsElm) =>
-                      defaultHandsElm.type === "fixed" &&
-                      defaultHandsElm.cards.some(
-                        (card) =>
-                          !decks
-                            .find(
-                              ({ name }) => name === defaultHandsElm.deckFrom,
-                            )
-                            ?.list.map(({ name }) => name)
-                            .includes(card.name),
-                      ),
-                  )?.deckFrom,
-              )
-              ?.list.map(({ name }) => name)
-              .includes(name)
-              ? prev
-              : `${prev}, ${name}`,
-          "",
-        )
-        .slice(2)}) are not in decks: ${
-        defaultHands.find(
-          (defaultHandsElm) =>
-            defaultHandsElm.type === "fixed" &&
-            defaultHandsElm.cards.some(
-              (card) =>
-                !decks
-                  .find(({ name }) => name === defaultHandsElm.deckFrom)
-                  ?.list.map(({ name }) => name)
-                  .includes(card.name),
-            ),
-        )?.deckFrom
-      } (${decks
-        .find(
-          ({ name }) =>
-            name ===
-            defaultHands.find(
-              (defaultHandsElm) =>
-                defaultHandsElm.type === "fixed" &&
-                defaultHandsElm.cards.some(
-                  (card) =>
-                    !decks
-                      .find(({ name }) => name === defaultHandsElm.deckFrom)
-                      ?.list.map(({ name }) => name)
-                      .includes(card.name),
+      "deckFrom",
+    );
+    if (failedDeckFrom?.length) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: template("defaultHands.deckFrom", failedDeckFrom).decks,
+      });
+    }
+
+    // defaultHands[type === fixed].deckFrom
+    const fixedDefaultHands = defaultHands.filter(
+      (hand) => hand.type === "fixed",
+    );
+    const [failedFixedDefaultHands, failedFixedDefaultHandsIndex, failedCards] =
+      findWithIndexResult(fixedDefaultHands, ({ deckFrom, cards }) =>
+        empty2False(
+          Array.from(
+            new Set(objArr2StrArr(cards, "name")).difference(
+              new Set(
+                objArr2StrArr(
+                  decks.find(({ name }) => name === deckFrom)?.list,
+                  "name",
                 ),
-            )?.deckFrom,
-        )
-        ?.list.map(({ name }) => name)
-        .join(", ")})`,
-    }),
-  );
+              ),
+            ),
+          ),
+        ),
+      ) ?? [];
+    const { deckFrom } = failedFixedDefaultHands ?? {};
+    if (failedCards) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: template(
+          `defaultHands[${failedFixedDefaultHandsIndex}].cards`,
+          failedCards,
+          deckFrom,
+          decks
+            .find(({ name }) => name === deckFrom)
+            ?.list.map(({ name }) => name)
+            .join(", "),
+        ).deckList,
+      });
+    }
+  });

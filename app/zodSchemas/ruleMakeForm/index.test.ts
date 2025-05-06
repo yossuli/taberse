@@ -29,7 +29,6 @@ if (import.meta.vitest) {
     const validate = RuleSchema.safeParse(okValues);
     expectWithValidateError(validate).toBe(true);
   });
-
   it("rolesに含まれないignoreRolesはエラー", () => {
     const failedValue = {
       ...defaultValues,
@@ -80,7 +79,6 @@ if (import.meta.vitest) {
     const validate = RuleSchema.safeParse(okValues);
     expectWithValidateError(validate).toBe(true);
   });
-
   it("rolesに含まれないdeck.playableRolesはエラー", () => {
     const failedValue = {
       ...defaultValues,
@@ -110,6 +108,7 @@ if (import.meta.vitest) {
       "decks[1].deck.playableRoles (test4) are not in roles (default, test, test2, test3)",
     );
   });
+
   it("defaultHands.roleForはrolesに含まれる必要がある", () => {
     const okValues = {
       ...defaultValues,
@@ -129,7 +128,6 @@ if (import.meta.vitest) {
     const validate = RuleSchema.safeParse(okValues);
     expectWithValidateError(validate).toBe(true);
   });
-
   it("rolesに含まれないdefaultHands.roleForはエラー", () => {
     const failedValue = {
       ...defaultValues,
@@ -156,6 +154,7 @@ if (import.meta.vitest) {
       "defaultHands.roleFor (test4) are not in roles (default, test, test2, test3)",
     );
   });
+
   it("field.operableRolesはrolesに含まれる必要がある", () => {
     const okValues = {
       ...defaultValues,
@@ -252,7 +251,6 @@ if (import.meta.vitest) {
     const validate = RuleSchema.safeParse(okValues);
     expectWithValidateError(validate).toBe(true);
   });
-
   it("rolesに含まれないfield.visibleRolesはエラー", () => {
     const failedValue = {
       ...defaultValues,
@@ -290,6 +288,7 @@ if (import.meta.vitest) {
       "fieldAreas[1].field[1].visibleRoles (test4) are not in roles (default, test, test2, test3)",
     );
   });
+
   it("defaultHands.deckFromはdeck.nameに含まれる必要がある", () => {
     const okValues = {
       ...defaultValues,
@@ -335,7 +334,7 @@ if (import.meta.vitest) {
     );
   });
 
-  it("defaultHands[number].type === fixed の .cards は decks.name === defaultHands[number].deckFrom の .list にすべて含まれる", () => {
+  it("defaultHands[type=fixed].cardsはすべてdecks[name=deckFrom].listに含まれる", () => {
     const okValues = {
       ...defaultValues,
       decks: [
@@ -354,7 +353,7 @@ if (import.meta.vitest) {
     const validate = RuleSchema.safeParse(okValues);
     expectWithValidateError(validate).toBe(true);
   });
-  it("decks.name === defaultHands[number].deckFrom の .list に含まれない defaultHands[number].type === fixed の .cards はエラー", () => {
+  it("decks[name=deckFrom].listに含まれないdefaultHands[type=fixed].cardsはエラー", () => {
     const failedValue = {
       ...defaultValues,
       decks: [
@@ -379,7 +378,7 @@ if (import.meta.vitest) {
     const validate = RuleSchema.safeParse(failedValue);
     expect(validate.success).toBe(false);
     expect(validate.error?.issues[0].message).toBe(
-      "defaultHands.cards (test) are not in decks: deck2 (default)",
+      "defaultHands[1].cards (test) are not in decks: deck2 (default)",
     );
   });
 }
