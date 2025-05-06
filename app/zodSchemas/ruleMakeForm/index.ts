@@ -152,13 +152,11 @@ export const RuleSchema = z
     const [failedFixedDefaultHands, failedFixedDefaultHandsIndex, failedCards] =
       findWithIndexResult(fixedDefaultHands, ({ deckFrom, cards }) =>
         empty2False(
-          Array.from(
-            new Set(objArr2StrArr(cards, "name")).difference(
-              new Set(
-                objArr2StrArr(
-                  decks.find(({ name }) => name === deckFrom)?.list,
-                  "name",
-                ),
+          new Set(objArr2StrArr(cards, "name")).difference(
+            new Set(
+              objArr2StrArr(
+                decks.find(({ name }) => name === deckFrom)?.list,
+                "name",
               ),
             ),
           ),
@@ -170,7 +168,7 @@ export const RuleSchema = z
         code: z.ZodIssueCode.custom,
         message: template(
           `defaultHands[${failedFixedDefaultHandsIndex}].cards`,
-          failedCards,
+          Array.from(failedCards),
           deckFrom,
           decks
             .find(({ name }) => name === deckFrom)
