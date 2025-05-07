@@ -44,16 +44,25 @@ export type Pos = {
 };
 export type Nullable = undefined | null;
 
+export type Primitive = string | number | boolean | null | undefined;
+
 export type RecursiveRecord = {
   [key: string | number]:
     | RecursiveRecord
     | RecursiveRecord[]
-    | string
-    | number
-    | boolean
-    | null
-    | undefined;
+    | Primitive
+    | Primitive[];
 };
+
+export type RecursivePartial<T> = T extends Function
+  ? T
+  : T extends Array<infer U>
+    ? RecursivePartial<U>[]
+    : T extends object
+      ? {
+          [K in keyof T]?: RecursivePartial<T[K]>;
+        }
+      : T;
 
 export type RecursiveNonNullable<T> = T extends Function
   ? T

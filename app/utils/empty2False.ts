@@ -6,7 +6,7 @@ export const empty2False = <
   },
 >(
   arr: T,
-) => !arr[Symbol.iterator]().next().done && arr;
+) => (!arr[Symbol.iterator]().next().done || undefined) && arr;
 
 if (import.meta.vitest) {
   const { it, expect } = import.meta.vitest;
