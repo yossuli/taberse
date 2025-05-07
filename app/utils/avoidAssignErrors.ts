@@ -17,8 +17,11 @@ const recursionAvoidAssignErrors = <T extends RecursiveRecord | undefined>(
       )
     : (nullableObj ?? {});
 
-export const avoidAssignErrors = <T extends RecursiveRecord>(
-  nullableObj: RecursiveNullable<T>,
+export const avoidAssignErrors = <
+  T extends RecursiveRecord,
+  U extends RecursiveNullable<T>,
+>(
+  nullableObj: U,
   targetStructure: T,
   fnWithAsserted: (d: T) => void,
 ) => {
@@ -27,6 +30,7 @@ export const avoidAssignErrors = <T extends RecursiveRecord>(
     targetStructure,
   );
   if (
+    AvoidedErrorObj !== undefined &&
     Object.keys(AvoidedErrorObj).length === 0 &&
     targetStructure instanceof Object &&
     Object.values(targetStructure).some((v) => v instanceof Object)
