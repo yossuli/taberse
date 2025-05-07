@@ -148,6 +148,7 @@ export const RuleSchema = z
         ),
         "deckFrom",
       );
+
       if (outliers) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
@@ -157,35 +158,34 @@ export const RuleSchema = z
     });
 
     wrap("defaultHands[type === fixed].deckFrom", () => {
+      const result = (a: string[] | undefined, b: string[] | undefined) => {
+        const diff = a?.filter((x) => !b?.includes(x));
+        return (!!diff?.length || undefined) && ([diff, b] as const);
+      };
       const fixedDefaultHands = defaultHands.filter(
         (hand) => hand.type === "fixed",
       );
-      const [{ deckFrom }, index, result] = deepAsserted(
+
+      const [{ deckFrom }, index, [outliers, deckList]] = deepAsserted(
         findWithIndexResult(fixedDefaultHands, ({ deckFrom, cards }) =>
-          empty2False(
-            new Set(objArr2StrArr(cards, "name")).difference(
-              new Set(
-                objArr2StrArr(
-                  decks.find(({ name }) => name === deckFrom)?.list,
-                  "name",
-                ),
-              ),
+          result(
+            objArr2StrArr(cards, "name"),
+            objArr2StrArr(
+              decks.find(({ name }) => name === deckFrom)?.list,
+              "name",
             ),
           ),
         ),
       );
 
-      if (result) {
+      if (outliers) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           message: template(
             `defaultHands[${index}].cards`,
-            Array.from(result),
+            outliers,
             deckFrom,
-            objArr2StrArr(
-              decks.find(({ name }) => name === deckFrom)?.list,
-              "name",
-            )?.join(", "),
+            deckList?.join(", "),
           ).deckList,
         });
       }
