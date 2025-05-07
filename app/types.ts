@@ -42,11 +42,37 @@ export type Pos = {
   x: number;
   y: number;
 };
+export type Nullable = undefined | null;
+
+export type RecursiveRecord = {
+  [key: string | number]:
+    | RecursiveRecord
+    | RecursiveRecord[]
+    | string
+    | number
+    | boolean
+    | null
+    | undefined;
+};
 
 export type RecursiveNonNullable<T> = T extends Function
   ? T
-  : T extends object
-    ? {
-        [K in keyof T]-?: RecursiveNonNullable<T[K]>;
-      }
-    : NonNullable<T>;
+  : T extends Array<infer U>
+    ? RecursiveNonNullable<U>[]
+    : T extends object
+      ? {
+          [K in keyof T]-?: RecursiveNonNullable<T[K]>;
+        }
+      : NonNullable<T>;
+
+export type RecursiveNullable<T> = T extends Function
+  ? T | Nullable
+  : T extends Array<infer U>
+    ? RecursiveNullable<U>[] | Nullable
+    : T extends object
+      ?
+          | {
+              [K in keyof T]?: RecursiveNullable<T[K]>;
+            }
+          | Nullable
+      : T | Nullable;
