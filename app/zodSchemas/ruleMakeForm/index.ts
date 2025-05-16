@@ -3,6 +3,7 @@ import { objArr2StrArr } from "app/utils/objArr2StrArr";
 
 import { avoidAssignErrors } from "app/utils/avoidAssignErrors";
 import { deepEmpty2Null } from "app/utils/deepEmpty2Null";
+import { emptyIter2Null } from "app/utils/emptyIter2Null";
 import { wrap } from "app/utils/wrap";
 import { z } from "zod";
 import { decksSchema } from "./decksSchema";
@@ -58,7 +59,7 @@ export const RuleSchema = z
     wrap("decks[number].deck.playableRoles", () => {
       avoidAssignErrors(
         findWithIndexResult(decks, ({ playableRoles }) =>
-          deepEmpty2Null(
+          emptyIter2Null(
             playableRoles.filter(
               ({ roleName }) => !roleNames?.includes(roleName),
             ),
@@ -97,7 +98,7 @@ export const RuleSchema = z
       avoidAssignErrors(
         findWithIndexResult(fieldAreas, ({ field }) =>
           findWithIndexResult(field, ({ operableRoles }) =>
-            deepEmpty2Null(
+            emptyIter2Null(
               operableRoles.filter(
                 ({ roleName }) => !roleNames?.includes(roleName),
               ),
@@ -123,7 +124,7 @@ export const RuleSchema = z
       avoidAssignErrors(
         findWithIndexResult(fieldAreas, ({ field }) =>
           findWithIndexResult(field, ({ visibleRoles }) =>
-            deepEmpty2Null(
+            emptyIter2Null(
               visibleRoles.filter(
                 ({ roleName }) => !roleNames?.includes(roleName),
               ),
