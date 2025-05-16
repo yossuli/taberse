@@ -14,7 +14,7 @@ if (import.meta.vitest) {
   it("findWithIndexResult normal test", () => {
     const arr = [1, 2, 3];
     const result = findWithIndexResult(arr, (value) => value === 2);
-    expect(result).toEqual([2, 1, true]);
+    expect(result).toEqual({ 0: 2, 1: 1, 2: true });
   });
 
   it("findWithIndexResult not found test", () => {
@@ -36,7 +36,7 @@ if (import.meta.vitest) {
       { id: 3, name: "c" },
     ];
     const result = findWithIndexResult(arr, (value) => value.name === "b");
-    expect(result).toEqual([{ id: 2, name: "b" }, 1, true]);
+    expect(result).toEqual({ 0: { id: 2, name: "b" }, 1: 1, 2: true });
   });
 
   it("nested findWithIndexResult test", () => {
@@ -50,11 +50,11 @@ if (import.meta.vitest) {
       (value) =>
         findWithIndexResult(value.children, (child) => child.name === "e")?.[0],
     );
-    expect(result).toEqual([
-      { id: 2, name: "b", children: [{ id: 5, name: "e" }] },
-      1,
-      { id: 5, name: "e" },
-    ]);
+    expect(result).toEqual({
+      0: { id: 2, name: "b", children: [{ id: 5, name: "e" }] },
+      1: 1,
+      2: { id: 5, name: "e" },
+    });
   });
 
   it("nested findWithIndexResult not found test", () => {

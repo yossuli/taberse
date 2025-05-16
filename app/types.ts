@@ -47,11 +47,7 @@ export type Nullable = undefined | null;
 export type Primitive = string | number | boolean | null | undefined;
 
 export type RecursiveRecord = {
-  [key: string | number]:
-    | RecursiveRecord
-    | RecursiveRecord[]
-    | Primitive
-    | Primitive[];
+  [key: string]: RecursiveRecord | Primitive | Primitive[] | RecursiveRecord[];
 };
 
 export type RecursivePartial<T> = T extends Function

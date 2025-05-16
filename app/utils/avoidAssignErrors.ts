@@ -1,21 +1,36 @@
-import type { RecursiveNullable, RecursiveRecord } from "app/types";
+// import type { RecursiveNullable, RecursiveRecord } from "app/types";
 
 const recursionAvoidAssignErrors = <T extends RecursiveRecord | undefined>(
   nullableObj: RecursiveNullable<T>,
   targetStructure: T | {},
-): T | {} =>
-  targetStructure instanceof Object
-    ? Object.fromEntries(
-        Object.entries(targetStructure).map(([key, value]) => {
-          const objProp = nullableObj?.[key];
+): T | {} => {
+  return Array.isArray(targetStructure)
+    ? targetStructure.reduce((prev, curr, i) => {
+        const nullableArrElm = nullableObj?.[i];
+        if (curr instanceof Object) {
+          return [...prev, recursionAvoidAssignErrors(nullableArrElm, curr)];
+        }
+        if (nullableObj === undefined) {
+          return prev;
+        }
+        return [...prev, nullableArrElm];
+      }, [])
+    : targetStructure instanceof Object
+      ? Object.entries(targetStructure).reduce((prev, [key, value]) => {
+          const nullableObjProp = nullableObj?.[key];
           if (value instanceof Object) {
-            console.log("recursion", key, value);
-            return [key, recursionAvoidAssignErrors(objProp, value)];
+            return {
+              ...prev,
+              [key]: recursionAvoidAssignErrors(nullableObjProp, value),
+            };
           }
-          return [key, objProp];
-        }),
-      )
-    : (nullableObj ?? {});
+          if (nullableObjProp === undefined) {
+            return prev;
+          }
+          return { ...prev, [key]: nullableObjProp };
+        }, {})
+      : (nullableObj ?? {});
+};
 
 export const avoidAssignErrors = <
   T extends RecursiveRecord,
@@ -29,15 +44,8 @@ export const avoidAssignErrors = <
     nullableObj,
     targetStructure,
   );
-  if (
-    AvoidedErrorObj !== undefined &&
-    Object.keys(AvoidedErrorObj).length === 0 &&
-    targetStructure instanceof Object &&
-    Object.values(targetStructure).some((v) => v instanceof Object)
-  ) {
-    throw new Error("AvoidedErrorObj is not a valid object");
-  }
-  fnWithAsserted(AvoidedErrorObj as T);
+
+  fnWithAsserted(AvoidedErrorObj);
 };
 
 if (import.meta.vitest) {
