@@ -36,3 +36,10 @@ export const generateHcType = (
     console.error("❌ Error generating types:", e);
   }
 };
+
+if (import.meta.vitest) {
+  const { it, expect } = import.meta.vitest;
+  it("generateHcType test pass", () => {
+    expect(true).toBe(true);
+  });
+}

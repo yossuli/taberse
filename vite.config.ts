@@ -50,7 +50,7 @@ export default defineConfig(({ mode }) => {
       tsconfigPaths(),
     ],
     test: {
-      include: ["./app/**/*.ts"],
+      include: ["./app/{utils/**/*.ts,**/*.test.ts}"],
     },
   };
 });

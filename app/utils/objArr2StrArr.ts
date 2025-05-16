@@ -4,7 +4,7 @@ export const objArr2StrArr = <T extends Record<string, any>, U extends keyof T>(
 ) => objArray?.map((obj) => obj[key]);
 
 if (import.meta.vitest) {
-  const { it, expect, expectTypeOf } = import.meta.vitest;
+  const { it, expect } = import.meta.vitest;
   it("objArr2StrArr normal test", () => {
     const objArray = [{ name: "a" }, { name: "b" }, { name: "c" }];
     const result = objArr2StrArr(objArray, "name");

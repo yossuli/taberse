@@ -21,7 +21,8 @@
     "lint:error": "biome lint --diagnostic-level=error ./app",
     "prepare": "panda codegen",
     "preview": "wrangler pages dev",
-    "deploy": "pnpm run build && wrangler pages deploy"
+    "deploy": "pnpm run build && wrangler pages deploy",
+    "test": "vitest"
   },
   "dependencies": {
     "@clerk/backend": "^1.24.2",
