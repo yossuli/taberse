@@ -1,7 +1,7 @@
 export const objArr2StrArr = <T extends Record<string, any>, U extends keyof T>(
-  objArray: T[] | undefined,
+  objArray: T[],
   key: U,
-) => objArray?.map((obj) => obj[key]);
+) => objArray.map((obj) => obj[key]);
 
 if (import.meta.vitest) {
   const { it, expect } = import.meta.vitest;
@@ -15,11 +15,5 @@ if (import.meta.vitest) {
     const empty: { id: number; name: string }[] = [];
     const result = objArr2StrArr(empty, "name");
     expect(result).toEqual([]);
-  });
-
-  it("objArr2StrArr undefined test", () => {
-    const optArray = undefined;
-    const result = objArr2StrArr(optArray, "name");
-    expect(result).toEqual(undefined);
   });
 }

@@ -30,23 +30,26 @@ export const RuleSchema = z
     const deckNames = objArr2StrArr(decks, "name");
     const template = (
       targetPropName: string,
-      targetProp?: string[],
+      targetProp: string[],
       ...opt: (string | undefined)[]
     ) => ({
-      roles: `${targetPropName} (${targetProp?.join(", ")}) are not in roles (${roleNames?.join(", ")})`,
-      decks: `${targetPropName} (${targetProp?.join(", ")}) are not in decks (${deckNames?.join(", ")})`,
-      deckList: `${targetPropName} (${targetProp?.join(", ")}) are not in decks: ${opt[0]} (${opt[1]})`,
+      roles: `${targetPropName} (${targetProp.join(", ")}) are not in roles (${roleNames.join(", ")})`,
+      decks: `${targetPropName} (${targetProp.join(", ")}) are not in decks (${deckNames.join(", ")})`,
+      deckList: `${targetPropName} (${targetProp.join(", ")}) are not in decks: ${opt[0]} (${opt[1]})`,
     });
 
     wrap("turn?.ignoreRoles", () => {
+      if (!turn) {
+        return;
+      }
       const outliers = objArr2StrArr(
-        turn?.ignoreRoles.filter(
-          ({ roleName }) => !roleNames?.includes(roleName),
+        turn.ignoreRoles.filter(
+          ({ roleName }) => !roleNames.includes(roleName),
         ),
         "roleName",
       );
 
-      if (outliers?.length) {
+      if (outliers.length) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           message: template("turn.ignoreRoles", outliers).roles,
@@ -79,11 +82,11 @@ export const RuleSchema = z
 
     wrap("defaultHands.roleFor", () => {
       const outliers = objArr2StrArr(
-        defaultHands.filter(({ roleFor }) => !roleNames?.includes(roleFor)),
+        defaultHands.filter(({ roleFor }) => !roleNames.includes(roleFor)),
         "roleFor",
       );
 
-      if (outliers?.length) {
+      if (outliers.length) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           message: template("defaultHands.roleFor", outliers).roles,
@@ -97,7 +100,7 @@ export const RuleSchema = z
           findWithIndexResult(field, ({ operableRoles }) =>
             emptyIter2Null(
               operableRoles.filter(
-                ({ roleName }) => !roleNames?.includes(roleName),
+                ({ roleName }) => !roleNames.includes(roleName),
               ),
             ),
           ),
@@ -122,7 +125,7 @@ export const RuleSchema = z
           findWithIndexResult(field, ({ visibleRoles }) =>
             emptyIter2Null(
               visibleRoles.filter(
-                ({ roleName }) => !roleNames?.includes(roleName),
+                ({ roleName }) => !roleNames.includes(roleName),
               ),
             ),
           ),
@@ -151,7 +154,7 @@ export const RuleSchema = z
         "deckFrom",
       );
 
-      if (outliers?.length) {
+      if (outliers.length) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           message: template("defaultHands.deckFrom", outliers).decks,
@@ -172,15 +175,16 @@ export const RuleSchema = z
       );
 
       callWithIfDefine(
-        findWithIndexResult(fixedDefaultHands, ({ deckFrom, cards }) =>
-          result(
+        findWithIndexResult(fixedDefaultHands, ({ deckFrom, cards }) => {
+          const deckList = decks.find(({ name }) => name === deckFrom)?.list;
+          if (!deckList) {
+            return undefined;
+          }
+          return result(
             objArr2StrArr(cards, "name"),
-            objArr2StrArr(
-              decks.find(({ name }) => name === deckFrom)?.list,
-              "name",
-            ),
-          ),
-        ),
+            objArr2StrArr(deckList, "name"),
+          );
+        }),
         ([{ deckFrom }, index, [outliers, deckList]]) => {
           if (outliers) {
             ctx.addIssue({
@@ -189,7 +193,7 @@ export const RuleSchema = z
                 `defaultHands[${index}].cards`,
                 outliers,
                 deckFrom,
-                deckList?.join(", "),
+                deckList.join(", "),
               ).deckList,
             });
           }
