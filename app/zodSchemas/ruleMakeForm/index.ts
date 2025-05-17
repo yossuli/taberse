@@ -1,9 +1,7 @@
+import { callWithIfDefine } from "app/utils/callWithIfDefine";
+import { emptyIter2Null } from "app/utils/emptyIter2Null";
 import { findWithIndexResult } from "app/utils/findWithIndex";
 import { objArr2StrArr } from "app/utils/objArr2StrArr";
-
-import { avoidAssignErrors } from "app/utils/avoidAssignErrors";
-import { deepEmpty2Null } from "app/utils/deepEmpty2Null";
-import { emptyIter2Null } from "app/utils/emptyIter2Null";
 import { wrap } from "app/utils/wrap";
 import { z } from "zod";
 import { decksSchema } from "./decksSchema";
@@ -57,7 +55,7 @@ export const RuleSchema = z
     });
 
     wrap("decks[number].deck.playableRoles", () => {
-      avoidAssignErrors(
+      callWithIfDefine(
         findWithIndexResult(decks, ({ playableRoles }) =>
           emptyIter2Null(
             playableRoles.filter(
@@ -65,9 +63,8 @@ export const RuleSchema = z
             ),
           ),
         ),
-        { 1: 0, 2: [{ roleName: "" }] },
-        ({ 1: index, 2: outliers }) => {
-          if (deepEmpty2Null(outliers)) {
+        ([_, index, outliers]) => {
+          if (outliers) {
             ctx.addIssue({
               code: z.ZodIssueCode.custom,
               message: template(
@@ -95,7 +92,7 @@ export const RuleSchema = z
     });
 
     wrap("fieldAreas[number].field[number].operableRoles", () => {
-      avoidAssignErrors(
+      callWithIfDefine(
         findWithIndexResult(fieldAreas, ({ field }) =>
           findWithIndexResult(field, ({ operableRoles }) =>
             emptyIter2Null(
@@ -105,9 +102,8 @@ export const RuleSchema = z
             ),
           ),
         ),
-        { 1: 0, 2: { 1: 0, 2: [{ roleName: "" }] } },
-        ({ 1: i, 2: { 1: j, 2: outliers } }) => {
-          if (deepEmpty2Null(outliers)) {
+        ([_1, i, [_2, j, outliers]]) => {
+          if (outliers) {
             ctx.addIssue({
               code: z.ZodIssueCode.custom,
               message: template(
@@ -121,7 +117,7 @@ export const RuleSchema = z
     });
 
     wrap("fieldAreas[number].field[number].visibleRoles", () => {
-      avoidAssignErrors(
+      callWithIfDefine(
         findWithIndexResult(fieldAreas, ({ field }) =>
           findWithIndexResult(field, ({ visibleRoles }) =>
             emptyIter2Null(
@@ -131,9 +127,8 @@ export const RuleSchema = z
             ),
           ),
         ),
-        { 1: 0, 2: { 1: 0, 2: [{ roleName: "" }] } },
-        ({ 1: i, 2: { 1: j, 2: outliers } }) => {
-          if (deepEmpty2Null(outliers)) {
+        ([_1, i, [_2, j, outliers]]) => {
+          if (outliers) {
             ctx.addIssue({
               code: z.ZodIssueCode.custom,
               message: template(
@@ -165,15 +160,18 @@ export const RuleSchema = z
     });
 
     wrap("defaultHands[type === fixed].deckFrom", () => {
-      const result = (a: string[] | undefined, b: string[] | undefined) => {
-        const diff = a?.filter((x) => !b?.includes(x));
-        return (!!diff?.length || undefined) && { 0: diff, 1: b };
+      const result = (
+        a: string[],
+        b: string[] | undefined,
+      ): [string[], string[] | undefined] | undefined => {
+        const diff = a.filter((x) => !b?.includes(x));
+        return (!!diff?.length || undefined) && [diff, b];
       };
       const fixedDefaultHands = defaultHands.filter(
         (hand) => hand.type === "fixed",
       );
 
-      avoidAssignErrors(
+      callWithIfDefine(
         findWithIndexResult(fixedDefaultHands, ({ deckFrom, cards }) =>
           result(
             objArr2StrArr(cards, "name"),
@@ -183,9 +181,8 @@ export const RuleSchema = z
             ),
           ),
         ),
-        { 0: { deckFrom: "" }, 1: 0, 2: { 0: [""], 1: [""] } },
-        ({ 0: { deckFrom }, 1: index, 2: { 0: outliers, 1: deckList } }) => {
-          if (deepEmpty2Null(outliers)) {
+        ([{ deckFrom }, index, [outliers, deckList]]) => {
+          if (outliers) {
             ctx.addIssue({
               code: z.ZodIssueCode.custom,
               message: template(
