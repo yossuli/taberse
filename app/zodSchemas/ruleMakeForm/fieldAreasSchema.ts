@@ -73,3 +73,16 @@ export const fieldAreasSchema = z
         });
       }),
   )
+  .superRefine((fieldAreas, ctx) => {
+    fieldAreas.forEach(({ name }, index) => {
+      if (
+        fieldAreas.filter((_, i) => i !== index).find((f) => f.name === name)
+      ) {
+        ctx.addIssue({
+          message: `FieldArea "${name}" is duplicated`,
+          code: z.ZodIssueCode.custom,
+          path: [index, "name"],
+        });
+      }
+    });
+  });

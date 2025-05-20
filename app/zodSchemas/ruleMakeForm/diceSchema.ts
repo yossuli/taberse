@@ -11,12 +11,14 @@ export const dicesSchema = z
       }),
     }),
   )
-  .refine(
-    (dice) => dice.every((d) => d.range.min <= d.range.max - d.range.step),
-    {
-      message: "Dice min must be less than max",
-    },
-  )
+  .superRefine((dice, ctx) => {
+    if (dice.every((d) => d.range.min > d.range.max - d.range.step)) {
+      ctx.addIssue({
+        message: "Dice min must be less than max",
+        code: z.ZodIssueCode.custom,
+      });
+    }
+  })
   .superRefine((dice, ctx) => {
     dice.forEach(({ name }, index) => {
       if (dice.filter((_, i) => i !== index).find((d) => d.name === name)) {
