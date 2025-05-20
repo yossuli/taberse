@@ -46,10 +46,10 @@ export const GridAreaPicker = ({
       return;
     }
     if (dragStart && dragEnd) {
-      const t = Math.min(dragStart.y, dragEnd.y);
-      const l = Math.min(dragStart.x, dragEnd.x);
-      const b = Math.max(dragStart.y, dragEnd.y);
-      const r = Math.max(dragStart.x, dragEnd.x);
+      const t = Math.min(dragStart.y, dragEnd.y + 1);
+      const l = Math.min(dragStart.x, dragEnd.x + 1);
+      const b = Math.max(dragStart.y, dragEnd.y + 1);
+      const r = Math.max(dragStart.x, dragEnd.x + 1);
       append({ t, l, b, r });
     }
     setDragStart(null);
