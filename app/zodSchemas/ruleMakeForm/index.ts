@@ -147,9 +147,7 @@ export const RuleSchema = z
     wrap("defaultHands.deckFromがdeck.nameに含まれているか", () => {
       const outliers = objArr2StrArr(
         defaultHands.filter(
-          ({ type, deckFrom }) =>
-            type === "random" &&
-            !decks.map(({ name }) => name).includes(deckFrom),
+          ({ deckFrom }) => !decks.map(({ name }) => name).includes(deckFrom),
         ),
         "deckFrom",
       );
@@ -162,41 +160,111 @@ export const RuleSchema = z
       }
     });
 
-    wrap("defaultHands[type=fixed].cardsがすべてdecks[name=deckFrom].listに含まれているか", () => {
-      const result = (
-        a: string[],
-        b: string[] | undefined,
-      ): [string[], string[] | undefined] | undefined => {
-        const diff = a.filter((x) => !b?.includes(x));
-        return (!!diff?.length || undefined) && [diff, b];
-      };
+    wrap("defaultHands.roleForがrole.nameに含まれているか", () => {
+      const outliers = objArr2StrArr(
+        defaultHands.filter(
+          ({ roleFor }) => !roles.map(({ name }) => name).includes(roleFor),
+        ),
+        "roleFor",
+      );
+
+      if (outliers.length) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: template("defaultHands.roleFor", outliers).roles,
+        });
+      }
+    });
+
+    wrap("defaultHands[type=fixed].cards", () => {
       const fixedDefaultHands = defaultHands.filter(
         (hand) => hand.type === "fixed",
       );
+      wrap("cardsがすべてdecks[name=deckFrom].listに含まれているか", () => {
+        const result = (
+          a: string[],
+          b: string[] | undefined,
+        ): [string[], string[] | undefined] | undefined => {
+          const diff = a.filter((x) => !b?.includes(x));
+          return (!!diff?.length || undefined) && [diff, b];
+        };
 
-      callWithIfDefine(
-        findWithIndexResult(fixedDefaultHands, ({ deckFrom, cards }) => {
-          const deckList = decks.find(({ name }) => name === deckFrom)?.list;
-          if (!deckList) {
-            return undefined;
-          }
-          return result(
-            objArr2StrArr(cards, "name"),
-            objArr2StrArr(deckList, "name"),
+        callWithIfDefine(
+          findWithIndexResult(fixedDefaultHands, ({ deckFrom, cards }) => {
+            const deckList = decks.find(({ name }) => name === deckFrom)?.list;
+            if (!deckList) {
+              return undefined;
+            }
+            return result(
+              objArr2StrArr(cards, "name"),
+              objArr2StrArr(deckList, "name"),
+            );
+          }),
+          ([{ deckFrom }, index, [outliers, deckList]]) => {
+            if (outliers) {
+              ctx.addIssue({
+                code: z.ZodIssueCode.custom,
+                message: template(
+                  `defaultHands[${index}].cards`,
+                  outliers,
+                  deckFrom,
+                  deckList.join(", "),
+                ).deckList,
+              });
+            }
+          },
+        );
+      });
+      wrap(
+        "cards*roleFor.numが固定しているカードの枚数に収まっているか",
+        () => {
+          type Result = (
+            name: string,
+            num: number,
+            deckFrom: string,
+            roleFor: string,
+          ) =>
+            | [
+                { name: string; num: number },
+                string,
+                number,
+                { roleFor: string; roleNum: number },
+              ]
+            | undefined;
+
+          const result: Result = (name, num, deckFrom, roleFor) => {
+            const deck = decks.find(
+              ({ name: deckName }) => deckName === deckFrom,
+            );
+            const c = roles.find(({ name }) => name === roleFor)?.num;
+            const a = deck?.list.find(
+              ({ name: cardName }) => cardName === name,
+            )?.num;
+
+            const [cardLimit, roleNum] = [a, c].filter((x) => x !== undefined);
+
+            if (cardLimit >= num * roleNum) {
+              return undefined;
+            }
+            return [{ name, num }, deckFrom, cardLimit, { roleFor, roleNum }];
+          };
+          callWithIfDefine(
+            findWithIndexResult(
+              fixedDefaultHands,
+              ({ roleFor, cards, deckFrom }) =>
+                findWithIndexResult(cards, ({ name, num }) =>
+                  result(name, num, deckFrom, roleFor),
+                ),
+            ),
+            ([_1, i, [_2, j, result]]) => {
+              const [{ name, num }, deckName, cardLimit, { roleFor, roleNum }] =
+                result;
+              ctx.addIssue({
+                code: z.ZodIssueCode.custom,
+                message: `defaultHands[${i}].cards[${j}].name (${name}) is ${deckName}: ${name} (${cardLimit}) < card: ${name} (${num}) * ${roleFor} (${roleNum})`,
+              });
+            },
           );
-        }),
-        ([{ deckFrom }, index, [outliers, deckList]]) => {
-          if (outliers) {
-            ctx.addIssue({
-              code: z.ZodIssueCode.custom,
-              message: template(
-                `defaultHands[${index}].cards`,
-                outliers,
-                deckFrom,
-                deckList.join(", "),
-              ).deckList,
-            });
-          }
         },
       );
     });

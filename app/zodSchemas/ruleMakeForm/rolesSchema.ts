@@ -1,7 +1,9 @@
 import { z } from "zod";
 
 export const rolesSchema = z
-  .array(z.object({ name: z.string().min(1) }))
+  .array(
+    z.object({ name: z.string().min(1), num: z.number().int().positive() }),
+  )
   .nonempty()
   .superRefine((roles, ctx) => {
     roles.forEach(({ name }, index) => {

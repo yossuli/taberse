@@ -219,46 +219,166 @@ if (import.meta.vitest) {
     );
   });
 
-  it("defaultHands.deckFromはdeck.nameに含まれる必要がある", () => {
-    const okValues = {
-      ...defaultValues,
-      decks: [
-        { ...deck, name: "deck1" },
-        { ...deck, name: "deck2" },
-      ],
-      defaultHands: [
-        {
-          ...defaultHandRandom,
-          deckFrom: "deck1",
-        },
-      ],
-    };
-    const validate = RuleSchema.safeParse(okValues);
-    expectWithValidateError(validate).toBe(true);
+  describe("defaultHands.deckFrom", () => {
+    it("deckFromはdeck.nameに含まれる必要がある", () => {
+      const okValues = {
+        ...defaultValues,
+        decks: [
+          { ...deck, name: "deck1" },
+          { ...deck, name: "deck2" },
+        ],
+        defaultHands: [
+          {
+            ...defaultHandRandom,
+            deckFrom: "deck1",
+          },
+          {
+            ...defaultHandFixed,
+            deckFrom: "deck2",
+          },
+        ],
+      };
+      const validate = RuleSchema.safeParse(okValues);
+      expectWithValidateError(validate).toBe(true);
+    });
+    it("deck.nameに含まれないdeckFromはエラー(type random)", () => {
+      const failedValue = {
+        ...defaultValues,
+        decks: [
+          { ...deck, name: "deck1" },
+          { ...deck, name: "deck2" },
+        ],
+        defaultHands: [
+          {
+            ...defaultHandRandom,
+            deckFrom: "deck1",
+          },
+          {
+            ...defaultHandRandom,
+            deckFrom: "deck3",
+          },
+        ],
+      };
+      const validate = RuleSchema.safeParse(failedValue);
+      expect(validate.success).toBe(false);
+      expect(validate.error?.issues[0].message).toBe(
+        "defaultHands.deckFrom (deck3) are not in decks (deck1, deck2)",
+      );
+    });
+    it("deck.nameに含まれないdeckFromはエラー(type fixed)", () => {
+      const failedValue = {
+        ...defaultValues,
+        decks: [
+          { ...deck, name: "deck1" },
+          { ...deck, name: "deck2" },
+        ],
+        defaultHands: [
+          {
+            ...defaultHandRandom,
+            deckFrom: "deck1",
+          },
+          {
+            ...defaultHandFixed,
+            deckFrom: "deck3",
+          },
+        ],
+      };
+      const validate = RuleSchema.safeParse(failedValue);
+      expect(validate.success).toBe(false);
+      expect(validate.error?.issues[0].message).toBe(
+        "defaultHands.deckFrom (deck3) are not in decks (deck1, deck2)",
+      );
+    });
   });
-  it("deck.nameに含まれないdefaultHands.deckFromはエラー", () => {
-    const failedValue = {
-      ...defaultValues,
-      decks: [
-        { ...deck, name: "deck1" },
-        { ...deck, name: "deck2" },
-      ],
-      defaultHands: [
-        {
-          ...defaultHandRandom,
-          deckFrom: "deck1",
-        },
-        {
-          ...defaultHandRandom,
-          deckFrom: "deck3",
-        },
-      ],
-    };
-    const validate = RuleSchema.safeParse(failedValue);
-    expect(validate.success).toBe(false);
-    expect(validate.error?.issues[0].message).toBe(
-      "defaultHands.deckFrom (deck3) are not in decks (deck1, deck2)",
-    );
+  describe("defaultHands.roleFor", () => {
+    it("roleForはrole.nameに含まれる必要がある", () => {
+      const okValues = {
+        ...defaultValues,
+        roles: testRoles,
+        defaultHands: [
+          {
+            ...defaultHandRandom,
+            roleFor: "default",
+          },
+          {
+            ...defaultHandFixed,
+            roleFor: "test2",
+          },
+        ],
+      };
+      const validate = RuleSchema.safeParse(okValues);
+      expectWithValidateError(validate).toBe(true);
+    });
+    it("role.nameに含まれないroleForはエラー(type random)", () => {
+      const failedValue = {
+        ...defaultValues,
+        roles: testRoles,
+        defaultHands: [
+          {
+            ...defaultHandRandom,
+            roleFor: "default",
+          },
+          {
+            ...defaultHandFixed,
+            roleFor: "test4",
+          },
+        ],
+      };
+      const validate = RuleSchema.safeParse(failedValue);
+      expect(validate.success).toBe(false);
+      expect(validate.error?.issues[0].message).toBe(
+        "defaultHands.roleFor (test4) are not in roles (default, test, test2, test3)",
+      );
+    });
+    it("deck.nameに含まれないroleForはエラー(type random)", () => {
+      const failedValue = {
+        ...defaultValues,
+        roles: testRoles,
+        decks: [
+          { ...deck, name: "deck1" },
+          { ...deck, name: "deck2" },
+        ],
+        defaultHands: [
+          {
+            ...defaultHandRandom,
+            roleFor: "default",
+          },
+          {
+            ...defaultHandRandom,
+            roleFor: "test4",
+          },
+        ],
+      };
+      const validate = RuleSchema.safeParse(failedValue);
+      expect(validate.success).toBe(false);
+      expect(validate.error?.issues[0].message).toBe(
+        "defaultHands.roleFor (test4) are not in roles (default, test, test2, test3)",
+      );
+    });
+    it("deck.nameに含まれないdeckFromはエラー(type fixed)", () => {
+      const failedValue = {
+        ...defaultValues,
+        decks: [
+          { ...deck, name: "deck1" },
+          { ...deck, name: "deck2" },
+        ],
+        defaultHands: [
+          {
+            ...defaultHandRandom,
+            deckFrom: "deck1",
+          },
+          {
+            ...defaultHandFixed,
+            deckFrom: "deck3",
+          },
+        ],
+      };
+      const validate = RuleSchema.safeParse(failedValue);
+      expect(validate.success).toBe(false);
+      expect(validate.error?.issues[0].message).toBe(
+        "defaultHands.deckFrom (deck3) are not in decks (deck1, deck2)",
+      );
+    });
   });
 
   describe("defaultHands[type=fixed].cards", () => {
@@ -336,5 +456,68 @@ if (import.meta.vitest) {
         "defaultHands[0].cards (test) are not in decks: deck1 (default)",
       );
     });
+  });
+  it("roleFor.num * cards.numはdeck.listのcards.numを超えてはいけない", () => {
+    const okValues = {
+      ...defaultValues,
+      roles: [{ ...role, num: 2 }],
+      decks: [
+        {
+          ...deck,
+          name: "deck1",
+          list: [
+            { ...card, name: "default", num: 4 },
+            { ...card, name: "test", num: 2 },
+          ],
+        },
+      ],
+      defaultHands: [
+        {
+          ...defaultHandFixed,
+          deckFrom: "deck1",
+          cards: [{ name: "default", num: 2 }],
+        },
+        {
+          ...defaultHandFixed,
+          deckFrom: "deck1",
+          cards: [{ name: "test", num: 1 }],
+        },
+      ],
+    };
+    const validate = RuleSchema.safeParse(okValues);
+    expectWithValidateError(validate).toBe(true);
+  });
+  it("roleFor.num * cards.numがdeck.listのcards.numを超えるとエラー", () => {
+    const failedValue = {
+      ...defaultValues,
+      roles: [{ ...role, num: 2 }],
+      decks: [
+        {
+          ...deck,
+          name: "deck1",
+          list: [
+            { ...card, name: "test", num: 4 },
+            { ...card, name: "test2", num: 2 },
+          ],
+        },
+      ],
+      defaultHands: [
+        {
+          ...defaultHandFixed,
+          deckFrom: "deck1",
+          cards: [{ name: "test", num: 3 }],
+        },
+        {
+          ...defaultHandFixed,
+          deckFrom: "deck1",
+          cards: [{ name: "test2", num: 1 }],
+        },
+      ],
+    };
+    const validate = RuleSchema.safeParse(failedValue);
+    expect(validate.success).toBe(false);
+    expect(validate.error?.issues[0].message).toBe(
+      "defaultHands[0].cards[0].name (test) is deck1: test (4) < card: test (3) * default (2)",
+    );
   });
 }

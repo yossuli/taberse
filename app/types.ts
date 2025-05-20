@@ -56,13 +56,20 @@ export type RecursiveNonNullable<T> = T extends [infer U]
           RecursiveNonNullable<V>,
           RecursiveNonNullable<W>,
         ]
-      : T extends Array<infer U>
-        ? RecursiveNonNullable<U>[]
-        : T extends object
-          ? {
-              [K in keyof T]-?: RecursiveNonNullable<T[K]>;
-            }
-          : NonNullable<T>;
+      : T extends [infer U, infer V, infer W, infer X]
+        ? [
+            RecursiveNonNullable<U>,
+            RecursiveNonNullable<V>,
+            RecursiveNonNullable<W>,
+            RecursiveNonNullable<X>,
+          ]
+        : T extends Array<infer U>
+          ? RecursiveNonNullable<U>[]
+          : T extends object
+            ? {
+                [K in keyof T]-?: RecursiveNonNullable<T[K]>;
+              }
+            : NonNullable<T>;
 
 if (import.meta.vitest) {
   const { it, expectTypeOf } = import.meta.vitest;
