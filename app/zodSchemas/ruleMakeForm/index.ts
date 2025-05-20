@@ -38,7 +38,7 @@ export const RuleSchema = z
       deckList: `${targetPropName} (${targetProp.join(", ")}) are not in decks: ${opt[0]} (${opt[1]})`,
     });
 
-    wrap("turn?.ignoreRoles", () => {
+    wrap("ignoreRolesがrolesに含まれているか", () => {
       if (!turn) {
         return;
       }
@@ -57,7 +57,7 @@ export const RuleSchema = z
       }
     });
 
-    wrap("decks[number].deck.playableRoles", () => {
+    wrap("deck.playableRolesがrolesに含まれているか", () => {
       callWithIfDefine(
         findWithIndexResult(decks, ({ playableRoles }) =>
           emptyIter2Null(
@@ -80,7 +80,7 @@ export const RuleSchema = z
       );
     });
 
-    wrap("defaultHands.roleFor", () => {
+    wrap("defaultHands.roleForがrolesに含まれているか", () => {
       const outliers = objArr2StrArr(
         defaultHands.filter(({ roleFor }) => !roleNames.includes(roleFor)),
         "roleFor",
@@ -94,7 +94,7 @@ export const RuleSchema = z
       }
     });
 
-    wrap("fieldAreas[number].field[number].operableRoles", () => {
+    wrap("field.operableRolesがrolesに含まれているか", () => {
       callWithIfDefine(
         findWithIndexResult(fieldAreas, ({ field }) =>
           findWithIndexResult(field, ({ operableRoles }) =>
@@ -119,7 +119,7 @@ export const RuleSchema = z
       );
     });
 
-    wrap("fieldAreas[number].field[number].visibleRoles", () => {
+    wrap("field.visibleRolesがrolesに含まれているか", () => {
       callWithIfDefine(
         findWithIndexResult(fieldAreas, ({ field }) =>
           findWithIndexResult(field, ({ visibleRoles }) =>
@@ -144,7 +144,7 @@ export const RuleSchema = z
       );
     });
 
-    wrap("defaultHands[type === random].deckFrom", () => {
+    wrap("defaultHands.deckFromがdeck.nameに含まれているか", () => {
       const outliers = objArr2StrArr(
         defaultHands.filter(
           ({ type, deckFrom }) =>
@@ -162,7 +162,7 @@ export const RuleSchema = z
       }
     });
 
-    wrap("defaultHands[type === fixed].deckFrom", () => {
+    wrap("defaultHands[type=fixed].cardsがすべてdecks[name=deckFrom].listに含まれているか", () => {
       const result = (
         a: string[],
         b: string[] | undefined,
