@@ -1,6 +1,7 @@
 import { rolesSchema } from "app/zodSchemas/ruleMakeForm/rolesSchema";
 
-export const roles = [{ name: "default" }] as const;
+export const role = { name: "default",} as const;
+export const roles = [role] as const;
 
 if (import.meta.vitest) {
   const { it, expect } = import.meta.vitest;

@@ -7,13 +7,13 @@ export const card = {
   description: "",
 } as const;
 
-export const decks = [
-  {
-    name: "default",
-    list: [card],
-    playableRoles: [{ roleName: "default" }],
-  },
-] as const;
+export const deck = {
+  name: "default",
+  list: [card],
+  playableRoles: [{ roleName: "default" }],
+} as const;
+
+export const decks = [deck] as const;
 
 if (import.meta.vitest) {
   const { it, expect } = import.meta.vitest;

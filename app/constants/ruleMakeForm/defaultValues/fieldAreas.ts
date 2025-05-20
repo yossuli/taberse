@@ -9,18 +9,18 @@ export const field = {
   visibleRoles: [{ roleName: "default" }],
 } as const;
 
-export const fieldAreas = [
-  {
-    name: "default",
-    description: "",
-    roleFor: "default",
-    fieldSize: {
-      width: 1,
-      height: 1,
-    },
-    field: [field],
+export const fieldArea = {
+  name: "default",
+  description: "",
+  roleFor: "default",
+  fieldSize: {
+    width: 1,
+    height: 1,
   },
-] as const;
+  field: [field],
+} as const;
+
+export const fieldAreas = [fieldArea] as const;
 
 if (import.meta.vitest) {
   const { it, expect } = import.meta.vitest;

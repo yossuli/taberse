@@ -1,25 +1,26 @@
-import { defaultValues } from "app/constants/ruleMakeForm/defaultValues";
-import { card, decks } from "app/constants/ruleMakeForm/defaultValues/decks";
+import { card, deck } from "@defaultValues/decks";
 import {
   defaultHandFixed,
-  defaultHands,
-} from "app/constants/ruleMakeForm/defaultValues/defaultHands";
-import { fieldAreas } from "app/constants/ruleMakeForm/defaultValues/fieldAreas";
+  defaultHandRandom,
+} from "@defaultValues/defaultHands";
+import { field, fieldArea } from "@defaultValues/fieldAreas";
+import { role } from "@defaultValues/roles";
+import { defaultValues } from "app/constants/ruleMakeForm/defaultValues";
 import { expectWithValidateError } from "app/utils/expectWithValidateError";
 import { RuleSchema } from "../";
 
 if (import.meta.vitest) {
-  const { it, expect } = import.meta.vitest;
-
+  const { it, expect, describe } = import.meta.vitest;
+  const testRoles = [
+    { ...role, name: "default" },
+    { ...role, name: "test" },
+    { ...role, name: "test2" },
+    { ...role, name: "test3" },
+  ];
   it("ignoreRolesはrolesに含まれる必要がある", () => {
     const okValues = {
       ...defaultValues,
-      roles: [
-        { name: "default" },
-        { name: "test" },
-        { name: "test2" },
-        { name: "test3" },
-      ],
+      roles: testRoles,
       turn: {
         ignoreRoles: [
           { roleName: "default" },
@@ -35,19 +36,14 @@ if (import.meta.vitest) {
   it("rolesに含まれないignoreRolesはエラー", () => {
     const failedValue = {
       ...defaultValues,
-      roles: [
-        { name: "default" },
-        { name: "test" },
-        { name: "test2" },
-        { name: "test3" },
-      ],
+      roles: testRoles,
       turn: {
         ignoreRoles: [
           { roleName: "default" },
           { roleName: "test" },
           { roleName: "test2" },
           { roleName: "test3" },
-          { roleName: "test4" }, // this is not in roles
+          { roleName: "test4" },
         ],
       },
     };
@@ -61,21 +57,11 @@ if (import.meta.vitest) {
   it("deck.playableRolesはrolesに含まれる必要がある", () => {
     const okValues = {
       ...defaultValues,
-      roles: [
-        { name: "default" },
-        { name: "test" },
-        { name: "test2" },
-        { name: "test3" },
-      ],
+      roles: testRoles,
       decks: [
         {
-          ...decks[0],
-          playableRoles: [
-            { roleName: "default" },
-            { roleName: "test" },
-            { roleName: "test2" },
-            { roleName: "test3" },
-          ],
+          ...deck,
+          playableRoles: [{ roleName: "default" }, { roleName: "test3" }],
         },
       ],
     };
@@ -85,22 +71,15 @@ if (import.meta.vitest) {
   it("rolesに含まれないdeck.playableRolesはエラー", () => {
     const failedValue = {
       ...defaultValues,
-      roles: [
-        { name: "default" },
-        { name: "test" },
-        { name: "test2" },
-        { name: "test3" },
-      ],
+      roles: testRoles,
       decks: [
-        decks[0],
+        deck,
         {
-          ...decks[0],
+          ...deck,
           playableRoles: [
             { roleName: "default" },
             { roleName: "test" },
-            { roleName: "test2" },
-            { roleName: "test3" },
-            { roleName: "test4" }, // this is not in roles
+            { roleName: "test4" },
           ],
         },
       ],
@@ -115,15 +94,10 @@ if (import.meta.vitest) {
   it("defaultHands.roleForはrolesに含まれる必要がある", () => {
     const okValues = {
       ...defaultValues,
-      roles: [
-        { name: "default" },
-        { name: "test" },
-        { name: "test2" },
-        { name: "test3" },
-      ],
+      roles: testRoles,
       defaultHands: [
         {
-          ...defaultHands[0],
+          ...defaultHandRandom,
           roleFor: "default",
         },
       ],
@@ -134,20 +108,15 @@ if (import.meta.vitest) {
   it("rolesに含まれないdefaultHands.roleForはエラー", () => {
     const failedValue = {
       ...defaultValues,
-      roles: [
-        { name: "default" },
-        { name: "test" },
-        { name: "test2" },
-        { name: "test3" },
-      ],
+      roles: testRoles,
       defaultHands: [
         {
-          ...defaultHands[0],
+          ...defaultHandRandom,
           roleFor: "default",
         },
         {
-          ...defaultHands[0],
-          roleFor: "test4", // this is not in roles
+          ...defaultHandRandom,
+          roleFor: "test4",
         },
       ],
     };
@@ -161,24 +130,14 @@ if (import.meta.vitest) {
   it("field.operableRolesはrolesに含まれる必要がある", () => {
     const okValues = {
       ...defaultValues,
-      roles: [
-        { name: "default" },
-        { name: "test" },
-        { name: "test2" },
-        { name: "test3" },
-      ],
+      roles: testRoles,
       fieldAreas: [
         {
-          ...fieldAreas[0],
+          ...fieldArea,
           field: [
             {
-              ...fieldAreas[0].field[0],
-              operableRoles: [
-                { roleName: "default" },
-                { roleName: "test" },
-                { roleName: "test2" },
-                { roleName: "test3" },
-              ],
+              ...field,
+              operableRoles: [{ roleName: "default" }, { roleName: "test3" }],
             },
           ],
         },
@@ -190,29 +149,18 @@ if (import.meta.vitest) {
   it("rolesに含まれないfield.operableRolesはエラー", () => {
     const failedValue = {
       ...defaultValues,
-      roles: [
-        { name: "default" },
-        { name: "test" },
-        { name: "test2" },
-        { name: "test3" },
-      ],
+      roles: testRoles,
       fieldAreas: [
-        fieldAreas[0],
+        fieldArea,
         {
-          ...fieldAreas[0],
+          ...fieldArea,
           name: "test1",
           field: [
-            fieldAreas[0].field[0],
+            field,
             {
-              ...fieldAreas[0].field[0],
+              ...field,
               name: "test",
-              operableRoles: [
-                { roleName: "default" },
-                { roleName: "test" },
-                { roleName: "test2" },
-                { roleName: "test3" },
-                { roleName: "test4" }, // this is not in roles
-              ],
+              operableRoles: [{ roleName: "test" }, { roleName: "test4" }],
             },
           ],
         },
@@ -228,24 +176,14 @@ if (import.meta.vitest) {
   it("field.visibleRolesはrolesに含まれる必要がある", () => {
     const okValues = {
       ...defaultValues,
-      roles: [
-        { name: "default" },
-        { name: "test" },
-        { name: "test2" },
-        { name: "test3" },
-      ],
+      roles: testRoles,
       fieldAreas: [
         {
-          ...fieldAreas[0],
+          ...fieldArea,
           field: [
             {
-              ...fieldAreas[0].field[0],
-              visibleRoles: [
-                { roleName: "default" },
-                { roleName: "test" },
-                { roleName: "test2" },
-                { roleName: "test3" },
-              ],
+              ...field,
+              visibleRoles: [{ roleName: "default" }, { roleName: "test2" }],
             },
           ],
         },
@@ -257,29 +195,18 @@ if (import.meta.vitest) {
   it("rolesに含まれないfield.visibleRolesはエラー", () => {
     const failedValue = {
       ...defaultValues,
-      roles: [
-        { name: "default" },
-        { name: "test" },
-        { name: "test2" },
-        { name: "test3" },
-      ],
+      roles: testRoles,
       fieldAreas: [
-        fieldAreas[0],
+        fieldArea,
         {
-          ...fieldAreas[0],
+          ...fieldArea,
           name: "test",
           field: [
-            fieldAreas[0].field[0],
+            field,
             {
-              ...fieldAreas[0].field[0],
+              ...field,
               name: "test",
-              visibleRoles: [
-                { roleName: "default" },
-                { roleName: "test" },
-                { roleName: "test2" },
-                { roleName: "test3" },
-                { roleName: "test4" }, // this is not in roles
-              ],
+              visibleRoles: [{ roleName: "test3" }, { roleName: "test4" }],
             },
           ],
         },
@@ -296,13 +223,12 @@ if (import.meta.vitest) {
     const okValues = {
       ...defaultValues,
       decks: [
-        { ...decks[0], name: "deck1" },
-        { ...decks[0], name: "deck2" },
+        { ...deck, name: "deck1" },
+        { ...deck, name: "deck2" },
       ],
       defaultHands: [
         {
-          ...defaultHands[0],
-          type: "random",
+          ...defaultHandRandom,
           deckFrom: "deck1",
         },
       ],
@@ -314,19 +240,17 @@ if (import.meta.vitest) {
     const failedValue = {
       ...defaultValues,
       decks: [
-        { ...decks[0], name: "deck1" },
-        { ...decks[0], name: "deck2" },
+        { ...deck, name: "deck1" },
+        { ...deck, name: "deck2" },
       ],
       defaultHands: [
         {
-          ...defaultHands[0],
-          type: "random",
+          ...defaultHandRandom,
           deckFrom: "deck1",
         },
         {
-          ...defaultHands[0],
-          type: "random",
-          deckFrom: "deck3", // this is not in decks
+          ...defaultHandRandom,
+          deckFrom: "deck3",
         },
       ],
     };
@@ -337,81 +261,80 @@ if (import.meta.vitest) {
     );
   });
 
-  it("defaultHands[type=fixed].cardsはすべてdecks[name=deckFrom].listに含まれる", () => {
-    const okValues = {
-      ...defaultValues,
-      decks: [
-        { ...decks[0], name: "deck1" },
-        { ...decks[0], name: "deck2" },
-      ],
-      defaultHands: [
-        {
-          type: "fixed",
-          roleFor: "default",
-          deckFrom: "deck1",
-          cards: [{ name: "default", num: 1 }],
-        },
-      ],
-    };
-    const validate = RuleSchema.safeParse(okValues);
-    expectWithValidateError(validate).toBe(true);
-  });
-  it("decks[name=deckFrom].listに含まれないdefaultHands[type=fixed].cardsはエラー", () => {
-    const failedValue = {
-      ...defaultValues,
-      decks: [
-        { ...decks[0], name: "deck1" },
-        { ...decks[0], name: "deck2" },
-      ],
-      defaultHands: [
-        {
-          ...defaultHands[0],
-          type: "fixed",
-          deckFrom: "deck1",
-          cards: [{ name: "default", num: 1 }],
-        },
-        {
-          ...defaultHands[0],
-          type: "fixed",
-          deckFrom: "deck2",
-          cards: [{ name: "test", num: 1 }], // this is not in decks
-        },
-      ],
-    };
-    const validate = RuleSchema.safeParse(failedValue);
-    expect(validate.success).toBe(false);
-    expect(validate.error?.issues[0].message).toBe(
-      "defaultHands[1].cards (test) are not in decks: deck2 (default)",
-    );
-  });
-  it("decks[name=deckFrom].listではないdeck.listに含まれるdefaultHands[type=fixed].cardsもエラー", () => {
-    const failedValue = {
-      ...defaultValues,
-      decks: [
-        { ...decks[0], name: "deck1" },
-        {
-          ...decks[0],
-          name: "deck2",
-          list: [
-            {
-              ...card,
-              name: "test",
-            },
-          ],
-        },
-      ],
-      defaultHands: [
-        {
-          ...defaultHandFixed,
-          deckFrom: "deck1",
-          cards: [{ name: "test", num: 1 }], // this is not in deck1 but in deck2
-        },
-      ],
-    };
-    const validate = RuleSchema.safeParse(failedValue);
-    expect(validate.success).toBe(false);
-    expect(validate.error?.issues[0].message).toBe(
-      "defaultHands[0].cards (test) are not in decks: deck1 (default)",
-    );
+  describe("defaultHands[type=fixed].cards", () => {
+    it("cardsはすべてdecks[name=deckFrom].listに含まれる", () => {
+      const okValues = {
+        ...defaultValues,
+        decks: [
+          { ...deck, name: "deck1" },
+          { ...deck, name: "deck2" },
+        ],
+        defaultHands: [
+          {
+            ...defaultHandFixed,
+            deckFrom: "deck1",
+            cards: [{ name: "default", num: 1 }],
+          },
+        ],
+      };
+      const validate = RuleSchema.safeParse(okValues);
+      expectWithValidateError(validate).toBe(true);
+    });
+    it("decks[name=deckFrom].listに含まれないcardsはエラー", () => {
+      const failedValue = {
+        ...defaultValues,
+        decks: [
+          { ...deck, name: "deck1" },
+          { ...deck, name: "deck2" },
+        ],
+        defaultHands: [
+          {
+            ...defaultHandFixed,
+            deckFrom: "deck1",
+            cards: [{ name: "default", num: 1 }],
+          },
+          {
+            ...defaultHandFixed,
+            deckFrom: "deck2",
+            cards: [{ name: "test", num: 1 }],
+          },
+        ],
+      };
+      const validate = RuleSchema.safeParse(failedValue);
+      expect(validate.success).toBe(false);
+      expect(validate.error?.issues[0].message).toBe(
+        "defaultHands[1].cards (test) are not in decks: deck2 (default)",
+      );
+    });
+    it("decks[name=deckFrom].listではないdeck.listに含まれるcardsもエラー", () => {
+      const failedValue = {
+        ...defaultValues,
+        decks: [
+          { ...deck, name: "deck1" },
+          {
+            ...deck,
+            name: "deck2",
+            list: [
+              {
+                ...card,
+                name: "test",
+              },
+            ],
+          },
+        ],
+        defaultHands: [
+          {
+            ...defaultHandFixed,
+            deckFrom: "deck1",
+            cards: [{ name: "test", num: 1 }],
+          },
+        ],
+      };
+      const validate = RuleSchema.safeParse(failedValue);
+      expect(validate.success).toBe(false);
+      expect(validate.error?.issues[0].message).toBe(
+        "defaultHands[0].cards (test) are not in decks: deck1 (default)",
+      );
+    });
   });
 }
