@@ -1,9 +1,12 @@
 import { defaultValues } from "app/constants/ruleMakeForm/defaultValues";
-import { decks } from "app/constants/ruleMakeForm/defaultValues/decks";
-import { defaultHands } from "app/constants/ruleMakeForm/defaultValues/defaultHands";
+import { card, decks } from "app/constants/ruleMakeForm/defaultValues/decks";
+import {
+  defaultHandFixed,
+  defaultHands,
+} from "app/constants/ruleMakeForm/defaultValues/defaultHands";
 import { fieldAreas } from "app/constants/ruleMakeForm/defaultValues/fieldAreas";
 import { expectWithValidateError } from "app/utils/expectWithValidateError";
-import { RuleSchema } from ".";
+import { RuleSchema } from "../";
 
 if (import.meta.vitest) {
   const { it, expect } = import.meta.vitest;
@@ -379,6 +382,36 @@ if (import.meta.vitest) {
     expect(validate.success).toBe(false);
     expect(validate.error?.issues[0].message).toBe(
       "defaultHands[1].cards (test) are not in decks: deck2 (default)",
+    );
+  });
+  it("decks[name=deckFrom].listではないdeck.listに含まれるdefaultHands[type=fixed].cardsもエラー", () => {
+    const failedValue = {
+      ...defaultValues,
+      decks: [
+        { ...decks[0], name: "deck1" },
+        {
+          ...decks[0],
+          name: "deck2",
+          list: [
+            {
+              ...card,
+              name: "test",
+            },
+          ],
+        },
+      ],
+      defaultHands: [
+        {
+          ...defaultHandFixed,
+          deckFrom: "deck1",
+          cards: [{ name: "test", num: 1 }], // this is not in deck1 but in deck2
+        },
+      ],
+    };
+    const validate = RuleSchema.safeParse(failedValue);
+    expect(validate.success).toBe(false);
+    expect(validate.error?.issues[0].message).toBe(
+      "defaultHands[0].cards (test) are not in decks: deck1 (default)",
     );
   });
 }
