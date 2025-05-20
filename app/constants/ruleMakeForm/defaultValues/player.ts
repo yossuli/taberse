@@ -1,10 +1,9 @@
 import { playerSchema } from "app/zodSchemas/ruleMakeForm/playerSchema";
-import type { z } from "zod";
 
-export const player: z.infer<typeof playerSchema> = {
+export const player = {
   min: 1,
   max: 1,
-};
+} as const;
 
 if (import.meta.vitest) {
   const { it, expect } = import.meta.vitest;

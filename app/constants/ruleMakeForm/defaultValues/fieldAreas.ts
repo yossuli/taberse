@@ -1,7 +1,15 @@
 import { fieldAreasSchema } from "app/zodSchemas/ruleMakeForm/fieldAreasSchema";
-import type { z } from "zod";
 
-export const fieldAreas: z.infer<typeof fieldAreasSchema> = [
+export const field = {
+  name: "default",
+  description: "",
+  color: "#000000",
+  area: { l: 0, t: 0, r: 0, b: 0 },
+  operableRoles: [{ roleName: "default" }],
+  visibleRoles: [{ roleName: "default" }],
+} as const;
+
+export const fieldAreas = [
   {
     name: "default",
     description: "",
@@ -10,18 +18,9 @@ export const fieldAreas: z.infer<typeof fieldAreasSchema> = [
       width: 1,
       height: 1,
     },
-    field: [
-      {
-        name: "default",
-        description: "",
-        color: "#000000",
-        area: { l: 0, t: 0, r: 0, b: 0 },
-        operableRoles: [{ roleName: "default" }],
-        visibleRoles: [{ roleName: "default" }],
-      },
-    ],
+    field: [field],
   },
-];
+] as const;
 
 if (import.meta.vitest) {
   const { it, expect } = import.meta.vitest;

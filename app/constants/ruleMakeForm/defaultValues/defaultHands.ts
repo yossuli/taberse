@@ -1,14 +1,24 @@
 import { defaultHandsSchema } from "app/zodSchemas/ruleMakeForm/defaultHandsSchema";
-import type { z } from "zod";
 
-export const defaultHands: z.infer<typeof defaultHandsSchema> = [
-  {
-    type: "random",
-    roleFor: "default",
-    number: 1,
-    deckFrom: "default",
-  },
-];
+export const defaultHandRandom = {
+  type: "random",
+  roleFor: "default",
+  number: 1,
+  deckFrom: "default",
+} as const;
+export const defaultHandFixed = {
+  type: "fixed",
+  roleFor: "default",
+  deckFrom: "default",
+  cards: [
+    {
+      name: "default",
+      num: 1,
+    },
+  ],
+} as const;
+
+export const defaultHands = [defaultHandRandom, defaultHandFixed] as const;
 
 if (import.meta.vitest) {
   const { it, expect } = import.meta.vitest;

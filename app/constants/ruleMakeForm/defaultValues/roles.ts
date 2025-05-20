@@ -1,7 +1,6 @@
 import { rolesSchema } from "app/zodSchemas/ruleMakeForm/rolesSchema";
-import type { z } from "zod";
 
-export const roles: z.infer<typeof rolesSchema> = [{ name: "default" }];
+export const roles = [{ name: "default" }] as const;
 
 if (import.meta.vitest) {
   const { it, expect } = import.meta.vitest;

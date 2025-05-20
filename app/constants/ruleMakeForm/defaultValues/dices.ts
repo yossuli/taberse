@@ -9,7 +9,7 @@ export const dices = [
       step: 1,
     },
   },
-];
+] as const;
 
 if (import.meta.vitest) {
   const { it, expect } = import.meta.vitest;

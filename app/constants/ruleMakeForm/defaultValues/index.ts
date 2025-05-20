@@ -1,5 +1,4 @@
 import { RuleSchema } from "app/zodSchemas/ruleMakeForm";
-import type { z } from "zod";
 import { decks } from "./decks";
 import { defaultHands } from "./defaultHands";
 import { dices } from "./dices";
@@ -8,7 +7,7 @@ import { player } from "./player";
 import { roles } from "./roles";
 import { turn } from "./turn";
 
-export const defaultValues: z.infer<typeof RuleSchema> = {
+export const defaultValues = {
   name: "special rule name",
   description: "",
   player,
@@ -19,7 +18,7 @@ export const defaultValues: z.infer<typeof RuleSchema> = {
   fieldAreas,
   dices,
   rankingBy: "hands",
-};
+} as const;
 
 if (import.meta.vitest) {
   const { it, expect } = import.meta.vitest;

@@ -1,19 +1,19 @@
 import { decksSchema } from "app/zodSchemas/ruleMakeForm/decksSchema";
-import type { z } from "zod";
-export const decks: z.infer<typeof decksSchema> = [
+
+export const card = {
+  name: "default",
+  categoryName: "",
+  num: 1,
+  description: "",
+} as const;
+
+export const decks = [
   {
     name: "default",
-    list: [
-      {
-        name: "default",
-        categoryName: "",
-        num: 1,
-        description: "",
-      },
-    ],
+    list: [card],
     playableRoles: [{ roleName: "default" }],
   },
-];
+] as const;
 
 if (import.meta.vitest) {
   const { it, expect } = import.meta.vitest;

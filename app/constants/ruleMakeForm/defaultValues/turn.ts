@@ -1,10 +1,9 @@
 import { turnSchema } from "app/zodSchemas/ruleMakeForm/turnSchema";
-import type { z } from "zod";
 
-export const turn: z.infer<typeof turnSchema> = {
+export const turn = {
   turnTimeLimit: { time: 10, type: "persistent" },
   ignoreRoles: [{ roleName: "default" }],
-};
+} as const;
 
 if (import.meta.vitest) {
   const { it, expect } = import.meta.vitest;
