@@ -18,13 +18,21 @@ export const Roles = ({
   return (
     <>
       <label htmlFor="roles">ロール</label>
-      <Grid>
+      <Grid columns={3}>
         {fields.map((field, index) => (
           <React.Fragment key={field.id}>
             <input
               {...register(`roles.${index}.name`, {
                 onChange: () => trigger("roles"),
                 onBlur: () => trigger("roles"),
+              })}
+            />
+            <input
+              type="number"
+              min={1}
+              {...register(`roles.${index}.num`, {
+                valueAsNumber: true,
+                onChange: () => trigger(),
               })}
             />
             <button
@@ -37,6 +45,7 @@ export const Roles = ({
               削除
             </button>
             <ErrorNotice>{errors.roles?.[index]?.name?.message}</ErrorNotice>
+            <ErrorNotice>{errors.roles?.[index]?.num?.message}</ErrorNotice>
           </React.Fragment>
         ))}
         <ErrorNotice>{errors.roles?.root?.message}</ErrorNotice>
@@ -45,7 +54,7 @@ export const Roles = ({
           className={css({
             gridColumn: "1/3",
           })}
-          onClick={() => append({ name: "" })}
+          onClick={() => append({ name: "", num: 1 })}
           disabled={!!errors.roles && fields.length > 0}
         >
           追加
