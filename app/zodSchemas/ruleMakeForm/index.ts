@@ -1,3 +1,4 @@
+import assert from "node:assert";
 import { callWithIfDefine } from "app/utils/callWithIfDefine";
 import { emptyIter2Null } from "app/utils/emptyIter2Null";
 import { findWithIndexResult } from "app/utils/findWithIndex";
@@ -38,7 +39,7 @@ export const RuleSchema = z
       deckList: `${targetPropName} (${targetProp.join(", ")}) are not in decks: ${opt[0]} (${opt[1]})`,
     });
 
-    wrap("ignoreRolesがrolesに含まれているか", () => {
+    wrap("1. ignoreRolesがrolesに含まれているか", () => {
       if (!turn) {
         return;
       }
@@ -57,7 +58,7 @@ export const RuleSchema = z
       }
     });
 
-    wrap("deck.playableRolesがrolesに含まれているか", () => {
+    wrap("2. deck.playableRolesがrolesに含まれているか", () => {
       callWithIfDefine(
         findWithIndexResult(decks, ({ playableRoles }) =>
           emptyIter2Null(
@@ -80,7 +81,7 @@ export const RuleSchema = z
       );
     });
 
-    wrap("defaultHands.roleForがrolesに含まれているか", () => {
+    wrap("3. defaultHands.roleForがrolesに含まれているか", () => {
       const outliers = objArr2StrArr(
         defaultHands.filter(({ roleFor }) => !roleNames.includes(roleFor)),
         "roleFor",
@@ -94,7 +95,7 @@ export const RuleSchema = z
       }
     });
 
-    wrap("field.operableRolesがrolesに含まれているか", () => {
+    wrap("4. field.operableRolesがrolesに含まれているか", () => {
       callWithIfDefine(
         findWithIndexResult(fieldAreas, ({ field }) =>
           findWithIndexResult(field, ({ operableRoles }) =>
@@ -119,7 +120,7 @@ export const RuleSchema = z
       );
     });
 
-    wrap("field.visibleRolesがrolesに含まれているか", () => {
+    wrap("5. field.visibleRolesがrolesに含まれているか", () => {
       callWithIfDefine(
         findWithIndexResult(fieldAreas, ({ field }) =>
           findWithIndexResult(field, ({ visibleRoles }) =>
@@ -144,7 +145,7 @@ export const RuleSchema = z
       );
     });
 
-    wrap("defaultHands.deckFromがdeck.nameに含まれているか", () => {
+    wrap("6. defaultHands.deckFromがdeck.nameに含まれているか", () => {
       const outliers = objArr2StrArr(
         defaultHands.filter(
           ({ deckFrom }) => !decks.map(({ name }) => name).includes(deckFrom),
@@ -160,7 +161,7 @@ export const RuleSchema = z
       }
     });
 
-    wrap("defaultHands.roleForがrole.nameに含まれているか", () => {
+    wrap("7. defaultHands.roleForがrole.nameに含まれているか", () => {
       const outliers = objArr2StrArr(
         defaultHands.filter(
           ({ roleFor }) => !roles.map(({ name }) => name).includes(roleFor),
@@ -180,7 +181,7 @@ export const RuleSchema = z
       const fixedDefaultHands = defaultHands.filter(
         (hand) => hand.type === "fixed",
       );
-      wrap("cardsがすべてdecks[name=deckFrom].listに含まれているか", () => {
+      wrap("8. cardsがすべてdecks[name=deckFrom].listに含まれているか", () => {
         const result = (
           a: string[],
           b: string[] | undefined,
@@ -215,7 +216,8 @@ export const RuleSchema = z
           },
         );
       });
-      wrap("cards*roleFor.numが固定しているカード枚数に収まっているか", () => {
+      // biome-ignore format:
+      wrap("9. cards*roleFor.numが固定しているカード枚数に収まっているか", () => {
         type Result = (
           name: string,
           num: number,
@@ -234,12 +236,12 @@ export const RuleSchema = z
           const deck = decks.find(
             ({ name: deckName }) => deckName === deckFrom,
           );
-          const c = roles.find(({ name }) => name === roleFor)?.num;
-          const a = deck?.list.find(
+          const roleNum = roles.find(({ name }) => name === roleFor)?.num;
+          const cardLimit = deck?.list.find(
             ({ name: cardName }) => cardName === name,
           )?.num;
-
-          const [cardLimit, roleNum] = [a, c].filter((x) => x !== undefined);
+          assert(cardLimit, "undefinedなら8でエラー");
+          assert(roleNum, "undefinedなら7でエラー");
 
           if (cardLimit >= num * roleNum) {
             return undefined;
