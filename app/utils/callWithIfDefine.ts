@@ -1,13 +1,16 @@
 import type { RecursiveNonNullable } from "app/types";
 
-export const callWithIfDefine = <T>(
+export const callWithIfDefine = <
+  T,
+  U extends (arg: RecursiveNonNullable<T>) => any,
+>(
   value: T,
-  callbackFn: (arg: RecursiveNonNullable<T>) => void,
-) => {
+  callbackFn: U,
+): ReturnType<U> | undefined => {
   if (value === undefined) {
     return;
   }
-  callbackFn(value as RecursiveNonNullable<T>);
+  return callbackFn(value as RecursiveNonNullable<T>);
 };
 
 if (import.meta.vitest) {

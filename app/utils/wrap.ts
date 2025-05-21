@@ -1,12 +1,15 @@
-export const wrap = (comment: string, fn: () => void, opt?: true) => {
-  if (opt) {
-    console.log(`do${comment}`);
-  }
-  fn();
-  if (opt) {
-    console.log(`done${comment}`);
-  }
-};
+export const wrap =
+  <T extends (...args: any[]) => any>(comment: string, fn: T) =>
+  (opt?: true): ReturnType<T> => {
+    if (opt) {
+      console.log(`do${comment}`);
+    }
+    const result = fn();
+    if (opt) {
+      console.log(`done${comment}`);
+    }
+    return result;
+  };
 
 if (import.meta.vitest) {
   const { it, expect } = import.meta.vitest;
@@ -14,19 +17,15 @@ if (import.meta.vitest) {
     let result = "";
     wrap("test", () => {
       result = "test";
-    });
+    })();
     expect(result).toBe("test");
   });
 
   it("wrap test with opt", () => {
     let result = "";
-    wrap(
-      "test",
-      () => {
-        result = "test";
-      },
-      true,
-    );
+    wrap("test", () => {
+      result = "test";
+    })(true);
     expect(result).toBe("test");
   });
 }
