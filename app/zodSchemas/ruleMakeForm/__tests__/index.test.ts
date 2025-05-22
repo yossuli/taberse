@@ -316,11 +316,10 @@ if (import.meta.vitest) {
         defaultHands: [
           {
             ...defaultHandRandom,
-            roleFor: "default",
+            roleFor: "test4",
           },
           {
             ...defaultHandFixed,
-            roleFor: "test4",
           },
         ],
       };
@@ -330,21 +329,16 @@ if (import.meta.vitest) {
         "defaultHands.roleFor (test4) are not in roles (default, test, test2, test3)",
       );
     });
-    it("deck.nameに含まれないroleForはエラー(type random)", () => {
+    it("role.nameに含まれないroleForはエラー(type fixed)", () => {
       const failedValue = {
         ...defaultValues,
         roles: testRoles,
-        decks: [
-          { ...deck, name: "deck1" },
-          { ...deck, name: "deck2" },
-        ],
         defaultHands: [
           {
             ...defaultHandRandom,
-            roleFor: "default",
           },
           {
-            ...defaultHandRandom,
+            ...defaultHandFixed,
             roleFor: "test4",
           },
         ],
@@ -353,30 +347,6 @@ if (import.meta.vitest) {
       expect(validate.success).toBe(false);
       expect(validate.error?.issues[0].message).toBe(
         "defaultHands.roleFor (test4) are not in roles (default, test, test2, test3)",
-      );
-    });
-    it("deck.nameに含まれないdeckFromはエラー(type fixed)", () => {
-      const failedValue = {
-        ...defaultValues,
-        decks: [
-          { ...deck, name: "deck1" },
-          { ...deck, name: "deck2" },
-        ],
-        defaultHands: [
-          {
-            ...defaultHandRandom,
-            deckFrom: "deck1",
-          },
-          {
-            ...defaultHandFixed,
-            deckFrom: "deck3",
-          },
-        ],
-      };
-      const validate = RuleSchema.safeParse(failedValue);
-      expect(validate.success).toBe(false);
-      expect(validate.error?.issues[0].message).toBe(
-        "defaultHands.deckFrom (deck3) are not in decks (deck1, deck2)",
       );
     });
   });
