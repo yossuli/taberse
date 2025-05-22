@@ -42,7 +42,6 @@ export const RuleSchema = z
     fieldVisibleRoles(fieldAreas, roleNames, ctx);
 
     conditionalSequence(
-      "",
       () => defaultHandsRoleForInRoles(defaultHands, roles, ctx),
       () => defaultHandsDeckFromInDecks(defaultHands, decks, deckNames, ctx),
       () => {
@@ -50,7 +49,6 @@ export const RuleSchema = z
           (hand) => hand.type === "fixed",
         );
         conditionalSequence(
-          "",
           () => defaultHandsFixedCardsInDeckList(fixedDefaultHands, decks, ctx),
           () =>
             defaultHandsFixedCardsNumLimit(
