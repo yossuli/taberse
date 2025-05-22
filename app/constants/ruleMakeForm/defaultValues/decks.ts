@@ -7,9 +7,14 @@ export const card = {
   description: "",
 } as const;
 
+const card2 = {
+  ...card,
+  name: "default 2",
+} as const;
+
 export const deck = {
   name: "default",
-  list: [card],
+  list: [card, card2],
   playableRoles: [{ roleName: "default" }],
 } as const;
 
