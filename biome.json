@@ -52,7 +52,7 @@
             "maxAllowedComplexity": 5
           }
         },
-        "noForEach": "warn",
+        "noForEach": "off",
         "useArrowFunction": { "level": "error", "fix": "safe" },
         "useFlatMap": "off",
         "useSimplifiedLogicExpression": "error"

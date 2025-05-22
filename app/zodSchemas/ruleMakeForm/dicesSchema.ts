@@ -1,16 +1,19 @@
 import { z } from "zod";
 
+export const diceName = z.string().min(1).brand("DiceName");
+
+export const dicesRange = z.object({
+  min: z.number().int(),
+  max: z.number().int(),
+  step: z.number().int().positive(),
+});
+
+export const diceSchema = z.object({
+  name: diceName,
+  range: dicesRange,
+});
 export const dicesSchema = z
-  .array(
-    z.object({
-      name: z.string().min(1),
-      range: z.object({
-        min: z.number().int(),
-        max: z.number().int(),
-        step: z.number().int().positive(),
-      }),
-    }),
-  )
+  .array(diceSchema)
   .superRefine((dice, ctx) => {
     if (dice.every((d) => d.range.min > d.range.max - d.range.step)) {
       ctx.addIssue({
@@ -30,3 +33,8 @@ export const dicesSchema = z
       }
     });
   });
+
+export type Dices = z.infer<typeof dicesSchema>;
+export type Dice = z.infer<typeof diceSchema>;
+export type DiceName = z.infer<typeof diceName>;
+export type DicesRange = z.infer<typeof dicesRange>;

@@ -1,5 +1,6 @@
 import { objArr2StrArr } from "app/utils/objArr2StrArr";
 import type { z } from "zod";
+import type { RoleName } from "../rolesSchema";
 import type { turnSchema } from "../turnSchema";
 import { template } from "./template";
 
@@ -7,7 +8,7 @@ export type Turn = z.infer<typeof turnSchema>;
 
 export const ignoreRoles = (
   turn: Turn | undefined,
-  roleNames: string[],
+  roleNames: RoleName[],
   ctx: z.RefinementCtx,
 ) => {
   if (!turn) {

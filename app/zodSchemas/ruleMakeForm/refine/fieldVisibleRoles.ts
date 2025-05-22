@@ -3,21 +3,22 @@ import { emptyIter2Null } from "app/utils/emptyIter2Null";
 import { findWithIndexResult } from "app/utils/findWithIndex";
 import { objArr2StrArr } from "app/utils/objArr2StrArr";
 import type { z } from "zod";
-import type { fieldAreasSchema } from "../fieldAreasSchema";
+import type { FieldAreas } from "../fieldAreasSchema";
+import type { RoleName } from "../rolesSchema";
 import { template } from "./template";
-
-export type FieldAreas = z.infer<typeof fieldAreasSchema>;
 
 export const fieldVisibleRoles = (
   fieldAreas: FieldAreas,
-  roleNames: string[],
+  roleNames: RoleName[],
   ctx: z.RefinementCtx,
 ) => {
   callWithIfDefine(
     findWithIndexResult(fieldAreas, (area) =>
       findWithIndexResult(area.field, (field) =>
         emptyIter2Null(
-          field.visibleRoles.filter((r) => !roleNames.includes(r.roleName)),
+          objArr2StrArr(field.visibleRoles, "roleName").filter(
+            (roleName) => !roleNames.includes(roleName),
+          ),
         ),
       ),
     ),
@@ -28,7 +29,7 @@ export const fieldVisibleRoles = (
           message: template.roles(
             roleNames,
             `fieldAreas[${i}].field[${j}].visibleRoles`,
-            objArr2StrArr(outliers, "roleName"),
+            outliers,
           ),
         });
       }

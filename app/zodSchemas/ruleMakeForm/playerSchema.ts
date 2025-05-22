@@ -13,3 +13,5 @@ export const playerSchema = z
       });
     }
   });
+
+export type PlayerSchema = z.infer<typeof playerSchema>;

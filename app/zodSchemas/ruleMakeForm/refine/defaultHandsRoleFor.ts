@@ -1,13 +1,12 @@
 import { objArr2StrArr } from "app/utils/objArr2StrArr";
 import type { z } from "zod";
-import type { defaultHandsSchema } from "../defaultHandsSchema";
+import type { DefaultHands } from "../defaultHandsSchema";
+import type { RoleName } from "../rolesSchema";
 import { template } from "./template";
 
-export type DefaultHand = z.infer<typeof defaultHandsSchema>[number];
-
 export const defaultHandsRoleFor = (
-  defaultHands: DefaultHand[],
-  roleNames: string[],
+  defaultHands: DefaultHands,
+  roleNames: RoleName[],
   ctx: z.RefinementCtx,
 ) => {
   const outliers = objArr2StrArr(defaultHands, "roleFor").filter(

@@ -1,16 +1,14 @@
 import { objArr2StrArr } from "app/utils/objArr2StrArr";
 import type { z } from "zod";
-import type { decksSchema } from "../decksSchema";
-import type { defaultHandsSchema } from "../defaultHandsSchema";
+import type { DeckName } from "../decksSchema";
+import type { DefaultHands } from "../defaultHandsSchema";
+import type { Decks } from "./deckPlayableRoles";
 import { template } from "./template";
 
-export type DefaultHand = z.infer<typeof defaultHandsSchema>[number];
-export type Decks = z.infer<typeof decksSchema>;
-
 export const defaultHandsDeckFromInDecks = (
-  defaultHands: DefaultHand[],
+  defaultHands: DefaultHands,
   decks: Decks,
-  deckNames: string[],
+  deckNames: DeckName[],
   ctx: z.RefinementCtx,
 ) => {
   const deckNameList = objArr2StrArr(decks, "name");

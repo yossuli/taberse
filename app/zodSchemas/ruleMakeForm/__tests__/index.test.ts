@@ -393,7 +393,7 @@ if (import.meta.vitest) {
       const validate = RuleSchema.safeParse(failedValue);
       expect(validate.success).toBe(false);
       expect(validate.error?.issues[0].message).toBe(
-        "defaultHands[1].cards (test) are not in decks: deck2 (default)",
+        "defaultHands[1].cards (test) are not in decks: deck2 (default, default 2)",
       );
     });
     it("decks[name=deckFrom].listではないdeck.listに含まれるcardsもエラー", () => {
@@ -423,7 +423,7 @@ if (import.meta.vitest) {
       const validate = RuleSchema.safeParse(failedValue);
       expect(validate.success).toBe(false);
       expect(validate.error?.issues[0].message).toBe(
-        "defaultHands[0].cards (test) are not in decks: deck1 (default)",
+        "defaultHands[0].cards (test) are not in decks: deck1 (default, default 2)",
       );
     });
   });

@@ -1,4 +1,4 @@
-import { card } from "app/constants/ruleMakeForm/defaultValues/decks";
+import { card, deck } from "app/constants/ruleMakeForm/defaultValues/decks";
 import { z } from "zod";
 import { decksSchema } from "../decksSchema";
 
@@ -6,13 +6,7 @@ if (import.meta.vitest) {
   const { expect, it } = import.meta.vitest;
 
   it("nameは重複禁止", () => {
-    const invalidDeck = [
-      {
-        name: "Deck1",
-        list: [card, card],
-        playableRoles: [{ roleName: "" }],
-      },
-    ];
+    const invalidDeck = [{ ...deck, name: "Deck1", list: [card, card] }];
     expect(
       JSON.parse(decksSchema.safeParse(invalidDeck).error?.message ?? ""),
     ).toStrictEqual([

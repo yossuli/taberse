@@ -1,4 +1,4 @@
-import { dicesSchema } from "../diceSchema";
+import { dicesSchema } from "../dicesSchema";
 
 if (import.meta.vitest) {
   const { expect, it } = import.meta.vitest;

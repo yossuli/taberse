@@ -3,7 +3,7 @@ import { objArr2StrArr } from "app/utils/objArr2StrArr";
 import { z } from "zod";
 import { decksSchema } from "./decksSchema";
 import { defaultHandsSchema } from "./defaultHandsSchema";
-import { dicesSchema } from "./diceSchema";
+import { dicesSchema } from "./dicesSchema";
 import { fieldAreasSchema } from "./fieldAreasSchema";
 import { playerSchema } from "./playerSchema";
 import { deckPlayableRoles } from "./refine/deckPlayableRoles";
@@ -61,3 +61,5 @@ export const RuleSchema = z
       },
     );
   });
+
+export type RuleSchema = z.infer<typeof RuleSchema>;

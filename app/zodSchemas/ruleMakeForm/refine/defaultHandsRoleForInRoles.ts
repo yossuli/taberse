@@ -1,15 +1,12 @@
 import { objArr2StrArr } from "app/utils/objArr2StrArr";
 import type { z } from "zod";
-import type { defaultHandsSchema } from "../defaultHandsSchema";
-import type { rolesSchema } from "../rolesSchema";
+import type { DefaultHands } from "../defaultHandsSchema";
+import type { Roles } from "../rolesSchema";
 import { template } from "./template";
 
-export type DefaultHand = z.infer<typeof defaultHandsSchema>[number];
-export type Role = z.infer<typeof rolesSchema>[number];
-
 export const defaultHandsRoleForInRoles = (
-  defaultHands: DefaultHand[],
-  roles: Role[],
+  defaultHands: DefaultHands,
+  roles: Roles,
   ctx: z.RefinementCtx,
 ) => {
   const roleNameList = objArr2StrArr(roles, "name");

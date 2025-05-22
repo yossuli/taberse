@@ -1,22 +1,17 @@
 import { callWithIfDefine } from "app/utils/callWithIfDefine";
 import { findWithIndexResult } from "app/utils/findWithIndex";
+import { objArr2StrArr } from "app/utils/objArr2StrArr";
 import type { z } from "zod";
-import type { decksSchema } from "../decksSchema";
-import type { defaultHandsSchema } from "../defaultHandsSchema";
+import type { CardName, Decks } from "../decksSchema";
+import type { DefaultHands } from "../defaultHandsSchema";
 import { template } from "./template";
 
-export type DefaultHand = z.infer<typeof defaultHandsSchema>[number];
-export type Deck = z.infer<typeof decksSchema>[number];
-
 export const defaultHandsFixedCardsInDeckList = (
-  fixedDefaultHands: DefaultHand[],
-  decks: Deck[],
+  fixedDefaultHands: DefaultHands,
+  decks: Decks,
   ctx: z.RefinementCtx,
 ) => {
-  const result = (
-    a: string[],
-    b: string[] | undefined,
-  ): [string[], string[] | undefined] | undefined => {
+  const result = (a: CardName[], b: CardName[] | undefined) => {
     const diff = a.filter((x) => !b?.includes(x));
     return (!!diff?.length || undefined) && [diff, b];
   };
@@ -33,11 +28,11 @@ export const defaultHandsFixedCardsInDeckList = (
         if (!deckList) {
           return undefined;
         }
-        const cardNames = hand.cards.map((c) => c.name);
-        const deckCardNames = deckList.map((c) => c.name);
+        const cardNames = objArr2StrArr(hand.cards, "name");
+        const deckCardNames = objArr2StrArr(deckList, "name");
         return result(cardNames, deckCardNames);
       }),
-      ([{ deckFrom }, index, [outliers, deckList]]) => {
+      ([{ deckFrom }, index, [outliers, deckCardNames]]) => {
         if (outliers) {
           ctx.addIssue({
             code: "custom",
@@ -45,7 +40,7 @@ export const defaultHandsFixedCardsInDeckList = (
               `defaultHands[${index}].cards`,
               outliers,
               deckFrom,
-              deckList.join(", "),
+              deckCardNames,
             ),
           });
           return false;

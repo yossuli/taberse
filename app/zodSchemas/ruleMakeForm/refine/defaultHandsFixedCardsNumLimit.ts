@@ -2,31 +2,27 @@ import assert from "node:assert";
 import { callWithIfDefine } from "app/utils/callWithIfDefine";
 import { findWithIndexResult } from "app/utils/findWithIndex";
 import type { z } from "zod";
-import type { decksSchema } from "../decksSchema";
-import type { defaultHandsSchema } from "../defaultHandsSchema";
-import type { rolesSchema } from "../rolesSchema";
-
-export type DefaultHand = z.infer<typeof defaultHandsSchema>[number];
-export type Deck = z.infer<typeof decksSchema>[number];
-export type Role = z.infer<typeof rolesSchema>[number];
+import type { DeckName, Decks } from "../decksSchema";
+import type { DefaultHands } from "../defaultHandsSchema";
+import type { RoleName, Roles } from "../rolesSchema";
 
 export const defaultHandsFixedCardsNumLimit = (
-  fixedDefaultHands: DefaultHand[],
-  decks: Deck[],
-  roles: Role[],
+  fixedDefaultHands: DefaultHands,
+  decks: Decks,
+  roles: Roles,
   ctx: z.RefinementCtx,
 ) => {
   type Result = (
     name: string,
     num: number,
-    deckFrom: string,
-    roleFor: string,
+    deckFrom: DeckName,
+    roleFor: RoleName,
   ) =>
     | [
         { name: string; num: number },
         string,
         number,
-        { roleFor: string; roleNum: number },
+        { roleFor: RoleName; roleNum: number },
       ]
     | undefined;
 

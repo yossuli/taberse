@@ -1,12 +1,15 @@
 import { z } from "zod";
+import { roleName } from "./rolesSchema";
 
+export const fieldName = z.string().min(1).brand("FieldName");
+export const fieldAreaName = z.string().min(1).brand("FieldAreaName");
 export const fieldAreasSchema = z
   .array(
     z
       .object({
-        name: z.string(),
+        name: fieldAreaName,
         description: z.string(),
-        roleFor: z.string(),
+        roleFor: roleName,
         fieldSize: z.object({
           width: z.number().positive(),
           height: z.number().positive(),
@@ -14,7 +17,7 @@ export const fieldAreasSchema = z
         field: z
           .array(
             z.object({
-              name: z.string(),
+              name: fieldName,
               description: z.string(),
               color: z.string().regex(/^(#([0-9a-f]{3}|[0-9a-f]{6})|())$/i, {
                 message: "Invalid color format",
@@ -25,8 +28,8 @@ export const fieldAreasSchema = z
                 r: z.number().int().nonnegative(),
                 b: z.number().int().nonnegative(),
               }),
-              operableRoles: z.array(z.object({ roleName: z.string() })),
-              visibleRoles: z.array(z.object({ roleName: z.string() })),
+              operableRoles: z.array(z.object({ roleName })),
+              visibleRoles: z.array(z.object({ roleName })),
             }),
           )
           .superRefine((field, ctx) => {
@@ -86,3 +89,5 @@ export const fieldAreasSchema = z
       }
     });
   });
+
+export type FieldAreas = z.infer<typeof fieldAreasSchema>;

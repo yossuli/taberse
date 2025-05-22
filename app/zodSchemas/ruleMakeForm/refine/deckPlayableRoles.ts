@@ -4,20 +4,21 @@ import { findWithIndexResult } from "app/utils/findWithIndex";
 import { objArr2StrArr } from "app/utils/objArr2StrArr";
 import type { z } from "zod";
 import type { decksSchema } from "../decksSchema";
+import type { RoleName } from "../rolesSchema";
 import { template } from "./template";
 
 export type Decks = z.infer<typeof decksSchema>;
 
 export const deckPlayableRoles = (
   decks: Decks,
-  roleNames: string[],
+  roleNames: RoleName[],
   ctx: z.RefinementCtx,
 ) => {
   callWithIfDefine(
     findWithIndexResult(decks, (deck) =>
       emptyIter2Null(
-        deck.playableRoles.filter(
-          ({ roleName }) => !roleNames.includes(roleName),
+        objArr2StrArr(deck.playableRoles, "roleName").filter(
+          (roleName) => !roleNames.includes(roleName),
         ),
       ),
     ),
@@ -28,7 +29,7 @@ export const deckPlayableRoles = (
           message: template.roles(
             roleNames,
             `decks[${index}].deck.playableRoles`,
-            objArr2StrArr(outliers, "roleName"),
+            outliers,
           ),
         });
       }

@@ -1,8 +1,9 @@
 import { z } from "zod";
+import { roleName } from "./rolesSchema";
 
 export const turnSchema = z.object({
   ignoreRoles: z
-    .array(z.object({ roleName: z.string() }))
+    .array(z.object({ roleName }))
     .superRefine((ignoreRoles, ctx) => {
       ignoreRoles.forEach((role, index) => {
         if (
@@ -25,3 +26,5 @@ export const turnSchema = z.object({
     })
     .optional(),
 });
+
+export type TurnSchema = z.infer<typeof turnSchema>;
