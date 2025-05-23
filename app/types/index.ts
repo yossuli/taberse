@@ -46,6 +46,27 @@ export type Nullable = undefined | null;
 
 export type Primitive = string | number | boolean | null | undefined;
 
+type FilterTarget<
+  T extends string,
+  Array extends readonly [string, ...string[]],
+> = Array extends [infer U, infer V]
+  ? U extends T
+    ? V extends T
+      ? [U, T]
+      : [U]
+    : V extends T
+      ? [V]
+      : []
+  : Array extends [infer U, ...infer Rest extends [string, ...string[]]]
+    ? U extends T
+      ? [U, ...FilterTarget<T, Rest>]
+      : FilterTarget<T, Rest>
+    : Array;
+
+export type EnsureUniqueStrArr<T extends readonly [string, ...string[]]> = {
+  [K in keyof T]: FilterTarget<T[K], T>["length"] extends 1 ? T[K] : never;
+};
+
 export type RecursiveNonNullable<T> = T extends [infer U]
   ? [RecursiveNonNullable<U>]
   : T extends [infer U, infer V]
@@ -106,6 +127,30 @@ if (import.meta.vitest) {
           [number, string, [number, string, boolean] | Nullable] | Nullable
         >
       >().toEqualTypeOf<[number, string, [number, string, boolean]]>();
+    });
+  });
+
+  describe("uniqueStrArr", () => {
+    it("unique elm array", () => {
+      expectTypeOf<EnsureUniqueStrArr<["a", "b", "c"]>>().toEqualTypeOf<
+        ["a", "b", "c"]
+      >();
+    });
+    it("duplicate elm array", () => {
+      expectTypeOf<EnsureUniqueStrArr<["a", "b", "c", "a"]>>().toEqualTypeOf<
+        [never, "b", "c", never]
+      >();
+    });
+  });
+  describe("FilterTargetLength", () => {
+    it("should be 1", () => {
+      expectTypeOf<FilterTarget<"a", ["a"]>>().toEqualTypeOf<["a"]>();
+    });
+    it("should be 2", () => {
+      expectTypeOf<FilterTarget<"a", ["a", "a"]>>().toEqualTypeOf<["a", "a"]>();
+    });
+    it("should be 1", () => {
+      expectTypeOf<FilterTarget<"a", ["a", "b"]>>().toEqualTypeOf<["a"]>();
     });
   });
 }
