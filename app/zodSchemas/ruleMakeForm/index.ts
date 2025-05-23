@@ -1,11 +1,11 @@
 import { conditionalSequence } from "app/utils/conditionalSequence";
 import { objArr2StrArr } from "app/utils/objArr2StrArr";
 import { z } from "zod";
-import { decksSchema } from "./decksSchema";
-import { defaultHandsSchema } from "./defaultHandsSchema";
-import { dicesSchema } from "./dicesSchema";
-import { fieldAreasSchema } from "./fieldAreasSchema";
-import { playerSchema } from "./playerSchema";
+import { decksSchema } from "./decks";
+import { defaultHandsSchema } from "./defaultHands";
+import { dicesSchema } from "./dices";
+import { fieldAreasSchema } from "./fieldAreas";
+import { playerSchema } from "./player";
 import { deckPlayableRoles } from "./refine/deckPlayableRoles";
 import { defaultHandsDeckFromInDecks } from "./refine/defaultHandsDeckFromInDecks";
 import { defaultHandsFixedCardsInDeckList } from "./refine/defaultHandsFixedCardsInDeckList";
@@ -15,8 +15,8 @@ import { defaultHandsRoleForInRoles } from "./refine/defaultHandsRoleForInRoles"
 import { fieldOperableRoles } from "./refine/fieldOperableRoles";
 import { fieldVisibleRoles } from "./refine/fieldVisibleRoles";
 import { ignoreRoles } from "./refine/ignoreRoles";
-import { rolesSchema } from "./rolesSchema";
-import { turnSchema } from "./turnSchema";
+import { rolesSchema } from "./roles";
+import { turnSchema } from "./turn";
 
 export const RuleSchema = z
   .object({

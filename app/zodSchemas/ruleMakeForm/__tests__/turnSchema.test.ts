@@ -1,6 +1,6 @@
 import { turn } from "app/constants/ruleMakeForm/defaultValues/turn";
 import { z } from "zod";
-import { turnSchema } from "../turnSchema";
+import { turnSchema } from "../turn";
 
 if (import.meta.vitest) {
   const { expect, it } = import.meta.vitest;

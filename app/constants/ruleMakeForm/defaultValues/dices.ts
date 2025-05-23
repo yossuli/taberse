@@ -1,4 +1,4 @@
-import { dicesSchema } from "app/zodSchemas/ruleMakeForm/dicesSchema";
+import { dicesSchema } from "app/zodSchemas/ruleMakeForm/dices";
 
 export const dices = [
   {

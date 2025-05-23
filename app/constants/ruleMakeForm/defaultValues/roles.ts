@@ -1,4 +1,4 @@
-import { rolesSchema } from "app/zodSchemas/ruleMakeForm/rolesSchema";
+import { rolesSchema } from "app/zodSchemas/ruleMakeForm/roles";
 
 export const role = { name: "default", num: 1 } as const;
 export const roles = [role] as const;

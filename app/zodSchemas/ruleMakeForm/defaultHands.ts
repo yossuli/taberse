@@ -1,8 +1,8 @@
 import { findWithIndexResult } from "app/utils/findWithIndex";
 import { objArr2StrArr } from "app/utils/objArr2StrArr";
 import { z } from "zod";
-import { cardName, deckName } from "./decksSchema";
-import { roleName } from "./rolesSchema";
+import { cardName, deckName } from "./decks";
+import { roleName } from "./roles";
 
 const defaultHand = z.discriminatedUnion("type", [
   z.object({
@@ -61,4 +61,3 @@ export const defaultHandsSchema = z
   });
 
 export type DefaultHands = z.infer<typeof defaultHandsSchema>;
-export type DefaultHand = z.infer<typeof defaultHand>;

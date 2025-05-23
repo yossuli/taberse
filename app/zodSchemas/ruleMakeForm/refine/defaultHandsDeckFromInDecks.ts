@@ -1,7 +1,7 @@
 import { objArr2StrArr } from "app/utils/objArr2StrArr";
 import type { z } from "zod";
-import type { DeckName } from "../decksSchema";
-import type { DefaultHands } from "../defaultHandsSchema";
+import type { DeckName } from "../decks";
+import type { DefaultHands } from "../defaultHands";
 import type { Decks } from "./deckPlayableRoles";
 import { template } from "./template";
 

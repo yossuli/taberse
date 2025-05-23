@@ -3,7 +3,7 @@ import {
   fieldAreas,
 } from "app/constants/ruleMakeForm/defaultValues/fieldAreas";
 import { z } from "zod";
-import { fieldAreasSchema } from "../fieldAreasSchema";
+import { fieldAreasSchema } from "../fieldAreas";
 
 if (import.meta.vitest) {
   const { expect, it } = import.meta.vitest;

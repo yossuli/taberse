@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { roleName } from "./rolesSchema";
+import { roleName } from "./roles";
 
 export const turnSchema = z.object({
   ignoreRoles: z
@@ -27,4 +27,4 @@ export const turnSchema = z.object({
     .optional(),
 });
 
-export type TurnSchema = z.infer<typeof turnSchema>;
+export type Turn = z.infer<typeof turnSchema>;

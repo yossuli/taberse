@@ -1,4 +1,4 @@
-import { turnSchema } from "app/zodSchemas/ruleMakeForm/turnSchema";
+import { turnSchema } from "app/zodSchemas/ruleMakeForm/turn";
 
 export const turn = {
   turnTimeLimit: { time: 10, type: "persistent" },

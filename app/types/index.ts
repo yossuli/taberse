@@ -65,45 +65,47 @@ export type RecursiveNonNullable<T> = T extends [infer U]
           ]
         : T extends Array<infer U>
           ? RecursiveNonNullable<U>[]
-          : T extends object
-            ? {
+          : T extends Primitive
+            ? NonNullable<T>
+            : {
                 [K in keyof T]-?: RecursiveNonNullable<T[K]>;
-              }
-            : NonNullable<T>;
+              };
 
 if (import.meta.vitest) {
-  const { it, expectTypeOf } = import.meta.vitest;
-  it("1elm should be non nullable", () => {
-    expectTypeOf<RecursiveNonNullable<[string | Nullable]>>().toEqualTypeOf<
-      [string]
-    >();
-  });
+  const { it, expectTypeOf, describe } = import.meta.vitest;
+  describe("RecursiveNonNullable", () => {
+    it("1elm should be non nullable", () => {
+      expectTypeOf<RecursiveNonNullable<[string | Nullable]>>().toEqualTypeOf<
+        [string]
+      >();
+    });
 
-  it("2elm should be non nullable", () => {
-    expectTypeOf<
-      RecursiveNonNullable<[string | Nullable, number | Nullable]>
-    >().toEqualTypeOf<[string, number]>();
-  });
+    it("2elm should be non nullable", () => {
+      expectTypeOf<
+        RecursiveNonNullable<[string | Nullable, number | Nullable]>
+      >().toEqualTypeOf<[string, number]>();
+    });
 
-  it("3elm should be non nullable", () => {
-    expectTypeOf<
-      RecursiveNonNullable<
-        [string | Nullable, number | Nullable, boolean | Nullable]
-      >
-    >().toEqualTypeOf<[string, number, boolean]>();
-  });
+    it("3elm should be non nullable", () => {
+      expectTypeOf<
+        RecursiveNonNullable<
+          [string | Nullable, number | Nullable, boolean | Nullable]
+        >
+      >().toEqualTypeOf<[string, number, boolean]>();
+    });
 
-  it("tuple should be non nullable", () => {
-    expectTypeOf<
-      RecursiveNonNullable<[number, string, boolean] | Nullable>
-    >().toEqualTypeOf<[number, string, boolean]>();
-  });
+    it("tuple should be non nullable", () => {
+      expectTypeOf<
+        RecursiveNonNullable<[number, string, boolean] | Nullable>
+      >().toEqualTypeOf<[number, string, boolean]>();
+    });
 
-  it("nested tuple should be nullable", () => {
-    expectTypeOf<
-      RecursiveNonNullable<
-        [number, string, [number, string, boolean] | Nullable] | Nullable
-      >
-    >().toEqualTypeOf<[number, string, [number, string, boolean]]>();
+    it("nested tuple should be nullable", () => {
+      expectTypeOf<
+        RecursiveNonNullable<
+          [number, string, [number, string, boolean] | Nullable] | Nullable
+        >
+      >().toEqualTypeOf<[number, string, [number, string, boolean]]>();
+    });
   });
 }

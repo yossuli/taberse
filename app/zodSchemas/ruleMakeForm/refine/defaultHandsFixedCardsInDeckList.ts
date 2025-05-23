@@ -2,8 +2,8 @@ import { callWithIfDefine } from "app/utils/callWithIfDefine";
 import { findWithIndexResult } from "app/utils/findWithIndex";
 import { objArr2StrArr } from "app/utils/objArr2StrArr";
 import type { z } from "zod";
-import type { CardName, Decks } from "../decksSchema";
-import type { DefaultHands } from "../defaultHandsSchema";
+import type { CardName, Decks } from "../decks";
+import type { DefaultHands } from "../defaultHands";
 import { template } from "./template";
 
 export const defaultHandsFixedCardsInDeckList = (

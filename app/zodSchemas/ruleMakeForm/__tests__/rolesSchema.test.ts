@@ -1,6 +1,6 @@
 import { roles } from "app/constants/ruleMakeForm/defaultValues/roles";
 import { z } from "zod";
-import { rolesSchema } from "../rolesSchema";
+import { rolesSchema } from "../roles";
 
 if (import.meta.vitest) {
   const { expect, it } = import.meta.vitest;

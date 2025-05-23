@@ -1,4 +1,4 @@
-import { decksSchema } from "app/zodSchemas/ruleMakeForm/decksSchema";
+import { decksSchema } from "app/zodSchemas/ruleMakeForm/decks";
 
 export const card = {
   name: "default",

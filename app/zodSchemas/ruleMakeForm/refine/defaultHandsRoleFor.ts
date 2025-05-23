@@ -1,7 +1,7 @@
 import { objArr2StrArr } from "app/utils/objArr2StrArr";
 import type { z } from "zod";
-import type { DefaultHands } from "../defaultHandsSchema";
-import type { RoleName } from "../rolesSchema";
+import type { DefaultHands } from "../defaultHands";
+import type { RoleName } from "../roles";
 import { template } from "./template";
 
 export const defaultHandsRoleFor = (

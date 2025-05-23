@@ -1,4 +1,4 @@
-import { fieldAreasSchema } from "app/zodSchemas/ruleMakeForm/fieldAreasSchema";
+import { fieldAreasSchema } from "app/zodSchemas/ruleMakeForm/fieldAreas";
 
 export const field = {
   name: "default",

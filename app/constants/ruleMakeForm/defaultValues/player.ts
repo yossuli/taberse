@@ -1,4 +1,4 @@
-import { playerSchema } from "app/zodSchemas/ruleMakeForm/playerSchema";
+import { playerSchema } from "app/zodSchemas/ruleMakeForm/player";
 
 export const player = {
   min: 1,

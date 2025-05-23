@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { roleName } from "./rolesSchema";
+import { roleName } from "./roles";
 
 export const deckName = z.string().min(1).brand("DeckName");
 export const deckListCategoryName = z

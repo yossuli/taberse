@@ -9,7 +9,7 @@ export const rolesSchema = z
     roles.forEach(({ name }, index) => {
       if (roles.filter((_, i) => i !== index).find((r) => r.name === name)) {
         ctx.addIssue({
-          message: `Role "${name}" is duplicated`,
+          message: `Role \"${name}\" is duplicated`,
           code: z.ZodIssueCode.custom,
           path: [index, "name"],
         });

@@ -1,4 +1,4 @@
-import { defaultHandsSchema } from "app/zodSchemas/ruleMakeForm/defaultHandsSchema";
+import { defaultHandsSchema } from "app/zodSchemas/ruleMakeForm/defaultHands";
 
 export const defaultHandRandom = {
   type: "random",

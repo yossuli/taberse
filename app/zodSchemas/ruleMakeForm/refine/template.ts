@@ -1,5 +1,5 @@
-import type { CardName, DeckName } from "../decksSchema";
-import type { RoleName } from "../rolesSchema";
+import type { CardName, DeckName } from "../decks";
+import type { RoleName } from "../roles";
 
 export const template = {
   roles: (

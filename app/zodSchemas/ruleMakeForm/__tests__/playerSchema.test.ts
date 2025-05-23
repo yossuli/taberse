@@ -1,4 +1,4 @@
-import { playerSchema } from "../playerSchema";
+import { playerSchema } from "../player";
 
 if (import.meta.vitest) {
   const { expect, it } = import.meta.vitest;

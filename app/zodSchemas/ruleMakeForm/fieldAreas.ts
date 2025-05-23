@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { roleName } from "./rolesSchema";
+import { roleName } from "./roles";
 
 export const fieldName = z.string().min(1).brand("FieldName");
 export const fieldAreaName = z.string().min(1).brand("FieldAreaName");

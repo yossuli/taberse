@@ -1,7 +1,7 @@
 import { card } from "app/constants/ruleMakeForm/defaultValues/decks";
 import { defaultHandFixed } from "app/constants/ruleMakeForm/defaultValues/defaultHands";
 import { z } from "zod";
-import { defaultHandsSchema } from "../defaultHandsSchema";
+import { defaultHandsSchema } from "../defaultHands";
 
 if (import.meta.vitest) {
   const { expect, it } = import.meta.vitest;

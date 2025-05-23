@@ -3,8 +3,8 @@ import { emptyIter2Null } from "app/utils/emptyIter2Null";
 import { findWithIndexResult } from "app/utils/findWithIndex";
 import { objArr2StrArr } from "app/utils/objArr2StrArr";
 import type { z } from "zod";
-import type { FieldAreas } from "../fieldAreasSchema";
-import type { RoleName } from "../rolesSchema";
+import type { FieldAreas } from "../fieldAreas";
+import type { RoleName } from "../roles";
 import { template } from "./template";
 
 export const fieldVisibleRoles = (

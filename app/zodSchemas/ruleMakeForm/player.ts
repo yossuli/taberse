@@ -14,4 +14,4 @@ export const playerSchema = z
     }
   });
 
-export type PlayerSchema = z.infer<typeof playerSchema>;
+export type Player = z.infer<typeof playerSchema>;

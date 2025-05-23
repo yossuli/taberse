@@ -1,6 +1,6 @@
 import { card, deck } from "app/constants/ruleMakeForm/defaultValues/decks";
 import { z } from "zod";
-import { decksSchema } from "../decksSchema";
+import { decksSchema } from "../decks";
 
 if (import.meta.vitest) {
   const { expect, it } = import.meta.vitest;

@@ -8,12 +8,12 @@ export const dicesRange = z.object({
   step: z.number().int().positive(),
 });
 
-export const diceSchema = z.object({
+export const dice = z.object({
   name: diceName,
   range: dicesRange,
 });
 export const dicesSchema = z
-  .array(diceSchema)
+  .array(dice)
   .superRefine((dice, ctx) => {
     if (dice.every((d) => d.range.min > d.range.max - d.range.step)) {
       ctx.addIssue({
@@ -26,7 +26,7 @@ export const dicesSchema = z
     dice.forEach(({ name }, index) => {
       if (dice.filter((_, i) => i !== index).find((d) => d.name === name)) {
         ctx.addIssue({
-          message: `Dice "${name}" is duplicated`,
+          message: `Dice \"${name}\" is duplicated`,
           code: z.ZodIssueCode.custom,
           path: [index, "name"],
         });
@@ -35,6 +35,6 @@ export const dicesSchema = z
   });
 
 export type Dices = z.infer<typeof dicesSchema>;
-export type Dice = z.infer<typeof diceSchema>;
+export type Dice = z.infer<typeof dice>;
 export type DiceName = z.infer<typeof diceName>;
 export type DicesRange = z.infer<typeof dicesRange>;

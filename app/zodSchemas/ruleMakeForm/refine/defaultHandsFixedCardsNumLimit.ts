@@ -2,9 +2,9 @@ import assert from "node:assert";
 import { callWithIfDefine } from "app/utils/callWithIfDefine";
 import { findWithIndexResult } from "app/utils/findWithIndex";
 import type { z } from "zod";
-import type { DeckName, Decks } from "../decksSchema";
-import type { DefaultHands } from "../defaultHandsSchema";
-import type { RoleName, Roles } from "../rolesSchema";
+import type { DeckName, Decks } from "../decks";
+import type { DefaultHands } from "../defaultHands";
+import type { RoleName, Roles } from "../roles";
 
 export const defaultHandsFixedCardsNumLimit = (
   fixedDefaultHands: DefaultHands,
