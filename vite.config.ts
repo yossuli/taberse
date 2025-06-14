@@ -50,7 +50,7 @@ export default defineConfig(({ mode }) => {
       tsconfigPaths(),
     ],
     test: {
-      include: ["./app/{utils/**/*.ts,**/*.test.ts,types.ts}"],
+      include: ["./app/{utils/**/*.ts,**/*.test.ts,types/**/*.ts}"],
     },
     alias: {
       "@defaultValues/*": "./app/constants/ruleMakeForm/defaultValues/*",

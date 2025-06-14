@@ -46,25 +46,17 @@ export type Nullable = undefined | null;
 
 export type Primitive = string | number | boolean | null | undefined;
 
-type FilterTarget<
-  T extends string,
-  Array extends readonly [string, ...string[]],
-> = Array extends [infer U, infer V]
+type FilterTarget<T extends string, Array extends string[]> = Array extends [
+  infer U,
+  ...infer V extends string[],
+]
   ? U extends T
-    ? V extends T
-      ? [U, T]
-      : [U]
-    : V extends T
-      ? [V]
-      : []
-  : Array extends [infer U, ...infer Rest extends [string, ...string[]]]
-    ? U extends T
-      ? [U, ...FilterTarget<T, Rest>]
-      : FilterTarget<T, Rest>
-    : Array;
+    ? [U, ...FilterTarget<T, V>]
+    : FilterTarget<T, V>
+  : [];
 
-export type EnsureUniqueStrArr<T extends readonly [string, ...string[]]> = {
-  [K in keyof T]: FilterTarget<T[K], T>["length"] extends 1 ? T[K] : never;
+export type EnsureUniqueStrArr<T extends readonly string[]> = {
+  [K in keyof T]: FilterTarget<T[K], [...T]>["length"] extends 1 ? T[K] : never;
 };
 
 export type RecursiveNonNullable<T> = T extends [infer U]
