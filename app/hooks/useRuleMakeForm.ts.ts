@@ -20,9 +20,9 @@ export const useRuleMakeForm = () => {
     watch,
     formState: { errors },
   } = useForm<RuleType>({
-    resolver: zodResolver(RuleSchema),
+    resolver: zodResolver(RuleSchema) as any,
     reValidateMode: "onBlur",
-    defaultValues,
+    defaultValues: defaultValues as any,
   });
   const onError: SubmitErrorHandler<RuleType> = (error) => {
     console.error("error", error);

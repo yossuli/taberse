@@ -1,5 +1,6 @@
 import { NumList } from "app/components/NumList";
 import type { RuleMakeFormChildrenProps, StrictOmit } from "app/types";
+import { parseName } from "app/utils/parseName";
 import { useFieldArray } from "react-hook-form";
 import { ImportDeckSelect } from "./ImportDeckSelect";
 import { TypeSelect } from "./TypeSelect";
@@ -40,9 +41,9 @@ export const Fixed = ({
               (field) => field.name === label,
             );
             if (labelIndex === -1) {
-              append({ name: label, num });
+              append({ name: parseName(label, "CardName"), num });
             } else {
-              update(labelIndex, { name: label, num });
+              update(labelIndex, { name: parseName(label, "CardName"), num });
             }
           }}
           remove={(fields, label) => {

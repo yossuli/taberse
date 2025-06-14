@@ -1,6 +1,7 @@
 import { css } from "@ss/css";
 import { Checklist } from "app/components/Checklist";
 import type { RuleMakeFormChildrenProps } from "app/types";
+import { parseName } from "app/utils/parseName";
 
 export const OperableRoles = ({
   control,
@@ -26,7 +27,9 @@ export const OperableRoles = ({
         control={control}
         name={`fieldAreas.${index}.field.${areaIndex}.operableRoles`}
         labels={roleNames}
-        checkOn={(append) => (value) => append({ roleName: value })}
+        checkOn={(append) => (value) =>
+          append({ roleName: parseName(value, "RoleName") })
+        }
         checkOff={(remove) => (field, value) =>
           remove(field.findIndex((f) => f.roleName === value))
         }

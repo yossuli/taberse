@@ -1,6 +1,7 @@
+import { nameBranding } from "app/utils/nameBranding";
 import { z } from "zod";
 
-export const diceName = z.string().min(1).brand("DiceName");
+export const diceName = nameBranding("DiceName");
 
 export const dicesRange = z.object({
   min: z.number().int(),

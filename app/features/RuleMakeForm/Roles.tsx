@@ -2,6 +2,7 @@ import { css } from "@ss/css";
 import { Grid } from "@ss/jsx";
 import { ErrorNotice } from "app/components/ErrorNotice";
 import type { RuleMakeFormChildrenProps } from "app/types";
+import { parseName } from "app/utils/parseName";
 import React from "react";
 import { useFieldArray } from "react-hook-form";
 
@@ -54,7 +55,7 @@ export const Roles = ({
           className={css({
             gridColumn: "1/3",
           })}
-          onClick={() => append({ name: "", num: 1 })}
+          onClick={() => append({ name: parseName("", "RoleName"), num: 1 })}
           disabled={!!errors.roles && fields.length > 0}
         >
           追加

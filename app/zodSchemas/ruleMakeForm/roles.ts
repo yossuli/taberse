@@ -1,6 +1,7 @@
+import { nameBranding } from "app/utils/nameBranding";
 import { z } from "zod";
 
-export const roleName = z.string().min(1).brand("RoleName");
+export const roleName = nameBranding("RoleName");
 export const role = z.object({
   name: roleName,
   num: z.number().int().positive(),

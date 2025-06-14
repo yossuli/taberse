@@ -1,4 +1,5 @@
 import { conditionalSequence } from "app/utils/conditionalSequence";
+import { nameBranding } from "app/utils/nameBranding";
 import { objArr2StrArr } from "app/utils/objArr2StrArr";
 import { z } from "zod";
 import { decksSchema } from "./decks";
@@ -20,7 +21,7 @@ import { turnSchema } from "./turn";
 
 export const RuleSchema = z
   .object({
-    name: z.string().min(1),
+    name: nameBranding("RuleName"),
     description: z.string(),
     player: playerSchema,
     roles: rolesSchema,

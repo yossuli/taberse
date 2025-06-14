@@ -2,6 +2,7 @@ import { css } from "@ss/css";
 import { Grid } from "@ss/jsx";
 import { ErrorNotice } from "app/components/ErrorNotice";
 import type { RuleMakeFormChildrenProps } from "app/types";
+import { parseName } from "app/utils/parseName";
 import React from "react";
 import { useFieldArray } from "react-hook-form";
 import { Each } from "./Each";
@@ -52,9 +53,9 @@ export const FieldAreas = ({
           })}
           onClick={() =>
             append({
-              name: "",
+              name: parseName("", "FieldAreaName"),
               description: "",
-              roleFor: "",
+              roleFor: parseName("", "RoleName"),
               fieldSize: {
                 width: 0,
                 height: 0,

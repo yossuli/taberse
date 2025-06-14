@@ -8,4 +8,5 @@ export const RULE_MAKE_FORM_BRAND_NAMES = uniqueStrArr([
   "FieldName",
   "FieldAreaName",
   "RoleName",
+  "RuleName",
 ] as const);

@@ -3,6 +3,7 @@ import { Grid } from "@ss/jsx";
 import { ErrorNotice } from "app/components/ErrorNotice";
 import { LabelInput } from "app/components/LabelInput";
 import type { RuleMakeFormChildrenProps } from "app/types";
+import { parseName } from "app/utils/parseName";
 import React from "react";
 import { useFieldArray } from "react-hook-form";
 import { List } from "./List";
@@ -47,7 +48,7 @@ export const Decks = ({
           type="button"
           onClick={() =>
             append({
-              name: "",
+              name: parseName("", "DeckName"),
               playableRoles: [],
               list: [],
             })

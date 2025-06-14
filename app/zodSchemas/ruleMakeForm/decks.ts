@@ -1,13 +1,13 @@
+import { nameBranding } from "app/utils/nameBranding";
 import { z } from "zod";
 import { roleName } from "./roles";
 
-export const deckName = z.string().min(1).brand("DeckName");
-export const deckListCategoryName = z
-  .string()
-  .optional()
-  .brand("DeckListCategoryName");
+export const deckName = nameBranding("DeckName");
+export const deckListCategoryName = nameBranding(
+  "DeckListCategoryName",
+).optional();
 
-export const cardName = z.string().min(1).brand("CardName");
+export const cardName = nameBranding("CardName");
 
 export const card = z.object({
   name: cardName,

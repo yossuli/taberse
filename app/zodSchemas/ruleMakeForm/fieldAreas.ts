@@ -1,8 +1,9 @@
+import { nameBranding } from "app/utils/nameBranding";
 import { z } from "zod";
 import { roleName } from "./roles";
 
-export const fieldName = z.string().min(1).brand("FieldName");
-export const fieldAreaName = z.string().min(1).brand("FieldAreaName");
+export const fieldName = nameBranding("FieldName");
+export const fieldAreaName = nameBranding("FieldAreaName");
 export const fieldAreasSchema = z
   .array(
     z

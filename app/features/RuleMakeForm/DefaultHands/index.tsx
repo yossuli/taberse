@@ -3,6 +3,7 @@ import { Grid } from "@ss/jsx";
 import { flex } from "@ss/patterns";
 import { ErrorNotice } from "app/components/ErrorNotice";
 import type { RuleMakeFormChildrenProps } from "app/types";
+import { parseName } from "app/utils/parseName";
 import React from "react";
 import { useFieldArray } from "react-hook-form";
 import { Each } from "./Each";
@@ -69,7 +70,7 @@ export const DefaultHands = ({
               deckFrom: deckName,
               cards: [
                 {
-                  name: "default",
+                  name: parseName("default", "CardName"),
                   num: 1,
                 },
               ],

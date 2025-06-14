@@ -7,6 +7,7 @@ import { LabelInput } from "app/components/LabelInput";
 import { LabelSelect } from "app/components/LabelSelect";
 import { LabelTextarea } from "app/components/LabelTextarea";
 import type { RuleMakeFormChildrenProps } from "app/types";
+import { parseName } from "app/utils/parseName";
 import { useState } from "react";
 import { useFieldArray } from "react-hook-form";
 import { OperableRoles } from "./OperableRoles";
@@ -90,7 +91,7 @@ export const Each = ({
         }))}
         append={(area) => {
           append({
-            name: "",
+            name: parseName("", "FieldAreaName"),
             description: "",
             color: "",
             area,

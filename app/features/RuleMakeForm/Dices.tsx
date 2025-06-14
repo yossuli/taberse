@@ -3,6 +3,7 @@ import { Grid } from "@ss/jsx";
 import { ErrorNotice } from "app/components/ErrorNotice";
 import { LabelInput } from "app/components/LabelInput";
 import type { RuleMakeFormChildrenProps } from "app/types";
+import { parseName } from "app/utils/parseName";
 import React from "react";
 import { useFieldArray } from "react-hook-form";
 
@@ -78,7 +79,12 @@ export const Dices = ({
       </Grid>
       <button
         type="button"
-        onClick={() => append({ name: "", range: { min: 1, max: 6, step: 1 } })}
+        onClick={() =>
+          append({
+            name: parseName("", "DiceName"),
+            range: { min: 1, max: 6, step: 1 },
+          })
+        }
         disabled={!!errors.dices && fields.length > 0}
         className={css({
           gridColumn: "1/3",

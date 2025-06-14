@@ -1,6 +1,7 @@
 import { css } from "@ss/css";
 import { Grid } from "@ss/jsx";
 import type { RuleMakeFormChildrenProps } from "app/types";
+import { parseName } from "app/utils/parseName";
 import { useFieldArray } from "react-hook-form";
 import { Card } from "./Card";
 
@@ -33,7 +34,7 @@ export const List = ({
         type="button"
         onClick={() =>
           append({
-            name: "",
+            name: parseName("", "CardName"),
             num: 1,
             description: "",
           })

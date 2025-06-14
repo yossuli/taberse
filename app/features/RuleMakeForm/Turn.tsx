@@ -4,6 +4,7 @@ import { ErrorNotice } from "app/components/ErrorNotice";
 import { LabelInput } from "app/components/LabelInput";
 import { LabelSelect } from "app/components/LabelSelect";
 import type { RuleMakeFormChildrenProps } from "app/types";
+import { parseName } from "app/utils/parseName";
 
 export const Turn = ({
   control,
@@ -23,7 +24,9 @@ export const Turn = ({
               control={control}
               name="turn.ignoreRoles"
               labels={rolesFields.map((roleField) => roleField.name)}
-              checkOn={(append) => (role) => append({ roleName: role })}
+              checkOn={(append) => (role) =>
+                append({ roleName: parseName(role, "RoleName") })
+              }
               checkOff={(remove) => (field, value) =>
                 remove(field.findIndex((f) => f.roleName === value))
               }
