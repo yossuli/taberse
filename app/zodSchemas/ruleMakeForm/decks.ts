@@ -9,15 +9,15 @@ export const deckListCategoryName = z
 
 export const cardName = z.string().min(1).brand("CardName");
 
-const card = z.object({
+export const card = z.object({
   name: cardName,
   categoryName: deckListCategoryName,
   num: z.number().int().positive(),
   description: z.string(),
 });
-const deckList = z.array(card);
+export const deckList = z.array(card);
 
-const deck = z.object({
+export const deck = z.object({
   name: deckName,
   list: deckList.superRefine((list, ctx) => {
     list.forEach(({ name }, index) => {
@@ -33,10 +33,3 @@ const deck = z.object({
   playableRoles: z.array(z.object({ roleName })),
 });
 export const decksSchema = z.array(deck);
-
-export type Decks = z.infer<typeof decksSchema>;
-export type DeckName = z.infer<typeof deckName>;
-export type CardName = z.infer<typeof cardName>;
-export type DeckListCategoryName = z.infer<typeof deckListCategoryName>;
-export type DeckList = z.infer<typeof deckList>;
-export type Deck = z.infer<typeof deck>;

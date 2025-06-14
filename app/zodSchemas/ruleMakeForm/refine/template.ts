@@ -1,4 +1,4 @@
-import type { CardName, DeckName } from "../decks";
+import type { CardName, DeckName } from "app/types/ruleMakeForm";
 import type { RoleName } from "../roles";
 
 export const template = {

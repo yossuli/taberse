@@ -1,8 +1,8 @@
 import assert from "node:assert";
+import type { DeckName, Decks } from "app/types/ruleMakeForm";
 import { callWithIfDefine } from "app/utils/callWithIfDefine";
 import { findWithIndexResult } from "app/utils/findWithIndex";
 import type { z } from "zod";
-import type { DeckName, Decks } from "../decks";
 import type { DefaultHands } from "../defaultHands";
 import type { RoleName, Roles } from "../roles";
 

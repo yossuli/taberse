@@ -1,8 +1,7 @@
+import type { DeckName, Decks } from "app/types/ruleMakeForm";
 import { objArr2StrArr } from "app/utils/objArr2StrArr";
 import type { z } from "zod";
-import type { DeckName } from "../decks";
 import type { DefaultHands } from "../defaultHands";
-import type { Decks } from "./deckPlayableRoles";
 import { template } from "./template";
 
 export const defaultHandsDeckFromInDecks = (
