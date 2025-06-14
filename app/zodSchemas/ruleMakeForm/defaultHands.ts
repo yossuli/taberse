@@ -59,5 +59,3 @@ export const defaultHandsSchema = z
         }
       });
   });
-
-export type DefaultHands = z.infer<typeof defaultHandsSchema>;

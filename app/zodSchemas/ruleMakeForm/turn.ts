@@ -27,4 +27,3 @@ export const turnSchema = z.object({
     .optional(),
 });
 
-export type Turn = z.infer<typeof turnSchema>;

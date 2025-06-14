@@ -1,7 +1,10 @@
 import { z } from "zod";
 
 export const roleName = z.string().min(1).brand("RoleName");
-const role = z.object({ name: roleName, num: z.number().int().positive() });
+export const role = z.object({
+  name: roleName,
+  num: z.number().int().positive(),
+});
 export const rolesSchema = z
   .array(role)
   .nonempty()
@@ -16,7 +19,3 @@ export const rolesSchema = z
       }
     });
   });
-
-export type RoleName = z.infer<typeof roleName>;
-export type Roles = z.infer<typeof rolesSchema>;
-export type Role = z.infer<typeof role>;

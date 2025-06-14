@@ -89,5 +89,3 @@ export const fieldAreasSchema = z
       }
     });
   });
-
-export type FieldAreas = z.infer<typeof fieldAreasSchema>;

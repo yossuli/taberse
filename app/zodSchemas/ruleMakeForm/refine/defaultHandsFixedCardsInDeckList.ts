@@ -1,9 +1,8 @@
-import type { CardName, Decks } from "app/types/ruleMakeForm";
+import type { CardName, Decks, DefaultHands } from "app/types/ruleMakeForm";
 import { callWithIfDefine } from "app/utils/callWithIfDefine";
 import { findWithIndexResult } from "app/utils/findWithIndex";
 import { objArr2StrArr } from "app/utils/objArr2StrArr";
 import type { z } from "zod";
-import type { DefaultHands } from "../defaultHands";
 import { template } from "./template";
 
 export const defaultHandsFixedCardsInDeckList = (

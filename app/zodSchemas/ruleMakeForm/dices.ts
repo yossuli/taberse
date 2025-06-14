@@ -33,8 +33,3 @@ export const dicesSchema = z
       }
     });
   });
-
-export type Dices = z.infer<typeof dicesSchema>;
-export type Dice = z.infer<typeof dice>;
-export type DiceName = z.infer<typeof diceName>;
-export type DicesRange = z.infer<typeof dicesRange>;

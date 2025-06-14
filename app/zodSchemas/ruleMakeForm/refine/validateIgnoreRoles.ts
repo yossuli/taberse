@@ -1,6 +1,6 @@
+import type { RoleName } from "app/types/ruleMakeForm";
 import { objArr2StrArr } from "app/utils/objArr2StrArr";
 import type { z } from "zod";
-import type { RoleName } from "../roles";
 import type { turnSchema } from "../turn";
 import { template } from "./template";
 

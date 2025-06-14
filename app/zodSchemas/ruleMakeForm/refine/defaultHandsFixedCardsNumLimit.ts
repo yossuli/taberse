@@ -1,10 +1,14 @@
 import assert from "node:assert";
-import type { DeckName, Decks } from "app/types/ruleMakeForm";
+import type {
+  DeckName,
+  Decks,
+  DefaultHands,
+  RoleName,
+  Roles,
+} from "app/types/ruleMakeForm";
 import { callWithIfDefine } from "app/utils/callWithIfDefine";
 import { findWithIndexResult } from "app/utils/findWithIndex";
 import type { z } from "zod";
-import type { DefaultHands } from "../defaultHands";
-import type { RoleName, Roles } from "../roles";
 
 export const defaultHandsFixedCardsNumLimit = (
   fixedDefaultHands: DefaultHands,

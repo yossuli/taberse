@@ -1,10 +1,9 @@
-import type { Decks } from "app/types/ruleMakeForm";
+import type { Decks, RoleName } from "app/types/ruleMakeForm";
 import { callWithIfDefine } from "app/utils/callWithIfDefine";
 import { emptyIter2Null } from "app/utils/emptyIter2Null";
 import { findWithIndexResult } from "app/utils/findWithIndex";
 import { objArr2StrArr } from "app/utils/objArr2StrArr";
 import type { z } from "zod";
-import type { RoleName } from "../roles";
 import { template } from "./template";
 
 export const deckPlayableRoles = (

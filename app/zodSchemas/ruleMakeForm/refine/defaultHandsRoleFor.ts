@@ -1,7 +1,6 @@
+import type { DefaultHands, RoleName } from "app/types/ruleMakeForm";
 import { objArr2StrArr } from "app/utils/objArr2StrArr";
 import type { z } from "zod";
-import type { DefaultHands } from "../defaultHands";
-import type { RoleName } from "../roles";
 import { template } from "./template";
 
 export const defaultHandsRoleFor = (
